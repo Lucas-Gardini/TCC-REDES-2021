@@ -23,7 +23,6 @@ E a versão Desktop destinada aos donos e funcionários que estejam na parte int
 ![Imagem representando html](https://media.discordapp.net/attachments/676543155423805460/818569156814438441/coding.png?width=960&height=440)
 
 -   Client Side
-
     -   HTML
     -   CSS
     -   JavaScript
@@ -36,6 +35,7 @@ E a versão Desktop destinada aos donos e funcionários que estejam na parte int
     -   JavaScript
     -   NodeJs
     -   [express](https://expressjs.com/pt-br/) Web Framework para o node.
+    -   [express-session](https://www.npmjs.com/package/express-session) Session Variables
     -   [morgan](https://www.npmjs.com/package/morgan) HTTP request logger
     -   [body-parser](https://www.npmjs.com/package/body-parser)
     -   [MongoDB](https://www.mongodb.com) and [Mongoose](https://mongoosejs.com)
