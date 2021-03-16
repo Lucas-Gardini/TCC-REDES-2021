@@ -44,8 +44,8 @@ E a versão Desktop destinada aos donos e funcionários que estejam na parte int
 
 ![Imagem representando "time"](https://media.discordapp.net/attachments/676543155423805460/818572477302308934/team.png?width=712&height=442)
 
--   Gabriela Ornellas
 -   Gabriel Luiz de Oliveira
+-   Gabriela Ornellas
 -   **_Lucas Gardini Dias_**
 -   Pedro Comelli Neto
 -   Thiago Aio
