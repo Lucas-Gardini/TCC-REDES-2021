@@ -1,0 +1,23 @@
+{
+	"name": "restaurant.platform.api",
+	"version": "1.0.0",
+	"description": "API para a plataforma de pedidos, destinada a restaurantes para melhorar o antendimento ao cliente",
+	"main": "main.js",
+	"scripts": {
+		"start": "nodemon ./app.js"
+	},
+	"keywords": [],
+	"author": "Kowalski Jr",
+	"license": "ISC",
+	"dependencies": {
+		"bcrypt": "^5.0.1",
+		"body-parser": "^1.19.0",
+		"cookie-parser": "^1.4.5",
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"express-session": "^1.17.1",
+		"mongodb": "^3.6.3",
+		"mongoose": "^5.11.15",
+		"morgan": "^1.10.0"
+	}
+}
