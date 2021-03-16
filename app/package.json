@@ -1,0 +1,24 @@
+{
+	"name": "restaurant.platform",
+	"version": "1.0.0",
+	"description": "Plataforma de pedidos, destinada a restaurantes para melhorar o antendimento ao cliente",
+	"main": "main.js",
+	"scripts": {
+		"start": "electron ."
+	},
+	"keywords": [],
+	"author": "Kowalski Jr",
+	"license": "ISC",
+	"devDependencies": {
+		"electron": "^12.0.0"
+	},
+	"dependencies": {
+		"@electron/remote": "^1.0.4",
+		"axios": "^0.21.1",
+		"bootstrap": "^5.0.0-beta2",
+		"bootstrap-icons": "^1.4.0",
+		"jquery": "^3.6.0",
+		"jQuery": "^1.7.4",
+		"vue": "^2.6.12"
+	}
+}

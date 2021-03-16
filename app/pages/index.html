@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css" />
+		<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+		<link rel="preload" href="global.css" as="style" />
+		<link rel="stylesheet" href="global.css" />
+		<title>NOME EMPRESA</title>
+		<style>
+			* {
+				color: rgb(8, 32, 245);
+			}
+
+			body {
+				background-color: whitesmoke;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+
+			div.backgroundsvg {
+				display: flex;
+				flex-direction: column;
+				z-index: -1;
+				height: 100vh;
+			}
+
+			div.backgroundsvg img {
+				margin-left: auto;
+				margin-top: auto;
+				width: 40%;
+				padding-right: 10px;
+				padding-bottom: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="main-content">
+			<div style="position: absolute; left: 50%; transform: translateX(-50%); margin-top: 5%; text-align: center">
+				<img width="128" src="./resources/logo.svg" /><br />
+				<label>NOME EMPRESA</label>
+			</div>
+			<div class="position-absolute top-50 start-50 translate-middle">
+				<div class="container" style="z-index: 1">
+					<div class="mb-3">
+						<label for="login" class="form-label text-center"><i class="bi bi-person"></i> Usuário</label>
+						<input type="text" class="form-control" id="login" />
+					</div>
+					<div class="mb-3">
+						<label for="passwd" class="form-label"> <i class="bi bi-key"></i> Senha </label>
+						<input type="password" class="form-control" id="passwd" />
+					</div>
+					<div class="w-100">
+						<hr />
+						<button id="loginbtn" style="background-color: #0820f5" class="btn w-100 btn-login">
+							<i style="color: white" class="bi bi-box-arrow-in-right"></i>
+							<span style="color: white">Entrar</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="backgroundsvg">
+			<img src="./resources/login.svg" />
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="alertmodal" tabindex="-1" aria-labelledby="ErrorModal" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Algo de Errado Aconteceu!</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">Verifique se o usuário está cadastrado e se suas credenciais estão corretas!</div>
+					<div class="modal-footer">
+						<button
+							type="button"
+							style="background-color: #0820f5; color: white"
+							class="btn"
+							data-bs-dismiss="modal"
+							id="stopLoading"
+						>
+							Ok
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="loading" id="loading">
+			<div class="spinner-border text-warning" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+		</div>
+		<div style="display: none" class="no-connection" id="no-connection">
+			<h1>Você está offline!</h1>
+		</div>
+		<script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+		<script type="module" src="global.js"></script>
+		<script type="module">
+			const axios = require("axios");
+			const $ = require("jQuery");
+			const BrowserWindow = require("@electron/remote");
+			const path = require("path");
+
+			window.addEventListener("load", async () => {
+				try {
+					const conn = await fetch("https://google.com");
+					if (conn) {
+						document.querySelector("#main-content").setAttribute("style", "");
+						document.querySelector("#no-connection").setAttribute("style", "display: none");
+					}
+				} catch (e) {
+					document.querySelector("#main-content").setAttribute("style", "display: none");
+					document.querySelector("#no-connection").setAttribute("style", "");
+				}
+			});
+
+			const user = document.querySelector("#login");
+			const passwd = document.querySelector("#passwd");
+
+			document.querySelector("body").addEventListener("keydown", (key) => {
+				if (key.code === "Enter") {
+					document.querySelector("#loginbtn").click();
+				}
+			});
+
+			document.querySelector("#loginbtn").addEventListener("click", () => {
+				document.querySelector("#loading").visible = 1;
+				document.querySelector("#loading").className = "loading active";
+				setTimeout(() => {
+					axios
+						.post("http://localhost:8080/user/get", {
+							user: user.value,
+							password: passwd.value,
+						})
+						.then((res) => {
+							if (res.data === "INVALID") {
+								$("#alertmodal").modal("show");
+							} else {
+								BrowserWindow.getCurrentWindow().loadFile(path.join(__dirname, "./dashboard.html"));
+								console.log("ok");
+							}
+						});
+				}, 500);
+			});
+
+			document.querySelector("#stopLoading").addEventListener("click", () => {
+				document.querySelector("#loading").visible = 0;
+				document.querySelector("#loading").className = "loading";
+			});
+		</script>
+	</body>
+</html>

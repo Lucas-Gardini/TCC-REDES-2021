@@ -1,0 +1,58 @@
+guest u
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css" />
+		<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+		<link rel="preload" href="global.css" as="style" />
+		<link rel="stylesheet" href="global.css" />
+		<title>NOME EMPRESA</title>
+		<style>
+			* {
+				color: #181818;
+			}
+
+			body {
+				background-color: whitesmoke;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="main-content"></div>
+		<div class="copyright">&copy; FastCoders 2020</div>
+		<div class="loading" id="loading">
+			<div class="spinner-border text-warning" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+		</div>
+		<div style="display: none" class="no-connection" id="no-connection">
+			<h1>Você está offline!</h1>
+		</div>
+		<script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+		<script type="module" src="global.js"></script>
+		<script type="module">
+			const axios = require("axios");
+			const BrowserWindow = require("@electron/remote");
+			window.addEventListener("load", async () => {
+				try {
+					const conn = await fetch("https://google.com");
+					if (conn) {
+						document.querySelector("#main-content").setAttribute("style", "");
+						document.querySelector("#no-connection").setAttribute("style", "display: none");
+					}
+				} catch (e) {
+					document.querySelector("#main-content").setAttribute("style", "display: none");
+					document.querySelector("#no-connection").setAttribute("style", "");
+				}
+			});
+		</script>
+	</body>
+</html>
