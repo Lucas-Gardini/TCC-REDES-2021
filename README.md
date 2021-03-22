@@ -10,7 +10,7 @@ A plataforma consiste em duas versões do aplicativo, uma **Desktop** e uma **Mo
 
 A versão Mobile destinada aos garçons ou funcionários que exerçam uma função parecida, tendo as funções de registrar pedidos e observações sobres os mesmos, contendo número da mesa ou qualquer outro meio de localização do cliente.
 
-E a versão Desktop destinada aos donos e funcionários que estejam na parte interna do estabelicimento/empresa, onde serão disponibilizados todos os pedidos existentes, com direito a:
+E a versão Desktop destinada aos donos e funcionários que estejam na parte interna do estabelecimento/empresa, onde serão disponibilizados todos os pedidos existentes, com direito a:
 
 -   ✔ Confirmação de pedido
 -   ❌ Cancelamento de pedido
