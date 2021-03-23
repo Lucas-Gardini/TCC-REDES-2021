@@ -15,7 +15,7 @@ E a versão _Desktop_ é destinada aos donos e funcionários que estejam na part
 -   👥 Gerenciamento de funcionários (possibilidade de bater ponto pelo app (com verificação de localização))
 -   🕒 Outras funcionalidades serão atualizadas conforme o passar do tempo (Usuários podem dar sugestões)
 
--   Objetivos
+## 💬 Objetivos
 
 O objetivo do projeto, é facilitar a organização do estabelecimento tanto para o dono quanto para os funcionários. Disponibilizando informações em tempo real de uma ponta a outra (de funcionário para funcionário (exemplo: garçom e cozinheiro), dono para funcionário e vice-versa), tornando mais rápido o atendimento e consequentemente gerando uma maior satisfação do cliente em relação a otimização do tempo.
 
