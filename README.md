@@ -70,6 +70,6 @@ A equipe é constituída por membros do Instituto Federal de São Paulo Campus C
 
 -   Gabriel Luiz de Oliveira
 -   Gabriela da Silva Ornellas
--   Lucas Gardini Dias
+-   _*Lucas Gardini Dias*_
 -   Pedro Comelli Neto
 -   Thiago Aio
