@@ -56,13 +56,13 @@ Para a funcionalidade completa do projeto, os seguintes recursos serão necessá
 
 -   Server Side
 
--   JavaScript
--   NodeJs
--   Express
--   express-session
--   morgan
--   body-parser
--   MongoDB e Mongoose
+    -   JavaScript
+    -   NodeJs
+    -   Express
+    -   express-session
+    -   morgan
+    -   body-parser
+    -   MongoDB e Mongoose
 
 ## 👥 Equipe
 
