@@ -73,3 +73,16 @@ A equipe é constituída por membros do Instituto Federal de São Paulo Campus C
 -   _**Lucas Gardini Dias**_
 -   Pedro Comelli Neto
 -   Thiago Aio
+
+## TESTANDO
+
+Digite no seu console:
+`git clone https://github.com/Lucas-Gardini/TCC-REDES-2021`
+
+Depois navegue até a pasta app e digite:
+`npm i`
+
+Depois navegue até a pasta server e digite:
+`npm i`
+
+E por fim, para funcionar dê um `npm start` nas pastas app e server
