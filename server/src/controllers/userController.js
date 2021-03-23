@@ -29,6 +29,9 @@ const userController = {
 			res.send("INVALID").end();
 		}
 	},
+	async getSession(req, res) {
+		res.send(req.session);
+	},
 	async addUser(req, res) {
 		// Encrypting Password
 		bcrypt.genSalt(saltRounds, function (err, salt) {

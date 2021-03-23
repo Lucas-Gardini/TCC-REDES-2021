@@ -8,6 +8,8 @@ router.post("/get", loginController.getUser);
 
 router.post("/getall", loginController.getAllUsers);
 
+router.post("/getSession", loginController.getSession);
+
 router.delete("/del", loginController.deleteUser);
 
 router.post("/logoff", loginController.logoffUser);

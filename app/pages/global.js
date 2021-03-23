@@ -1,19 +1,5 @@
 const BrowserWindow = require("@electron/remote");
 
-{
-	/* <div class="window-frame">
-			<button id="minimizeWindow">
-				<img width="16" src="resources/minimize.svg" />
-			</button>
-			<button id="maximizeWindow">
-				<img width="16" style="transform: scaleX(-1)" src="resources/maximize.svg" />
-			</button>
-			<button id="closeWindow">
-				<img width="16" src="resources/close.svg" />
-			</button>
-		</div> */
-}
-
 window.addEventListener("load", () => {
 	let windowFrame = document.createElement("div");
 	let buttonMinimize = document.createElement("button");
@@ -63,12 +49,6 @@ window.addEventListener("load", () => {
 		let electron_window = BrowserWindow.getCurrentWindow();
 		electron_window.close();
 	});
+
+	document.querySelector("title").innerHTML = "EMPRESA";
 });
-
-//const closeButton = document.querySelector("#closeWindow");
-//
-//
-//const maximizeButton = document.querySelector("#maximizeWindow");
-
-//
-//const minimizeButton = document.querySelector("#minimizeWindow");

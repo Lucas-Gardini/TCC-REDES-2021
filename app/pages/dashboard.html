@@ -1,182 +1,144 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css" />
-		<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
-		<link rel="preload" href="global.css" as="style" />
-		<link rel="stylesheet" href="global.css" />
-		<title>NOME EMPRESA</title>
-	</head>
 
-	<body>
-		<div id="main">
-			<div class="lateral container">
-				<ul>
-					<li>
-						<a href="#">
-							<span class="icon empty"> &nbsp; </span>
-						</a>
-					</li>
-					<li id="nav-home">
-						<a @click="alertar('home')" :class="menus['home']" href="#">
-							<span class="icon">
-								<i class="bi bi-house-fill"></i>
-							</span>
-							<span class="titulo">Início</span>
-						</a>
-					</li>
-					<li id="nav-products">
-						<a @click="alertar('products')" :class="menus['products']" href="#">
-							<span class="icon">
-								<i class="bi bi-handbag-fill"></i>
-							</span>
-							<span class="titulo">Produto</span>
-						</a>
-					</li>
-					<li id="nav-profile">
-						<a @click="alertar('profile')" :class="menus['profile']" href="#">
-							<span class="icon">
-								<i class="bi bi-person-fill"></i>
-							</span>
-							<span class="titulo">Perfil</span>
-						</a>
-					</li>
-					<li id="nav-graph">
-						<a @click="alertar('graph')" :class="menus['graph']" href="#">
-							<span class="icon">
-								<i class="bi bi-bar-chart-fill"></i>
-							</span>
-							<span class="titulo">Gráfico</span>
-						</a>
-					</li>
-					<li id="nav-requests">
-						<a @click="alertar('request')" :class="menus['request']" href="#">
-							<span class="icon">
-								<i class="bi bi-journal-text"></i>
-							</span>
-							<span class="titulo">Pedido</span>
-						</a>
-					</li>
-					<li id="nav-support">
-						<a @click="alertar('support')" :class="menus['support']" href="#">
-							<span class="icon">
-								<i class="bi bi-tools"></i>
-							</span>
-							<span class="titulo">Suporte</span>
-						</a>
-					</li>
-					<li>
-						<a @click="logoff()" href="#">
-							<span class="icon">
-								<i class="bi bi-box-arrow-left"></i>
-							</span>
-							<span class="titulo">Sair</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<span class="icon empty"> &nbsp; </span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<span class="icon empty"> &nbsp; </span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<span class="icon empty"> &nbsp; </span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<span class="icon empty"> &nbsp; </span>
-						</a>
-					</li>
-				</ul>
-			</div>
-			<div id="main-content">
-				<div id="home"></div>
-				<div id="products"></div>
-				<div id="profile"></div>
-				<div id="graph"></div>
-				<div id="requests"></div>
-				<div id="support"></div>
-			</div>
-		</div>
-		<div class="loading" id="loading">
-			<div class="spinner-border text-warning" role="status">
-				<span class="visually-hidden">Loading...</span>
-			</div>
-		</div>
-		<div style="display: none" class="no-connection" id="no-connection">
-			<h1>Você está offline!</h1>
-		</div>
-		<script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-		<script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-		<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
-		<script src="../node_modules/vue/dist/vue.js"></script>
-		<script type="module" src="global.js"></script>
-		<script type="module">
-			const axios = require("axios");
-			const BrowserWindow = require("@electron/remote");
-			const path = require("path");
-			window.addEventListener("load", async () => {
-				try {
-					const conn = await fetch("https://google.com");
-					if (conn) {
-						document.querySelector("#main-content").setAttribute("style", "");
-						document.querySelector("#no-connection").setAttribute("style", "display: none");
-					}
-				} catch (e) {
-					document.querySelector("#main-content").setAttribute("style", "display: none");
-					document.querySelector("#no-connection").setAttribute("style", "");
-				}
-			}); //Vue Area
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css" />
+	<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="preload" href="global.css" as="style" />
+	<link rel="stylesheet" href="global.css" />
+	<title>NOME EMPRESA</title>
+</head>
 
-			const vue = new Vue({
-				el: "#main",
-				data() {
-					return { menus: { home: "active", products: "", profile: "", graph: "", requests: "", support: "" } };
-				},
-				methods: {
-					alertar(btn) {
-						for (let c in this.menus) {
-							this.menus[c] = "";
-						}
-						switch (btn) {
-							case "home":
-								this.menus["home"] = "active";
-								break;
-							case "products":
-								this.menus["products"] = "active";
-								break;
-							case "profile":
-								this.menus["profile"] = "active";
-								break;
-							case "graph":
-								this.menus["graph"] = "active";
-								break;
-							case "requests":
-								this.menus["requests"] = "active";
-								break;
-							case "support":
-								this.menus["support"] = "active";
-								break;
-						}
-					},
-					logoff() {
-						axios.post("http://localhost:8080/user/logoff").then((res) => {
-							if (res.data.success) {
-								BrowserWindow.getCurrentWindow().loadFile(path.join(__dirname, "./index.html"));
-							}
-						});
-					},
-				},
-			});
-		</script>
-	</body>
+<body>
+	<div id="main">
+		<div class="lateral container">
+			<ul>
+				<li>
+					<a href="#">
+						<span class="icon empty"> &nbsp; </span>
+					</a>
+				</li>
+				<li id="nav-home">
+					<a @click="alertar('home')" :class="menus['home']" href="#">
+						<span class="icon">
+							<i class="bi bi-house-fill"></i>
+						</span>
+						<span class="titulo">Início</span>
+					</a>
+				</li>
+				<li id="nav-products">
+					<a @click="alertar('products')" :class="menus['products']" href="#">
+						<span class="icon">
+							<i class="bi bi-box"></i>
+						</span>
+						<span class="titulo">Produtos</span>
+					</a>
+				</li>
+				<li id="nav-requests">
+					<a @click="alertar('request')" :class="menus['request']" href="#">
+						<span class="icon">
+							<i class="bi bi-journal-text"></i>
+						</span>
+						<span class="titulo">Pedidos</span>
+					</a>
+				</li>
+				<li id="nav-graph">
+					<a @click="alertar('graph')" :class="menus['graph']" href="#">
+						<span class="icon">
+							<i class="bi bi-bar-chart-fill"></i>
+						</span>
+						<span class="titulo">Gráfico</span>
+					</a>
+				</li>
+				<li id="nav-support">
+					<a @click="alertar('support')" :class="menus['support']" href="#">
+						<span class="icon">
+							<i class="bi bi-tools"></i>
+						</span>
+						<span class="titulo">Configurações</span>
+					</a>
+				</li>
+				<li id="nav-profile">
+					<a @click="alertar('profile')" :class="menus['profile']" href="#">
+						<span class="icon">
+							<i class="bi bi-person-fill"></i>
+						</span>
+						<span class="titulo">Perfil</span>
+					</a>
+				</li>
+				<li>
+					<a @click="logoff()" href="#">
+						<span class="icon">
+							<i class="bi bi-box-arrow-left"></i>
+						</span>
+						<span class="titulo">Sair</span>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<span class="icon empty"> &nbsp; </span>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<span class="icon empty"> &nbsp; </span>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<span class="icon empty"> &nbsp; </span>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<span class="icon empty"> &nbsp; </span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div id="main-content" v-if="loaded" v-cloak>
+			<div v-if="menus['home'] === 'active'" id="home"></div>
+			<div v-if="menus['products'] === 'active'" id="products">
+				<div class="container-table">
+					<div v-for="product in products" class="box-prod">
+						<div>
+							<img src="https://http2.mlstatic.com/D_NQ_NP_620438-MLB29512328329_022019-O.jpg" width=200
+								height=180>
+						</div>
+						<div>
+							<h1>{{product.name}}</h1>
+							<h2>disponível: {{product.avaiable}}</h2>
+						</div>
+						<div style="text-align: right;">
+							<button class="btn"><i class="bi bi-plus"></i></button>
+							<button class="btn"><i class="bi bi-dash"></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div v-if="menus['profile'] === 'active'" id="profile"></div>
+			<div v-if="menus['graph'] === 'active'" id="graph"></div>
+			<div v-if="menus['requests'] === 'active'" id="requests"></div>
+			<div v-if="menus['support'] === 'active'" id="support"></div>
+		</div>
+	</div>
+	<div class="loading" id="loading">
+		<div class="spinner-border text-warning" role="status">
+			<span class="visually-hidden">Loading...</span>
+		</div>
+	</div>
+	<div style="display: none" class="no-connection" id="no-connection">
+		<h1>Você está offline!</h1>
+	</div>
+	<script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+	<script src="../node_modules/vue/dist/vue.js"></script>
+	<script type="module" src="global.js"></script>
+	<script type="module" src="dashboardVue.js"></script>
+</body>
+
 </html>
