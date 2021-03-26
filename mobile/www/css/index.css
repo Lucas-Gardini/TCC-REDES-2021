@@ -1,0 +1,29 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.backgroundsvg {
+	display: flex;
+	flex-direction: column;
+	z-index: -1;
+	height: 100vh;
+}
+
+.backgroundsvg img {
+	margin-left: auto;
+	margin-top: auto;
+	width: 40%;
+	padding-right: 10px;
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+}
+
+.title {
+	color: black;
+	font-size: 30px;
+}
+
+.config {
+	color: black;
+}

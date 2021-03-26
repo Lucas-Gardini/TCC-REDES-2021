@@ -3,6 +3,7 @@ const bpJSON = require("body-parser").json();
 const morgan = require("morgan");
 const session = require("express-session");
 const cookies = require("cookie-parser");
+const cors = require("cors");
 const path = require("path");
 // Routes
 const loginRoute = require("./src/routes/userRoute.js");
@@ -17,7 +18,7 @@ app.use(
 		saveUninitialized: false,
 	})
 );
-
+app.use(cors({ origin: "*" }));
 app.use(morgan("dev"));
 
 const port = 8080;
