@@ -7,8 +7,14 @@ const userController = {
 	async getAllUsers(req, res) {
 		res.send(await users.find({}).exec());
 	},
-	async getUser(req, res) {
+	async getUser(req, res, next) {
 		const { user, password } = req.body;
+		await Object.assign(req.session, {
+			auth: {
+				user,
+				password,
+			},
+		});
 		try {
 			const result = await users.find({ user: user }).exec();
 			const hash = result[0].passwd;
@@ -29,19 +35,22 @@ const userController = {
 			res.send("INVALID").end();
 		}
 	},
-	async getSession(req, res) {
-		res.send(req.session);
+	async getSession(req, res, next) {
+		res.send(`Session after login: ${JSON.stringify(req.session.id)}`);
 	},
 	async addUser(req, res) {
 		// Encrypting Password
 		bcrypt.genSalt(saltRounds, function (err, salt) {
 			bcrypt.hash("admin", salt, async function (err, hash) {
-				const create = await users.create({ user: "admin", passwd: hash, function: null, adm: true }, (err) => {
-					if (err) res.send(`Error code: ${err.code}`);
-					else {
-						res.send(create);
+				const create = await users.create(
+					{ user: "admin", passwd: hash, function: null, adm: true },
+					(err) => {
+						if (err) res.send(`Error code: ${err.code}`);
+						else {
+							res.send(create);
+						}
 					}
-				});
+				);
 
 				console.log(hash);
 			});
