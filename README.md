@@ -47,8 +47,9 @@ Para a funcionalidade completa do projeto, os seguintes recursos serão necessá
         -   HTML
         -   CSS
         -   JavaScript
-        -   OnsenUi
+        -   NuxtJs
         -   VueJs
+        -   Vuetify
         -   Bootstrap Icons
         -   HeroIcons
         -   UnDraw
