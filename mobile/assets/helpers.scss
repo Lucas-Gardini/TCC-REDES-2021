@@ -1,0 +1,37 @@
+.m-auto {
+	margin: auto;
+}
+
+@for $i from 1 through 1000 {
+	.m-#{$i} {
+		margin: #{$i + 'px'} !important;
+	}
+	.mt-#{$i} {
+		margin-top: #{$i + 'px'} !important;
+	}
+	.mb-#{$i} {
+		margin-bottom: #{$i + 'px'} !important;
+	}
+	.ml-#{$i} {
+		margin-left: #{$i + 'px'} !important;
+	}
+	.mr-#{$i} {
+		margin-right: #{$i + 'px'} !important;
+	}
+
+	.p-#{$i} {
+		padding: #{$i + 'px'} !important;
+	}
+	.pt-#{$i} {
+		padding-top: #{$i + 'px'} !important;
+	}
+	.pb-#{$i} {
+		padding-bottom: #{$i + 'px'} !important;
+	}
+	.pl-#{$i} {
+		padding-left: #{$i + 'px'} !important;
+	}
+	.pr-#{$i} {
+		padding-right: #{$i + 'px'} !important;
+	}
+}

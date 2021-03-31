@@ -22,7 +22,7 @@ export default {
 		link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
 	},
 
-	css: [],
+	css: ['~/assets/helpers.scss'],
 
 	plugins: [],
 
@@ -53,4 +53,8 @@ export default {
 	},
 
 	build: {},
+
+	server: {
+		port: 6924,
+	},
 }
