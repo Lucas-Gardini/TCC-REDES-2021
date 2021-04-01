@@ -5,7 +5,7 @@
 			<v-spacer />
 		</v-app-bar>
 		<v-main>
-			<v-container fill-height fluid>
+			<v-container>
 				<nuxt />
 			</v-container>
 		</v-main>
@@ -22,9 +22,9 @@ export default {
 			clipped: false,
 			fixed: true,
 			title: 'Orderify - Mobile',
-		}
+		};
 	},
-}
+};
 </script>
 
 <style>
@@ -50,5 +50,11 @@ body {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
 	background: #555;
+}
+
+.floating-action-button {
+	position: fixed;
+	bottom: 60px;
+	right: 10px;
 }
 </style>

@@ -1,4 +1,4 @@
-import colors from 'vuetify/es5/util/colors'
+import colors from 'vuetify/es5/util/colors';
 
 export default {
 	ssr: false,
@@ -24,7 +24,11 @@ export default {
 
 	css: ['~/assets/helpers.scss'],
 
-	plugins: [],
+	plugins: [
+		{
+			src: '~/plugins/cookieSession.client.js',
+		},
+	],
 
 	components: true,
 
@@ -57,4 +61,4 @@ export default {
 	server: {
 		port: 6924,
 	},
-}
+};
