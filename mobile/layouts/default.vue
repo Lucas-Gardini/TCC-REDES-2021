@@ -57,4 +57,10 @@ body {
 	bottom: 60px;
 	right: 10px;
 }
+
+.logout-floating-action-button {
+	position: fixed;
+	bottom: 60px;
+	left: 10px;
+}
 </style>

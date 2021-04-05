@@ -13,6 +13,7 @@ export const mutations = {
 	unAuthenticate(state) {
 		state.authenticated = false;
 		state.authentication = { name: '', passwd: '' };
+		this.$router.push('/auth');
 	},
 };
 
