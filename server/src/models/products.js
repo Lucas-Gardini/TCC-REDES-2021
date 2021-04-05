@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const productsSchema = new mongoose.Schema({
+	name: String,
 	price: Number,
 	ingredients: Array,
 	available: Boolean,

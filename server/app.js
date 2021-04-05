@@ -5,8 +5,13 @@ const session = require("express-session");
 const cookies = require("cookie-parser");
 const cors = require("cors");
 const path = require("path");
+const host = require("localtunnel");
+
 // Routes
 const loginRoute = require("./src/routes/userRoute.js");
+const productsRoute = require("./src/routes/productsRoute.js");
+const requestsRoute = require("./src/routes/requestsRoute.js");
+const tablesRoute = require("./src/routes/tablesRoute.js");
 
 const app = express();
 app.use(bpJSON);
@@ -27,22 +32,13 @@ app.use(morgan("dev"));
 
 const port = 8080;
 
-app.get("/1", function (req, res, next) {
-	if (req.session.views) {
-		req.session.views++;
-		res.setHeader("Content-Type", "text/html");
-		res.write(JSON.stringify(req.session));
-		res.end();
-	} else {
-		req.session.views = 1;
-		res.end("welcome to the session demo. refresh!");
-	}
-});
-
 app.use("/public", express.static("./response_pages"));
 
 // Using Routes
 app.use("/user", loginRoute);
+app.use("/products", productsRoute);
+app.use("/requests", requestsRoute);
+app.use("/tables", tablesRoute);
 
 app.post("/", (req, res) => {
 	console.log(req.session);
@@ -52,6 +48,19 @@ app.get("**", (req, res) => {
 	res.sendFile(path.join(__dirname, "/response_pages/404.html"));
 });
 
-app.listen(process.env.PORT || port, () => {
+app.listen(process.env.PORT || port, async () => {
+	console.log("\u001b[35mTying to start server...");
+	const tunnel = await host({ port: 8080, subdomain: "orderify" });
+
+	url = tunnel.url;
+	console.log(`Hosting in ${url}\u001b[37m`);
+
+	tunnel.on("open", () => {
+		console.log("\u001b[36mStarted server\u001b[37m");
+	});
+
+	tunnel.on("close", () => {
+		console.log("\u001b[31mServer Crashed or Stopped\u001b[37m");
+	});
 	console.log(`Server listening in port ${process.env.PORT || port}`);
 });
