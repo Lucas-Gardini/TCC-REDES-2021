@@ -38,21 +38,25 @@ Server.on("connection", (conn) => {
 });
 
 userModel.watch().on("change", (change) => {
+	console.log("Database changed: " + "user");
 	for (let conn in connections) {
 		connections[conn].send("user");
 	}
 });
 productsModel.watch().on("change", (change) => {
+	console.log("Database changed: " + "products");
 	for (let conn in connections) {
 		connections[conn].send("products");
 	}
 });
 requestsModel.watch().on("change", (change) => {
+	console.log("Database changed: " + "requests");
 	for (let conn in connections) {
 		connections[conn].send("requests");
 	}
 });
 tablesModel.watch().on("change", (change) => {
+	console.log("Database changed: " + "tables");
 	for (let conn in connections) {
 		connections[conn].send("tables");
 	}

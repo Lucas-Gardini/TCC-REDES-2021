@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 
 const requestsSchema = new mongoose.Schema({
-	table_id: Number,
+	table_id: String,
+	products: Array,
 	completed: Boolean,
-	date: Date,
+	date: { type: Date, default: Date.now() },
 });
 
 module.exports = mongoose.model("requests", requestsSchema);

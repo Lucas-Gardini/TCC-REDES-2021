@@ -26,7 +26,17 @@ app.use(
 	})
 );
 app.use(
-	cors({ allowedHeaders: ["Content-Type", "Set-Cookie"], origin: "*", methods: ["POST", "GET"] })
+	cors({
+		allowedHeaders: [
+			"Content-Type",
+			"Set-Cookie",
+			"Access-Control-Allow-Origin",
+			"Allow-Origin",
+			"Allowed-Methods",
+		],
+		origin: "*",
+		methods: ["POST", "GET"],
+	})
 );
 app.use(morgan("dev"));
 
@@ -49,18 +59,31 @@ app.get("**", (req, res) => {
 });
 
 app.listen(process.env.PORT || port, async () => {
-	console.log("\u001b[35mTying to start server...");
-	const tunnel = await host({ port: 8080, subdomain: "orderify" });
+	console.log("Tying to start server...");
+	const server = await host({ port: 8080, subdomain: "orderify" });
+	const websocket = await host({ port: 8081, subdomain: "ws-orderify" });
 
-	url = tunnel.url;
-	console.log(`Hosting in ${url}\u001b[37m`);
+	const server_url = server.url;
+	const websocket_url = websocket.url;
 
-	tunnel.on("open", () => {
-		console.log("\u001b[36mStarted server\u001b[37m");
+	console.log(`Server hosting in ${server_url}`);
+	console.log(`WebSocket hosting in ${websocket_url}`);
+
+	server.on("open", () => {
+		console.log(`Server hosting in ${server_url}`);
 	});
 
-	tunnel.on("close", () => {
-		console.log("\u001b[31mServer Crashed or Stopped\u001b[37m");
+	websocket.on("open", () => {
+		console.log(`WebSocket hosting in ${websocket_url}`);
 	});
-	console.log(`Server listening in port ${process.env.PORT || port}`);
+
+	server.on("close", () => {
+		console.log("Server Crashed or Stopped");
+	});
+
+	websocket.on("close", () => {
+		console.log("WebSocket Crashed or Stopped");
+	});
+
+	console.log(`SERVER STARTED`);
 });
