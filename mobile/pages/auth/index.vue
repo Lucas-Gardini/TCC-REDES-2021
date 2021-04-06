@@ -141,7 +141,7 @@ export default {
 				this.loading = true;
 				try {
 					const auth = await this.$axios.$post(
-						'http://localhost:8080/user/get',
+						'https://orderify.loca.lt//user/get',
 						{
 							user: this.name,
 							password: this.password,
