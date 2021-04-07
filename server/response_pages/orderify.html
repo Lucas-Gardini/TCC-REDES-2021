@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta name="title" content="Orderify - Facilitando a organização do seu estabelecimento">
+    <meta name="description"
+        content="O objetivo do projeto, é facilitar a organização do estabelecimento tanto para o dono quanto para os funcionários.">
+    <meta name="keywords" content="Ordem, comandas, pedidos, organização, restaurante, garçom">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="Portuguese">
+    <meta name="author" content="Gabriel Luiz, Gabriela Ornellas, Lucas Gardini Dias, Pedro Comelli, Thiago Aio">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Orderify - Facilitando a organização do seu estabelecimento</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .row * {
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body class="bg-dark text-light">
+    <div id="main" v-cloak>
+        <nav class="navbar fixed-top navbar-expand-lg bg-success navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand h1 m-0" href="#">Orderify</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <div style="border-left: 1px solid white;margin-left: 10px;margin-right: 5px;"></div>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#main">
+                                <i class="bi bi-house-fill"></i>Inicio
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#about">
+                                <i class="bi bi-person-lines-fill"></i> Sobre nós
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#contact">
+                                <i class="bi bi-geo-alt-fill"></i> Contato
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <section id="home"
+            style="background-image: url(https://i.pinimg.com/originals/11/a5/5a/11a55a964c278eec04d849c5d312bfee.jpg);background-position: center;background-repeat: no-repeat;background-size: cover;margin-top: 56px;">
+            <div style="min-width: 100%;max-width: 100%; background-color: rgba(0, 0, 0, 0.5);padding-bottom: 25px; ">
+                <div style="padding-top: 50px;padding-bottom: 50px;">
+                    <h1 style="text-align: center; ">ORDERIFY</h1>
+                    <h2 style="font-size: large;text-align: center; ">
+                        Dê um basta na desorganização. Facilite o gerenciamento do seu estabelecimento com o Orderify
+                    </h2><br>
+                    <div class='container' style="text-align: center;">
+                        <button @click="buy" class="btn btn-success col-auto">Adquira já</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="contact" class="container">
+
+        </section>
+        <hr>
+        <section id="about" class="container">
+            <h1 style="text-align: center;">Sobre Nós</h1>
+            <div id="row" class="row row-cols-4 justify-content-md-center" style="display: flex; text-align: center;">
+                <div class="card col-12 xs12 sm12" style="width: 18rem;">
+                    <img src="public/team/Kovinski.jpg" class="card-img-top" alt="Imagem do Lucas Gardini">
+                    <div class="card-body">
+                        <h5 class="card-title text-dark">Lucas Gardini Dias</h5>
+                        <p class="card-text text-dark">
+                            Desenvolvedor full-stack da aplicação (<i>mobile</i>, <i>desktop</i>, servidor e
+                            <i>web</i>)
+                        </p>
+                        <a href="https://github.com/Lucas-Gardini" target="_blank" class="btn bg-dark text-light"><i
+                                class="bi bi-github"></i> Perfil do GitHub</a>
+                    </div>
+                </div>
+                <div class="card col-12 xs12 sm12" style="width: 18rem;">
+                    <img src="https://medias.cnnbrasil.com.br/barry-austin.jpeg?format=JPEG&image=https://mediastorage.cnnbrasil.com.br/IMAGES/00/00/02/22251_C44B6C9438A62D53.jpg&width=719&height=405&resize=CROP"
+                        width="256" height="256" class="card-img-top" alt="Imagem Pedro Comelli">
+                    <div class="card-body">
+                        <h5 class="card-title text-dark">Pedro Comelli Neto</h5>
+                        <p class="card-text text-dark">Suporte de desenvolvimento</p>
+                        <a href="https://github.com/Nosay22" target="_blank" class="btn text-light bg-dark"> <i
+                                class="bi bi-github"></i> Perfil do GitHub</a>
+                    </div>
+                </div>
+                <div class="card col-12 xs12 sm12" style="width: 18rem;">
+                    <img src="public/team/Thuzinho.png" class="card-img-top" alt="Imagem Thiago">
+                    <div class="card-body">
+                        <h5 class="card-title text-dark">Thiago Aio</h5>
+                        <p class="card-text text-dark">Desenvolvedor Front-end</p>
+                        <a href="https://github.com/thiagoa261" target="_blank" class="btn text-light bg-dark">
+                            <i class="bi bi-github"></i> Perfil do GitHub
+                        </a>
+                    </div>
+                </div>
+                <div class="card col-12 xs12 sm12" style="width: 18rem;">
+                    <img width="262" height="262" src="http://www.otomedsc.com.br/adm/prof/2a.jpg" class="card-img-top"
+                        alt="Imagem do Luiz">
+                    <div class="card-body">
+                        <h5 class="card-title text-dark">Gabriel Luiz de Oliveira</h5>
+                        <p class="card-text text-dark">Desenvolvedor Front-end</p>
+                        <a href="https://github.com/Luiz2077" target="_blank" class="btn bg-dark text-light">
+                            <i class="bi bi-github"></i> Perfil do GitHub
+                        </a>
+                    </div>
+                </div>
+                <div class="card col-12 xs12 sm12" style="width: 18rem;">
+                    <img width="262" height="262"
+                        src="https://vempraminds.com.br/wp-content/uploads/2020/02/duvidas1-1000x650.jpg"
+                        class="card-img-top" alt="Imagem da Gabriela">
+                    <div class="card-body">
+                        <h5 class="card-title text-dark">Gabriela da Silva Ornellas</h5>
+                        <p class="card-text text-dark">Pensar</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js "></script>
+    <script src='https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js'></script>
+    <script>
+        const vue = new Vue({
+            el: '#main',
+            data() {
+                return {
+
+                };
+            },
+            methods: {
+                buy() {
+                    alert("Em desenvolvimento")
+                    //window.open('mailto:test@example.com');
+                }
+            },
+        });
+
+        window.onresize = checkResponsivity();
+
+        function checkResponsivity() {
+            if (window.innerWidth < 500) {
+                document.querySelector("#row").setAttribute("class", "row");
+            } else {
+                document.querySelector("#row").setAttribute("class", "row row-cols-4 justify-content-md-center");
+            }
+        }
+    </script>
+</body>
+
+</html>
