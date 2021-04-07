@@ -18,13 +18,19 @@ const productsModel = require("./products.js");
 const requestsModel = require("./requests.js");
 const tablesModel = require("./tables.js");
 
-console.log("Starting WebSocket Server");
+console.log("-----------------------------");
+console.log(" 🛠 Starting WebSocket Server");
 
 const Server = new ws.Server({
 	port: 8081,
 });
 
 var connections = [];
+
+Server.on("listening", () => {
+	console.log(" ✔ WebSocket Server Running");
+	console.log("-----------------------------");
+});
 
 Server.on("connection", (conn) => {
 	connections.push(conn);

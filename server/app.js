@@ -50,8 +50,8 @@ app.use("/products", productsRoute);
 app.use("/requests", requestsRoute);
 app.use("/tables", tablesRoute);
 
-app.post("/", (req, res) => {
-	console.log(req.session);
+app.get("/", (req, res) => {
+	res.sendFile(path.join(__dirname, "/response_pages/orderify.html"));
 });
 
 app.get("**", (req, res) => {
@@ -59,15 +59,18 @@ app.get("**", (req, res) => {
 });
 
 app.listen(process.env.PORT || port, async () => {
-	console.log("Tying to start server...");
+	console.log(" ⌛ Waiting for localtunnel");
+	console.log("-----------------------------");
 	const server = await host({ port: 8080, subdomain: "orderify" });
 	const websocket = await host({ port: 8081, subdomain: "ws-orderify" });
 
 	const server_url = server.url;
 	const websocket_url = websocket.url;
 
-	console.log(`Server hosting in ${server_url}`);
-	console.log(`WebSocket hosting in ${websocket_url}`);
+	console.log("-----------------------------");
+	console.log(` 🛅 Server hosting in ${server_url}`);
+	console.log(` 🔌 WebSocket hosting in ${websocket_url}`);
+	console.log("-----------------------------");
 
 	server.on("open", () => {
 		console.log(`Server hosting in ${server_url}`);
