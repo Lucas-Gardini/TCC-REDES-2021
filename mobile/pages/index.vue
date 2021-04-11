@@ -286,7 +286,10 @@ export default {
 		this.fetchProducts();
 
 		this.websocket = new WebSocket('wss://ws-orderify.loca.lt');
-		console.log(this.websocket);
+		this.websocket.onerror = (e) => {
+			console.log(e);
+		};
+
 		this.websocket.onmessage = (msg) => {
 			msg = msg.data;
 			switch (msg) {

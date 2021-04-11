@@ -1,7 +1,5 @@
 import colors from 'vuetify/es5/util/colors';
 
-import lt from 'localtunnel';
-
 export default {
 	ssr: false,
 
@@ -63,12 +61,16 @@ export default {
 	server: {
 		port: 6924,
 	},
+
+	loading: {
+		color: '#4caf50',
+		failedColor: 'red',
+		background: '#121212',
+		css: false,
+	},
+	loadingIndicator: {
+		name: 'cube-grid',
+		color: '#4caf50',
+		background: '#121212',
+	},
 };
-
-async function startServer() {
-	const server = await lt({ port: 6924, subdomain: 'orderify' });
-	const serverUrl = server.url;
-	console.log(`Nuxt server listening in ${serverUrl}`);
-}
-
-startServer();
