@@ -1,3 +1,6 @@
+// Baianisse
+const colors = require("colors");
+
 const express = require("express");
 const bpJSON = require("body-parser").json();
 const morgan = require("morgan");
@@ -60,16 +63,16 @@ app.get("**", (req, res) => {
 
 app.listen(process.env.PORT || port, async () => {
 	console.log(" ⌛ Waiting for localtunnel");
-	console.log("-----------------------------");
-	const server = await host({ port: 8080, subdomain: "orderify" });
+
+	const server = await host({ port: 8080, subdomain: "api-orderify" });
 	const websocket = await host({ port: 8081, subdomain: "ws-orderify" });
 
 	const server_url = server.url;
 	const websocket_url = websocket.url;
 
 	console.log("-----------------------------");
-	console.log(` 🛅 Server hosting in ${server_url}`);
-	console.log(` 🔌 WebSocket hosting in ${websocket_url}`);
+	console.log(` 🛅 Server hosting in ${server_url.yellow.bgBlack}`);
+	console.log(` 🔌 WebSocket hosting in ${websocket_url.yellow.bgBlack}`);
 	console.log("-----------------------------");
 
 	server.on("open", () => {
