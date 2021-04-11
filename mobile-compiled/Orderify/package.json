@@ -1,27 +1,31 @@
 {
-    "version": "1.0.0",
-    "name": "Orderify",
-    "app-name": "Orderify",
-    "package-name": "webview",
-    "project-type": "webview",
-    "icon": "./assets/icon/icon.png",
-    "dist-path": "./dist",
-    "permission": [
-        "android.permission.INTERNET"
-    ],
-    "description": "",
-    "main": "main.js",
-    "scripts": {
-        "start:dev": "node .",
-        "build": "androidjs build"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "androidjs": "^2.0.2"
-    },
-    "project-name": "Orderify",
-    "theme": {
-        "fullScreen": true
-    }
+	"version": "1.0.0",
+	"name": "Orderify",
+	"app-name": "Orderify",
+	"package-name": "kowalskijr",
+	"project-type": "webview",
+	"icon": "./assets/icon/icon.png",
+	"dist-path": "./dist",
+	"permission": [
+		"android.permission.INTERNET"
+	],
+	"description": "",
+	"main": "main.js",
+	"scripts": {
+		"start:dev": "node .",
+		"build": "androidjs build"
+	},
+	"author": "KowalskiJr",
+	"license": "ISC",
+	"dependencies": {
+		"androidjs": "^2.0.2"
+	},
+	"project-name": "Orderify",
+	"theme": {
+		"fullScreen": true,
+		"colorAccent": "#4caf50",
+		"colorPrimary": "#272727",
+		"colorPrimaryDark": "#272727"
+	},
+	"screenOrientation": "portrait"
 }
