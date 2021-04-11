@@ -141,12 +141,13 @@ export default {
 				this.loading = true;
 				try {
 					const auth = await this.$axios.$post(
-						'https://orderify.loca.lt//user/get',
+						'https://api-orderify.loca.lt/user/get',
 						{
 							user: this.name,
 							password: this.password,
 						}
 					);
+					console.log(auth);
 					if (auth === 'OK') {
 						this.authenticate({
 							user: this.name,

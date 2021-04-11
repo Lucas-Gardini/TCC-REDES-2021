@@ -155,7 +155,7 @@
 										<h1>
 											Total:
 											<span style="color: #4caf50"
-												>R$ {{ total_price }}</span
+												>R$ {{ selecting_price }}</span
 											>
 										</h1>
 									</v-card-text>
@@ -164,20 +164,14 @@
 										<v-btn
 											color="green darken-1"
 											text
-											@click="
-												product_dialog = false;
-												saveProducts();
-											"
+											@click="saveProducts()"
 										>
 											Salvar
 										</v-btn>
 										<v-btn
 											color="green darken-1"
 											text
-											@click="
-												product_dialog = false;
-												resetProducts();
-											"
+											@click="resetProducts()"
 										>
 											Resetar
 										</v-btn>
@@ -189,15 +183,46 @@
 					<ul class="mb-10">
 						<li v-for="(product, i) in order_products" :key="i">
 							<div style="display: flex; flex-direction: row">
-								<span>{{ product.name }},&nbsp;</span>
-								<span style="color: #4caf50"
-									>R$ {{ product.price }}</span
-								>
+								<div class="d-inline pa-2">
+									<span>{{ product[0].name }},&nbsp;</span>
+									<span style="color: #4caf50"
+										>R$
+										{{
+											String(
+												Number(
+													product[0].price
+												).toFixed(2)
+											).replace('.', ',')
+										}},&nbsp;</span
+									>
+									<span>Quantidade: {{ product[1] }} </span>
+								</div>
+								<div class="d-inline pa-2">
+									<span>
+										<v-btn
+											x-small
+											color="green"
+											@click="updateQuantity(i, 1)"
+										>
+											<i class="mdi mdi-plus"></i>
+										</v-btn>
+										<v-btn
+											x-small
+											color="red"
+											@click="updateQuantity(i, -1)"
+										>
+											<i class="mdi mdi-minus"></i>
+										</v-btn>
+									</span>
+								</div>
 							</div>
 						</li>
 					</ul>
 					<v-divider></v-divider>
-					<h1 v-if="total_price > 0" class="mt-5 mb-5">
+					<h1
+						v-if="Number(String(total_price).replace(',', '.')) > 0"
+						class="mt-5 mb-5"
+					>
 						Total:
 						<span style="color: #4caf50">R$ {{ total_price }}</span>
 					</h1>
@@ -230,12 +255,26 @@ export default {
 		order_products: [],
 		checkbox_products: [],
 		total_price: 0,
+		selecting_price: 0,
 		product_dialog: false,
 		radios: null,
 		websocket: null,
 		can_send: false,
 		sended: false,
 	}),
+	watch: {
+		order_products(newVal) {
+			let master = 0;
+			for (const product of newVal) {
+				const price = product[0].price;
+				master += price * product[1];
+			}
+			this.total_price = String(Number(master).toFixed(2)).replace(
+				'.',
+				','
+			);
+		},
+	},
 	beforeCreate() {
 		if (!this.$store.getters.getAuthentication) {
 			this.$router.push('/auth');
@@ -263,13 +302,13 @@ export default {
 	methods: {
 		async fetchTables() {
 			const tables = await this.$axios.$get(
-				'https://orderify.loca.lt/tables/getall'
+				'https://api-orderify.loca.lt/tables/getall'
 			);
 			this.available_tables = tables;
 		},
 		async fetchProducts() {
 			const products = await this.$axios.$get(
-				'https://orderify.loca.lt/products/getall'
+				'https://api-orderify.loca.lt/products/getall'
 			);
 			this.products = products;
 		},
@@ -283,7 +322,7 @@ export default {
 		verifyProducts() {
 			setTimeout(() => {
 				const currentProducts = [];
-				this.total_price = 0;
+				this.selecting_price = 0;
 				const checkboxes = document.querySelectorAll(
 					'input[type=checkbox]'
 				);
@@ -293,13 +332,13 @@ export default {
 						checkboxes[el].checked
 					) {
 						currentProducts.push(el);
-						this.total_price = Number(
-							String(this.total_price).replace(',', '.')
+						this.selecting_price = Number(
+							String(this.selecting_price).replace(',', '.')
 						).toFixed(2);
-						this.total_price =
-							Number(this.total_price) +
+						this.selecting_price =
+							Number(this.selecting_price) +
 							Number(this.products[el].price);
-						this.total_price = this.total_price
+						this.selecting_price = this.selecting_price
 							.toFixed(2)
 							.replace('.', ',');
 					}
@@ -308,11 +347,13 @@ export default {
 			}, 200);
 		},
 		saveProducts() {
+			this.product_dialog = false;
 			this.order_products = [];
 			for (const c in this.selected_products) {
-				this.order_products.push(
-					this.products[this.selected_products[c]]
-				);
+				this.order_products.push([
+					this.products[this.selected_products[c]],
+					1,
+				]);
 			}
 			if (this.order_products.length > 0) {
 				this.can_send = true;
@@ -321,6 +362,7 @@ export default {
 			}
 		},
 		resetProducts() {
+			this.product_dialog = false;
 			this.selected_products = [];
 			this.total_price = 0;
 			this.checkbox_products = [];
@@ -333,13 +375,13 @@ export default {
 				const productsId = [];
 				const tableId = this.available_tables[this.current_table]._id;
 				for (const c in this.selected_products) {
-					productsId.push(
-						this.products[this.selected_products[c]]._id
-					);
+					productsId.push([
+						this.products[this.selected_products[c]]._id,
+						this.order_products[c][1],
+					]);
 				}
-				console.log(this.available_tables);
 				const request = await this.$axios.post(
-					'https://orderify.loca.lt/requests/add',
+					'https://api-orderify.loca.lt/requests/add',
 					{
 						products: productsId,
 						table_id: tableId,
@@ -352,6 +394,14 @@ export default {
 				}
 				this.sended = false;
 			});
+		},
+		updateQuantity(product, quantity) {
+			this.$set(
+				this.order_products[product],
+				1,
+				(this.order_products[product][1] += quantity)
+			);
+			this.verifyProducts();
 		},
 		...mapMutations({
 			unAuthenticate: 'unAuthenticate',
