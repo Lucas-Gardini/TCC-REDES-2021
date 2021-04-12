@@ -285,7 +285,7 @@ export default {
 		this.fetchTables();
 		this.fetchProducts();
 
-		this.websocket = new WebSocket('wss://ws-orderify.loca.lt');
+		this.websocket = new WebSocket('ws://localhost:8081');
 		this.websocket.onerror = (e) => {
 			console.log(e);
 		};
@@ -305,13 +305,13 @@ export default {
 	methods: {
 		async fetchTables() {
 			const tables = await this.$axios.$get(
-				'https://api-orderify.loca.lt/tables/getall'
+				'http://localhost:8080/tables/getall'
 			);
 			this.available_tables = tables;
 		},
 		async fetchProducts() {
 			const products = await this.$axios.$get(
-				'https://api-orderify.loca.lt/products/getall'
+				'http://localhost:8080/products/getall'
 			);
 			this.products = products;
 		},
@@ -384,7 +384,7 @@ export default {
 					]);
 				}
 				const request = await this.$axios.post(
-					'https://api-orderify.loca.lt/requests/add',
+					'http://localhost:8080/requests/add',
 					{
 						products: productsId,
 						table_id: tableId,
@@ -399,12 +399,21 @@ export default {
 			});
 		},
 		updateQuantity(product, quantity) {
-			this.$set(
-				this.order_products[product],
-				1,
-				(this.order_products[product][1] += quantity)
-			);
-			this.verifyProducts();
+			if (this.order_products[product][1] > 1) {
+				this.$set(
+					this.order_products[product],
+					1,
+					(this.order_products[product][1] += quantity)
+				);
+				this.verifyProducts();
+			} else if (quantity > 0) {
+				this.$set(
+					this.order_products[product],
+					1,
+					(this.order_products[product][1] += quantity)
+				);
+				this.verifyProducts();
+			}
 		},
 		...mapMutations({
 			unAuthenticate: 'unAuthenticate',

@@ -21,7 +21,7 @@ export default {
 		return {
 			clipped: false,
 			fixed: true,
-			title: 'Orderify - Mobile',
+			title: 'Orderify',
 		};
 	},
 };
