@@ -219,6 +219,22 @@
 						</li>
 					</ul>
 					<v-divider></v-divider>
+					<div>
+						<v-row>
+							<v-col cols="12" sm="6">
+								<v-textarea
+									v-model="observations"
+									class="mx-2 mt-3 mb-2"
+									color="green"
+									label="Observações"
+									rows="1"
+									prepend-icon="mdi-comment-eye"
+									auto-grow
+								></v-textarea>
+							</v-col>
+						</v-row>
+					</div>
+					<v-divider></v-divider>
 					<h1
 						v-if="Number(String(total_price).replace(',', '.')) > 0"
 						class="mt-5 mb-5"
@@ -257,7 +273,7 @@ export default {
 		total_price: 0,
 		selecting_price: 0,
 		product_dialog: false,
-		radios: null,
+		observations: null,
 		websocket: null,
 		can_send: false,
 		sended: false,
@@ -371,12 +387,14 @@ export default {
 			this.checkbox_products = [];
 			this.order_products = [];
 			this.can_send = false;
+			this.observations = null;
 		},
 		sendProducts() {
 			this.sended = true;
 			setTimeout(async () => {
 				const productsId = [];
 				const tableId = this.available_tables[this.current_table]._id;
+				const observations = this.observations;
 				for (const c in this.selected_products) {
 					productsId.push([
 						this.products[this.selected_products[c]]._id,
@@ -387,6 +405,7 @@ export default {
 					'http://localhost:8080/requests/add',
 					{
 						products: productsId,
+						observations,
 						table_id: tableId,
 					}
 				);
