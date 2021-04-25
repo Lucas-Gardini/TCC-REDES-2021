@@ -302,6 +302,7 @@ export default {
 		this.fetchProducts();
 
 		this.websocket = new WebSocket('ws://localhost:8081');
+		console.log(this.websocket);
 		this.websocket.onerror = (e) => {
 			console.log(e);
 		};
@@ -384,6 +385,7 @@ export default {
 			this.product_dialog = false;
 			this.selected_products = [];
 			this.total_price = 0;
+			this.selecting_price = 0;
 			this.checkbox_products = [];
 			this.order_products = [];
 			this.can_send = false;

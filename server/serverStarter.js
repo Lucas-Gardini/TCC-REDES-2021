@@ -1,7 +1,7 @@
-const host = require("./server/node_modules/localtunnel");
+const host = require("localtunnel");
 
 async function start() {
-	const server = await host({ port: 8080, subdomain: "api-orderify" });
+	const server = await host({ port: 8080, subdomain: "orderify" });
 	const websocket = await host({ port: 8081, subdomain: "ws-orderify" });
 	const mobile = await host({ port: 6924, subdomain: "app-orderify" });
 

@@ -4,7 +4,9 @@
 	"description": "API para a plataforma de pedidos, destinada a restaurantes para melhorar o antendimento ao cliente",
 	"main": "main.js",
 	"scripts": {
-		"start": "nodemon ./app.js"
+		"start": "npm-run-all -p host server",
+		"host": "node serverStarter.js",
+		"server": "nodemon app.js"
 	},
 	"keywords": [],
 	"author": "Kowalski Jr",
