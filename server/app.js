@@ -26,6 +26,7 @@ app.use(
 		resave: false,
 		saveUninitialized: false,
 		cookie: { secure: false },
+		name: "SessionId",
 	})
 );
 app.use(
@@ -38,20 +39,14 @@ app.use(
 			"Allow-Origin",
 			"Allowed-Methods",
 		],
-		origin: "*",
+		origin: ["http://localhost:8082", "http://localhost:2469"],
 		methods: ["POST", "GET", "OPTIONS", "DELETE"],
+		credentials: true,
 	})
 );
 app.use(morgan("dev"));
 
 const port = 8080;
-
-// CORS
-app.use(function (req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	next();
-});
 
 app.use("/public", express.static("./response_pages"));
 app.use("/app", express.static("./requests_app"));
@@ -71,29 +66,5 @@ app.get("**", (req, res) => {
 });
 
 app.listen(process.env.PORT || port, async () => {
-	// console.log(" ⌛ Waiting for localtunnel");
-	// const server = await host({ port: 8080, subdomain: "orderify" });
-	// const websocket = await host({ port: 8081, subdomain: "ws-orderify" });
-	// const mobile = await host({ port: 6924, subdomain: "app-orderify" });
-	// const server_url = server.url;
-	// const websocket_url = websocket.url;
-	// const mobile_url = mobile.url;
-	// console.log("-----------------------------");
-	// console.log(` 🛅 Server hosting in ${server_url.yellow.bgBlack}`);
-	// console.log(` 🔌 WebSocket hosting in ${websocket_url.yellow.bgBlack}`);
-	// console.log(` 📱 Nuxt server listening in ${mobile_url.yellow.bgBlack}`);
-	// console.log("-----------------------------");
-	// server.on("open", () => {
-	// 	console.log(`Server hosting in ${server_url}`);
-	// });
-	// websocket.on("open", () => {
-	// 	console.log(`WebSocket hosting in ${websocket_url}`);
-	// });
-	// server.on("close", () => {
-	// 	console.log("Server Crashed or Stopped");
-	// });
-	// websocket.on("close", () => {
-	// 	console.log("WebSocket Crashed or Stopped");
-	// });
-	console.log(`SERVER STARTED`);
+	console.log(`SERVER STARTED at port ${process.env.PORT || port}`);
 });
