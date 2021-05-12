@@ -14,6 +14,19 @@ const productsController = {
 		const result = await products.find().exec();
 		res.json(result);
 	},
+	async getQuantity(req, res) {
+		try {
+			if (req.session.auth.loggedin === true) {
+				const result = await products.find().exec();
+				res.send(`${result.length}`);
+			} else {
+				res.sendStatus(403);
+			}
+		} catch (err) {
+			console.log(err);
+			res.sendStatus(418);
+		}
+	},
 };
 
 module.exports = productsController;

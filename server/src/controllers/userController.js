@@ -57,7 +57,7 @@ const userController = {
 	async deleteUser(req, res) {
 		res.send(await users.collection.drop());
 	},
-	async logoffUser(req, res) {
+	async logOffUser(req, res) {
 		try {
 			req.session.destroy();
 			res.send({

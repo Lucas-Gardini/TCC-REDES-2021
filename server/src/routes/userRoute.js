@@ -13,6 +13,6 @@ router.post("/getsession", loginController.getSession);
 
 router.delete("/del", loginController.deleteUser);
 
-router.post("/logoff", loginController.logoffUser);
+router.post("/logoff", loginController.logOffUser);
 
 module.exports = router;
