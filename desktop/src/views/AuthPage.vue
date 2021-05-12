@@ -1,5 +1,5 @@
 <template>
-	<div id="auth" class="d-flex align-items-center justify-content-center" style="height: 350px;">
+	<div id="auth" class="d-flex align-items-center justify-content-center" :style="clientHeight">
 		<div v-if="isLoggingIn">
 			<h1>Orderify</h1>
 			<h2>Login</h2>
@@ -127,6 +127,7 @@ export default {
 	},
 	data: () => {
 		return {
+			clientHeight: "height: 500px",
 			user: "",
 			passwd: "",
 			isLoggingIn: true,
@@ -135,6 +136,7 @@ export default {
 		};
 	},
 	async mounted() {
+		this.clientHeight = `height: ${window.screen.availHeight}px`;
 		localStorage.user = null;
 		const USER_LOGIN_RESULT = await axios.post("http://localhost:8080/user/get", {
 			headers: {
