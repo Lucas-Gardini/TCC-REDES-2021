@@ -1,39 +1,14 @@
 <template>
 	<div id="auth" class="d-flex align-items-center justify-content-center" :style="clientHeight">
 		<div v-if="isLoggingIn">
-			<h1>Orderify</h1>
-			<h2>Login</h2>
+			<div style="text-align: center; border-bottom: 1px solid black">
+				<h1>Orderify</h1>
+				<h2>Login</h2>
+			</div>
 			<br />
-			<MDBInput
-				inputGroup
-				:formOutline="false"
-				wrapperClass="flex-nowrap"
-				v-model="user"
-				aria-label="Usuário"
-				placeholder="Usuário"
-			>
-				<template #prepend>
-					<span class="input-group-text">
-						<i class="mdi mdi-account"></i>
-					</span>
-				</template>
-			</MDBInput>
+			<MDBInput label="Usuário" type="text" v-model="user" />
 			<br />
-			<MDBInput
-				inputGroup
-				:formOutline="false"
-				wrapperClass="flex-nowrap"
-				v-model="passwd"
-				aria-label="Senha"
-				placeholder="Senha"
-				type="password"
-			>
-				<template #prepend>
-					<span class="input-group-text">
-						<i class="mdi mdi-key"></i>
-					</span>
-				</template>
-			</MDBInput>
+			<MDBInput label="Senha" type="password" v-model="passwd" />
 			<br />
 			<div>
 				<MDBBtn @click="logIn" color="success" rounded>Entrar</MDBBtn>&nbsp;
@@ -47,23 +22,12 @@
 			</div>
 		</div>
 		<div v-else>
-			<h1>Orderify</h1>
-			<h2>Troca de Senha</h2>
+			<div style="text-align: center; border-bottom: 1px solid black">
+				<h1>Orderify</h1>
+				<h2>Troca de Senha</h2>
+			</div>
 			<br />
-			<MDBInput
-				inputGroup
-				:formOutline="false"
-				wrapperClass="flex-nowrap"
-				v-model="user"
-				aria-label="Usuário"
-				placeholder="Usuário"
-			>
-				<template #prepend>
-					<span class="input-group-text">
-						<i class="mdi mdi-account"></i>
-					</span>
-				</template>
-			</MDBInput>
+			<MDBInput label="Usuário" type="text" v-model="user" />
 			<br />
 			<div>
 				<MDBBtn color="success" rounded>Enviar Solicitação</MDBBtn>&nbsp;
@@ -82,9 +46,31 @@
 				class="mask"
 				style="background: linear-gradient(45deg, rgba(29, 236, 197, 0.7), rgba(91, 14, 214, 0.7) 100%);"
 			></div>
-			<MDBSpinner style="width: 50px; height: 50px" />
+			<div v-if="serverConnection">
+				<MDBSpinner color="success" style="width: 50px; height: 50px;" />
+			</div>
+			<div v-else>
+				<MDBCard text="center" style="color: #121212">
+					<MDBCardHeader
+						color="danger"
+						style="background-color: #F93154; color: aliceblue"
+						><MDBIcon icon="exclamation-triangle" iconStyle="fas"/> Erro
+						<MDBIcon icon="exclamation-triangle" iconStyle="fas"
+					/></MDBCardHeader>
+					<MDBCardBody>
+						<MDBCardTitle>Sem conexão com o servidor</MDBCardTitle>
+						<MDBCardText>
+							Verifique se o servidor está de pé e que a conexão está estabelecida!
+						</MDBCardText>
+						<MDBBtn @click="checkServerConnection" color="primary">Entendi!</MDBBtn>
+					</MDBCardBody>
+					<MDBCardFooter class="text-muted"
+						>Caso o erro persista, contate o suporte!</MDBCardFooter
+					>
+				</MDBCard>
+			</div>
 		</div>
-		<MDBModal v-model="show">
+		<MDBModal staticBackdrop v-model="show">
 			<MDBModalHeader color="danger" style="color: white">
 				<MDBModalTitle>Erro na Autenticação!</MDBModalTitle>
 			</MDBModalHeader>
@@ -110,6 +96,13 @@ import {
 	MDBModalTitle,
 	MDBModalBody,
 	MDBModalFooter,
+	MDBCard,
+	MDBCardHeader,
+	MDBCardBody,
+	MDBCardText,
+	MDBCardTitle,
+	MDBCardFooter,
+	MDBIcon,
 } from "mdb-vue-ui-kit";
 import axios from "axios";
 
@@ -124,28 +117,44 @@ export default {
 		MDBModalTitle,
 		MDBModalBody,
 		MDBModalFooter,
+		MDBCard,
+		MDBCardHeader,
+		MDBCardText,
+		MDBCardBody,
+		MDBCardTitle,
+		MDBCardFooter,
+		MDBIcon,
 	},
 	data: () => {
 		return {
-			clientHeight: "height: 500px",
+			clientHeight: "height: 500px;",
 			user: "",
 			passwd: "",
 			isLoggingIn: true,
 			isLoading: false,
 			show: false,
+			serverConnection: true,
 		};
 	},
 	async mounted() {
-		this.clientHeight = `height: ${window.screen.availHeight}px`;
-		localStorage.user = null;
-		const USER_LOGIN_RESULT = await axios.post("http://localhost:8080/user/get", {
-			headers: {
-				withCredentials: true,
-			},
-		});
+		this.clientHeight = `height: ${window.screen.availHeight}px; margin-top: -50px`;
+		try {
+			const USER_LOGIN_RESULT = await axios.post("http://localhost:8080/user/get", {
+				headers: {
+					withCredentials: true,
+				},
+			});
 
-		if (USER_LOGIN_RESULT.data === "ALREADY_LOGGED_IN") {
-			this.$router.push("/dashboard");
+			if (USER_LOGIN_RESULT.data === "ALREADY_LOGGED_IN") {
+				this.$router.push("/dashboard");
+			} else {
+				localStorage.user = null;
+			}
+		} catch (err) {
+			if (err) {
+				this.isLoading = true;
+				this.serverConnection = false;
+			}
 		}
 
 		window.addEventListener("keypress", (event) => {
@@ -174,6 +183,18 @@ export default {
 				this.show = true;
 			}
 		},
+		async checkServerConnection() {
+			try {
+				const ping = await axios.get("http://localhost:8080/ping");
+				if (ping.data === "Pong!") {
+					this.isLoading = false;
+					this.serverConnection = true;
+				}
+			} catch (e) {
+				this.isLoading = true;
+				this.serverConnection = false;
+			}
+		},
 	},
 };
 </script>
@@ -182,10 +203,13 @@ export default {
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-	transition: opacity 0.5s;
+	transition: all 0.1s ease;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active em versões anteriores a 2.1.8 */ {
+
+.fade-enter-from,
+.fade-leave-to {
 	opacity: 0;
+	transform: translateX(50vw);
 }
 
 .overlay {

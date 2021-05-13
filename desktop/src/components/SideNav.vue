@@ -18,12 +18,12 @@
 			><i class="mdi mdi-tune"></i
 		></a>
 		<a href="javascript:void(0)" @click="loggout()"><i class="mdi mdi-exit-to-app"></i></a>
-		<a
+		<!-- <a
 			style="position: absolute; bottom: 0%; left: 0%"
 			href="javascript:void(0)"
 			@click="changeColorMode()"
 			><i :class="colorModeClass"></i
-		></a>
+		></a> -->
 		<MDBModal
 			id="loggingout"
 			tabindex="-1"
@@ -74,8 +74,8 @@ export default {
 			user: null,
 			isAtHome: "",
 			isAtSettings: "",
-			colorMode: localStorage.colorMode || "light",
-			colorModeClass: localStorage.colorModeIcon || "mdi mdi-weather-night",
+			// colorMode: localStorage.colorMode || "light",
+			// colorModeClass: localStorage.colorModeIcon || "mdi mdi-weather-night",
 		};
 	},
 	components: {
@@ -99,7 +99,7 @@ export default {
 				this.isAdm = true;
 			}
 		}
-		this.changeActualColors();
+		// this.changeActualColors();
 	},
 
 	watch: {
@@ -144,53 +144,53 @@ export default {
 			this.isAtHome = "";
 			this.isAtSettings = "";
 		},
-		changeColorMode() {
-			this.colorMode === "light"
-				? ((this.colorMode = "dark"), (this.colorModeClass = "mdi mdi-weather-night"))
-				: ((this.colorMode = "light"), (this.colorModeClass = "mdi mdi-weather-sunny"));
-			localStorage.colorMode = this.colorMode;
-			localStorage.colorModeClass = this.colorModeClass;
-			this.changeActualColors();
-		},
-		changeActualColors() {
-			setTimeout(() => {
-				try {
-					const NAVBAR = document.querySelector("#sidenav");
-					document.querySelector("body").style =
-						this.colorMode === "light"
-							? "background-color: #121212 !important; color: aliceblue;"
-							: "background-color: white !important; color: black;";
-					NAVBAR.style =
-						this.colorMode === "light"
-							? "background-color: aliceblue !important; color: aliceblue"
-							: "background-color: #121212 !important; color: black !important";
-					NAVBAR.querySelector("#userPicture").style =
-						this.colorMode === "light"
-							? "text-align: center; font-size: xx-large; color: black;display: grid"
-							: "text-align: center; font-size: xx-large; color: aliceblue;display: grid";
-					const NAVBAR_A = NAVBAR.querySelectorAll("a");
-					for (let a of NAVBAR_A) {
-						if (String(a.style.cssText).indexOf("absolute") === 10) {
-							a.style =
-								this.colorMode === "light"
-									? "position: absolute; bottom: 0%; left: 0%; color: black"
-									: "position: absolute; bottom: 0%; left: 0%; color: aliceblue";
-						} else {
-							a.style =
-								this.colorMode === "light"
-									? "text-align: center; color: black;"
-									: "text-align: center; color: aliceblue;";
-						}
-					}
-				} catch (e) {
-					console.log("slk");
-				}
-			}, 100);
-			// document.querySelector(".ToolBar").style =
-			// 	this.colorMode === "light"
-			// 		? "background-color: white !important; color: black;"
-			// 		: "background-color: #121212 !important; color: aliceblue;";
-		},
+		// changeColorMode() {
+		// 	this.colorMode === "light"
+		// 		? ((this.colorMode = "dark"), (this.colorModeClass = "mdi mdi-weather-night"))
+		// 		: ((this.colorMode = "light"), (this.colorModeClass = "mdi mdi-weather-sunny"));
+		// 	localStorage.colorMode = this.colorMode;
+		// 	localStorage.colorModeClass = this.colorModeClass;
+		// 	this.changeActualColors();
+		// },
+		// changeActualColors() {
+		// 	setTimeout(() => {
+		// 		try {
+		// 			const NAVBAR = document.querySelector("#sidenav");
+		// 			document.querySelector("body").style =
+		// 				this.colorMode === "light"
+		// 					? "background-color: #121212 !important; color: aliceblue;"
+		// 					: "background-color: white !important; color: black;";
+		// 			NAVBAR.style =
+		// 				this.colorMode === "light"
+		// 					? "background-color: aliceblue !important; color: aliceblue"
+		// 					: "background-color: #121212 !important; color: black !important";
+		// 			NAVBAR.querySelector("#userPicture").style =
+		// 				this.colorMode === "light"
+		// 					? "text-align: center; font-size: xx-large; color: black;display: grid"
+		// 					: "text-align: center; font-size: xx-large; color: aliceblue;display: grid";
+		// 			const NAVBAR_A = NAVBAR.querySelectorAll("a");
+		// 			for (let a of NAVBAR_A) {
+		// 				if (String(a.style.cssText).indexOf("absolute") === 10) {
+		// 					a.style =
+		// 						this.colorMode === "light"
+		// 							? "position: absolute; bottom: 0%; left: 0%; color: black"
+		// 							: "position: absolute; bottom: 0%; left: 0%; color: aliceblue";
+		// 				} else {
+		// 					a.style =
+		// 						this.colorMode === "light"
+		// 							? "text-align: center; color: black;"
+		// 							: "text-align: center; color: aliceblue;";
+		// 				}
+		// 			}
+		// 		} catch (e) {
+		// 			console.log("slk");
+		// 		}
+		// 	}, 100);
+		// 	// document.querySelector(".ToolBar").style =
+		// 	// 	this.colorMode === "light"
+		// 	// 		? "background-color: white !important; color: black;"
+		// 	// 		: "background-color: #121212 !important; color: aliceblue;";
+		// },
 		async loggout(isLoggingOut = false) {
 			if (isLoggingOut) {
 				localStorage.currentUser = null;
