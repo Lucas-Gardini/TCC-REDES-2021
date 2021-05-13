@@ -30,7 +30,7 @@
 								</div>
 							</p>
 
-							<button @click="saveServerPort" type="button" class="btn btn-success">Salvar</button>
+							<button @click="saveAll" type="button" class="btn btn-success">Salvar</button>
 						</div>
 						<div class="card-footer">Modificado em {{modifiedDate}}</div>
 					</div>
@@ -51,20 +51,57 @@
 						<div class="card-footer" >
 							<div style="margin-bottom: 10px;" class="form-outline form-white">
 								<i class="fas fa-plus-circle trailing"></i>
-								<input @keypress.enter="(typeof newAllowedHost !== 'undefined' && newAllowedHost !== null) ? allowedHosts.push({'host': newAllowedHost}) : ``" v-model="newAllowedHost" style="border: 1px solid aliceblue;" type="text" class="form-control form-icon-trailing" />
+								<input @keypress.enter="(typeof newAllowedHost !== 'undefined' && newAllowedHost !== null && validateHostIp()) ? allowedHosts.push({'host': newAllowedHost}) : ``" v-model="newAllowedHost" style="border: 1px solid aliceblue;" type="text" class="form-control form-icon-trailing" />
 							</div>
 							<button style="margin-bottom: 10px;" @click="saveAll" type="button" class="btn btn-success">Salvar</button><br />
+							<div style="position: relative; width: 100%; margin-top: 5px; margin-bottom: 10px; display: none" class="alert alert-danger mb-0 alert-dismissible alert-absolute fade" id="alertIp" role="alert" data-mdb-color="secondary">
+								<i class="fas fa-times me-2"></i>
+								Insira um endereço de IP válido
+							  
+								<button type="button" class="btn-close ms-2" data-mdb-dismiss="alert" aria-label="Close"></button>
+							</div>
 							Modificado em {{modifiedDate}}
 						</div>
 					</div>
 				</div>
-				<div class="col-md">One of three columns</div>
+				
+			</div>
+			<div class="row">
+				<div class="col" style="margin-bottom: 10px;">
+					<div class="card text-center text-white">
+						<div class="card-header">Servidor | Atual: <span v-if="!isServerUp" style="color: #F93154">Desligado</span><span v-else style="color: #00B74A">Ligado</span></div>
+						<div class="card-body">
+							<button v-if="isServerUp" @click="stopServer" type="button" class="btn btn-danger"><i class="fas fa-power-off"></i></button>
+							<button v-else @click="startServer" type="button" class="btn btn-success"><i class="fas fa-play"></i></button>
+						</div>
+						<div style="position: relative; width: 100%; margin-top: 5px; margin-bottom: 10px; display: none" class="alert alert-danger mb-0 alert-dismissible alert-absolute fade" id="alertServer" role="alert" data-mdb-color="secondary">
+							<i class="fas fa-times me-2"></i>
+							Falha ao iniciar servidor
+						  
+							<button type="button" class="btn-close ms-2" data-mdb-dismiss="alert" aria-label="Close"></button>
+						</div>
+						<div class="card-footer">Modificado em {{modifiedDate}}</div>
+					</div>
+				</div>
 			</div>
 		</div>
+		<script src="./node_modules/mdb-ui-kit/js/mdb.min.js"></script>
 		<script src="./scripts/vue.js" type="module" ></script>
 		<style>
-			::-webkit-scrollbar{
-				display: none;
+			::-webkit-scrollbar {
+				width: 13px;
+				height: 13px;
+			}
+			::-webkit-scrollbar-thumb {
+				background: #00b74a;
+				border-radius: 0px;
+			}
+			::-webkit-scrollbar-thumb:hover{
+				background: #00a640;
+			}
+			::-webkit-scrollbar-track{
+				background: #313130;
+				border-radius: 0px;
 			}
 		</style>
 	</body>

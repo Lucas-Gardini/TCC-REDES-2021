@@ -1,17 +1,25 @@
 {
-	"name": "restaurant.platform.api",
+	"name": "orderify.platform.api",
+	"productName": "Orderify Server",
 	"version": "1.0.0",
 	"description": "API para a plataforma de pedidos, destinada a restaurantes para melhorar o antendimento ao cliente",
-	"main": "main.js",
+	"main": "electronStart.js",
 	"scripts": {
-		"start": "npm-run-all -p host server",
+		"start": "electron .",
 		"host": "node serverStarter.js",
-		"server": "nodemon app.js"
+		"server": "nodemon app.js",
+		"package-win": "electron-packager . orderify.platform.api --overwrite --asar --platform=win32 --arch=x64 --icon=icon/serverConfigIcon.ico --prune=true --out=release-builds",
+		"package-linux": "electron-packager . orderify.platform.api --overwrite --asar --platform=linux --arch=x64 --icon=icon/serverConfigIcon.png --prune=true --out=release-builds"
 	},
 	"keywords": [],
 	"author": "Kowalski Jr",
 	"license": "ISC",
+	"devDependencies": {
+		"electron": "^11.0.0",
+		"electron-winstaller": "^5.0.0"
+	},
 	"dependencies": {
+		"axios": "^0.21.1",
 		"bcrypt": "^5.0.1",
 		"body-parser": "^1.19.0",
 		"bootstrap": "^5.0.0-beta3",
@@ -20,12 +28,16 @@
 		"cookie-parser": "^1.4.5",
 		"cors": "^2.8.5",
 		"dotenv": "^8.2.0",
+		"electron-devtools-installer": "^3.2.0",
 		"express": "^4.17.1",
 		"express-session": "^1.17.1",
 		"localtunnel": "^2.0.1",
+		"luxon": "^1.26.0",
+		"mdb-ui-kit": "^3.5.1",
 		"mongodb": "^3.6.3",
 		"mongoose": "^5.11.15",
 		"morgan": "^1.10.0",
+		"vue": "^2.6.12",
 		"ws": "^7.4.4"
 	}
 }

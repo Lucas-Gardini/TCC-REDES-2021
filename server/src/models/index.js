@@ -1,10 +1,8 @@
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+const env = require("../../env.json");
 const ws = require("ws");
 
-dotenv.config();
-
-const url = `mongodb+srv://${process.env.MONGO_USR}:${process.env.MONGO_PWD}@tcc-api-data.vtvfp.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
+const url = `mongodb+srv://${env.MONGO_USR}:${env.MONGO_PWD}@tcc-api-data.vtvfp.mongodb.net/${env.MONGO_DB}?retryWrites=true&w=majority`;
 
 mongoose.connect(url, {
 	useNewUrlParser: true,

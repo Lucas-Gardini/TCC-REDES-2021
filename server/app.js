@@ -1,88 +1,116 @@
-// Baianisse
-const colors = require("colors");
-const { createServer } = require("http");
-const express = require("express");
-const bpJSON = require("body-parser").json();
-const morgan = require("morgan");
-const session = require("express-session");
-const cookies = require("cookie-parser");
-const cors = require("cors");
-const path = require("path");
-const fs = require("fs");
-// const host = require("localtunnel");
+var server;
+function startServer() {
+	try {
+		// Baianisse
+		const colors = require("colors");
+		const { createServer } = require("http");
+		const express = require("express");
+		const bpJSON = require("body-parser").json();
+		const morgan = require("morgan");
+		const session = require("express-session");
+		const cookies = require("cookie-parser");
+		const cors = require("cors");
+		const path = require("path");
+		const fs = require("fs");
+		const env = require("./env.json");
+		// const host = require("localtunnel");
 
-// Routes
-const loginRoute = require("./src/routes/userRoute.js");
-const productsRoute = require("./src/routes/productsRoute.js");
-const requestsRoute = require("./src/routes/requestsRoute.js");
-const tablesRoute = require("./src/routes/tablesRoute.js");
+		const serverConfig = require("../config.json");
 
-const app = express();
+		// Routes
+		const loginRoute = require("./src/routes/userRoute.js");
+		const productsRoute = require("./src/routes/productsRoute.js");
+		const requestsRoute = require("./src/routes/requestsRoute.js");
+		const tablesRoute = require("./src/routes/tablesRoute.js");
 
-const server = createServer(app);
+		const app = express();
 
-app.use(bpJSON);
-app.use(cookies());
-app.set("trust proxy", 1);
-app.use(
-	session({
-		secret: "41cb99b1-22dd-41aa-8b27-33292b42612e",
-		resave: false,
-		saveUninitialized: false,
-		cookie: { secure: false },
-		name: "SessionId",
-	})
-);
-app.use(
-	cors({
-		allowedHeaders: [
-			"Content-Type",
-			"Set-Cookie",
-			"Access-Control-Allow-Origin",
-			"Access-Control-Allow-Headers",
-			"Allow-Origin",
-			"Allowed-Methods",
-		],
-		origin: "*",
-		methods: ["POST", "GET", "OPTIONS", "DELETE"],
-		credentials: true,
-	})
-);
-app.use(morgan("dev"));
+		server = createServer(app);
 
-const port = 8080;
+		app.use(bpJSON);
+		app.use(cookies());
+		app.set("trust proxy", 1);
+		app.use(
+			session({
+				secret: "41cb99b1-22dd-41aa-8b27-33292b42612e",
+				resave: false,
+				saveUninitialized: false,
+				cookie: { secure: false },
+				name: "SessionId",
+			})
+		);
 
-app.use("/public", express.static("./response_pages"));
-app.use("/app", express.static("./requests_app"));
+		let allowedOrigins = [];
+		for (let obj of serverConfig.allowedHosts) {
+			allowedOrigins.push("http://" + obj.host);
+		}
 
-function authMiddleware(req, res, next) {
-	if (req.baseUrl === "/user" && (req.url === "/get" || req.url === "/logoff")) {
-		return next();
+		app.use(
+			cors({
+				allowedHeaders: [
+					"Content-Type",
+					"Set-Cookie",
+					"Access-Control-Allow-Origin",
+					"Access-Control-Allow-Headers",
+					"Allow-Origin",
+					"Allowed-Methods",
+				],
+				origin: function (origin, callback) {
+					if (allowedOrigins.indexOf(origin) !== -1) {
+						callback(null, true);
+					} else {
+						callback(console.log("ass"));
+					}
+				},
+				methods: ["POST", "GET", "OPTIONS", "DELETE"],
+				credentials: true,
+			})
+		);
+		app.use(morgan("dev"));
+
+		const port = serverConfig.serverPort;
+
+		app.use("/public", express.static("./response_pages"));
+		app.use("/app", express.static("./requests_app"));
+
+		function authMiddleware(req, res, next) {
+			if (req.baseUrl === "/user" && (req.url === "/get" || req.url === "/logoff")) {
+				return next();
+			}
+			if (req.session.auth && req.session.auth.loggedin) {
+				return next(); // Você é obrigado a chamar o next()
+			}
+			return res.sendStatus(401);
+		}
+
+		// Using Routes
+		app.use("/user", authMiddleware, loginRoute);
+		app.use("/products", authMiddleware, productsRoute);
+		app.use("/requests", authMiddleware, requestsRoute);
+		app.use("/tables", authMiddleware, tablesRoute);
+
+		app.get("/", (req, res) => {
+			res.sendFile(path.join(__dirname, "/response_pages/orderify.html"));
+		});
+
+		app.get("/ping", (req, res) => {
+			res.send("Pong!");
+		});
+
+		app.get("**", (req, res) => {
+			res.sendFile(path.join(__dirname, "/response_pages/404.html"));
+		});
+
+		server.listen(port, env.SERVER_IP, () => {
+			console.log(`SERVER STARTED at port ${process.env.PORT || port}`);
+		});
+	} catch (err) {
+		console.log(err);
 	}
-	if (req.session.auth && req.session.auth.loggedin) {
-		return next(); // Você é obrigado a chamar o next()
-	}
-	return res.sendStatus(401);
 }
 
-// Using Routes
-app.use("/user", authMiddleware, loginRoute);
-app.use("/products", authMiddleware, productsRoute);
-app.use("/requests", authMiddleware, requestsRoute);
-app.use("/tables", authMiddleware, tablesRoute);
+async function stopServer() {
+	return await server.close(); // Won't accept new connection
+}
 
-app.get("/", (req, res) => {
-	res.sendFile(path.join(__dirname, "/response_pages/orderify.html"));
-});
-
-app.get("/ping", (req, res) => {
-	res.send("Pong!");
-});
-
-app.get("**", (req, res) => {
-	res.sendFile(path.join(__dirname, "/response_pages/404.html"));
-});
-
-server.listen(8080, process.env.SERVER_IP, () => {
-	console.log(`SERVER STARTED at port ${process.env.PORT || port}`);
-});
+module.exports = { startServer, stopServer };
