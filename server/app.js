@@ -1,6 +1,6 @@
 // Baianisse
 const colors = require("colors");
-
+const { createServer } = require("http");
 const express = require("express");
 const bpJSON = require("body-parser").json();
 const morgan = require("morgan");
@@ -8,6 +8,7 @@ const session = require("express-session");
 const cookies = require("cookie-parser");
 const cors = require("cors");
 const path = require("path");
+const fs = require("fs");
 // const host = require("localtunnel");
 
 // Routes
@@ -17,6 +18,9 @@ const requestsRoute = require("./src/routes/requestsRoute.js");
 const tablesRoute = require("./src/routes/tablesRoute.js");
 
 const app = express();
+
+const server = createServer(app);
+
 app.use(bpJSON);
 app.use(cookies());
 app.set("trust proxy", 1);
@@ -39,7 +43,7 @@ app.use(
 			"Allow-Origin",
 			"Allowed-Methods",
 		],
-		origin: ["http://localhost:8082", "http://localhost:2469"],
+		origin: "*",
 		methods: ["POST", "GET", "OPTIONS", "DELETE"],
 		credentials: true,
 	})
@@ -51,20 +55,34 @@ const port = 8080;
 app.use("/public", express.static("./response_pages"));
 app.use("/app", express.static("./requests_app"));
 
+function authMiddleware(req, res, next) {
+	if (req.baseUrl === "/user" && (req.url === "/get" || req.url === "/logoff")) {
+		return next();
+	}
+	if (req.session.auth && req.session.auth.loggedin) {
+		return next(); // Você é obrigado a chamar o next()
+	}
+	return res.sendStatus(401);
+}
+
 // Using Routes
-app.use("/user", loginRoute);
-app.use("/products", productsRoute);
-app.use("/requests", requestsRoute);
-app.use("/tables", tablesRoute);
+app.use("/user", authMiddleware, loginRoute);
+app.use("/products", authMiddleware, productsRoute);
+app.use("/requests", authMiddleware, requestsRoute);
+app.use("/tables", authMiddleware, tablesRoute);
 
 app.get("/", (req, res) => {
 	res.sendFile(path.join(__dirname, "/response_pages/orderify.html"));
+});
+
+app.get("/ping", (req, res) => {
+	res.send("Pong!");
 });
 
 app.get("**", (req, res) => {
 	res.sendFile(path.join(__dirname, "/response_pages/404.html"));
 });
 
-app.listen(process.env.PORT || port, async () => {
+server.listen(8080, process.env.SERVER_IP, () => {
 	console.log(`SERVER STARTED at port ${process.env.PORT || port}`);
 });

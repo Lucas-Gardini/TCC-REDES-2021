@@ -1,0 +1,20 @@
+{
+	"name": "orderify.server.config",
+	"version": "1.0.0",
+	"description": "A visual app for starting the server and customizing it",
+	"main": "main.js",
+	"scripts": {
+		"start": "electron ."
+	},
+	"author": "Lucas Gardini Dias",
+	"license": "ISC",
+	"devDependencies": {
+		"electron": "^11.0.0"
+	},
+	"dependencies": {
+		"electron-devtools-installer": "^3.2.0",
+		"luxon": "^1.26.0",
+		"mdb-ui-kit": "^3.5.1",
+		"vue": "^2.6.12"
+	}
+}

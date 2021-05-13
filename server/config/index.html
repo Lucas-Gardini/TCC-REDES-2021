@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Orderify - Server Configuration</title>
+		<link rel="stylesheet" href="./node_modules/mdb-ui-kit/css/mdb.dark.min.css" />
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
+	</head>
+	<body>
+		<!-- Navbar -->
+		<nav class="navbar navbar-expand-lg bg-success navbar-dark fixed-top">
+			<!-- Container wrapper -->
+			<div class="container-fluid">
+				<!-- Navbar brand -->
+				<a class="navbar-brand" href="#">ORDERIFY - SERVER CONFIGURATION</a>
+			</div>
+			<!-- Container wrapper -->
+		</nav>
+		<!-- Navbar -->
+		<div id="main" class="container" style="margin-top: 100px">
+			<div class="row">
+				<div class="col-md" style="margin-bottom: 10px;">
+					<div class="card text-center text-white">
+						<div class="card-header">Porta do Servidor | Atual: {{serverPort}}</div>
+						<div class="card-body">
+							<p class="card-text">
+								<div class="form-outline form-white">
+									<i class="fas fa-door-open trailing"></i>
+									<input style="border: 1px solid aliceblue;" v-model="serverPort" type="text" class="form-control form-icon-trailing" />
+								</div>
+							</p>
+
+							<button @click="saveServerPort" type="button" class="btn btn-success">Salvar</button>
+						</div>
+						<div class="card-footer">Modificado em {{modifiedDate}}</div>
+					</div>
+				</div>
+				<div class="col-md" style="margin-bottom: 10px;">
+					<div class="card text-center text-white">
+						<div class="card-header">Hosts</div>
+						<div class="card-body" style="max-height: 250px; overflow-y: scroll;">
+							<p class="card-text">
+								<div style="margin-bottom: 10px;" class="form-outline form-white input-group" v-for="host in allowedHosts" >
+									<input style="border: 1px solid aliceblue; font-size: small;" v-model="host.host" type="text" class="form-control form-icon-trailing" />
+									<button class="btn btn-danger" type="button" @click="removeAllowedHost(host.host)" data-mdb-ripple-color="dark">
+										<i class="fas fa-times"></i>
+									</button>
+								</div>
+							</p>
+						</div>
+						<div class="card-footer" >
+							<div style="margin-bottom: 10px;" class="form-outline form-white">
+								<i class="fas fa-plus-circle trailing"></i>
+								<input @keypress.enter="(typeof newAllowedHost !== 'undefined' && newAllowedHost !== null) ? allowedHosts.push({'host': newAllowedHost}) : ``" v-model="newAllowedHost" style="border: 1px solid aliceblue;" type="text" class="form-control form-icon-trailing" />
+							</div>
+							<button style="margin-bottom: 10px;" @click="saveAll" type="button" class="btn btn-success">Salvar</button><br />
+							Modificado em {{modifiedDate}}
+						</div>
+					</div>
+				</div>
+				<div class="col-md">One of three columns</div>
+			</div>
+		</div>
+		<script src="./scripts/vue.js" type="module" ></script>
+		<style>
+			::-webkit-scrollbar{
+				display: none;
+			}
+		</style>
+	</body>
+</html>
