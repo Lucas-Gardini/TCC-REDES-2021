@@ -3,10 +3,10 @@ const { tables } = require("../models/index.js");
 const tablesController = {
 	async addTable(req, res) {
 		const { table, available } = req.body;
-		const create = await tables.create({ table, available }, (err) => {
-			if (err) res.send(`Error code: ${err.code}`);
+		await tables.create({ table, available }, (err) => {
+			if (err) res.sendStatus(500).end();
 			else {
-				res.send(create);
+				res.sendStatus(200);
 			}
 		});
 	},
@@ -24,6 +24,22 @@ const tablesController = {
 			}
 		}
 		res.send([quantity, available]);
+	},
+	async deleteTable(req, res) {
+		await tables.deleteOne({ _id: req.params.id }, (err) => {
+			if (err) res.sendStatus(500).end();
+			else {
+				res.sendStatus(200);
+			}
+		});
+	},
+	async changeAvailability(req, res) {
+		await tables.updateOne({ _id: req.params.id }, { available: req.body.available }, (err) => {
+			if (err) res.sendStatus(500).end();
+			else {
+				res.sendStatus(200);
+			}
+		});
 	},
 };
 

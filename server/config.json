@@ -1,0 +1,10 @@
+{
+	"serverPort": 8080,
+	"modifiedDate": "2021-05-13",
+	"allowedHosts": [
+		{ "host": "localhost:8082" },
+		{ "host": "192.168.0.101" },
+		{ "host": "192.168.0.102" },
+		{ "host": "192.168.0.103" }
+	]
+}

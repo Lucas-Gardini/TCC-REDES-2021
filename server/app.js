@@ -15,7 +15,13 @@ function startServer() {
 		const env = require("./env.json");
 		// const host = require("localtunnel");
 
-		const serverConfig = require("../config.json");
+		let serverConfig = {};
+
+		try {
+			serverConfig = require("../config.json");
+		} catch (err) {
+			serverConfig = require("./config.json");
+		}
 
 		// Routes
 		const loginRoute = require("./src/routes/userRoute.js");
@@ -78,7 +84,7 @@ function startServer() {
 				return next();
 			}
 			if (req.session.auth && req.session.auth.loggedin) {
-				return next(); // Você é obrigado a chamar o next()
+				return next();
 			}
 			return res.sendStatus(401);
 		}
@@ -112,5 +118,9 @@ function startServer() {
 async function stopServer() {
 	return await server.close(); // Won't accept new connection
 }
+
+// Remove this on production
+
+startServer();
 
 module.exports = { startServer, stopServer };
