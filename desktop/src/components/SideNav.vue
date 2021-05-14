@@ -14,6 +14,9 @@
 		<a :class="isAtHome" href="javascript:void(0)" @click="redirect('/dashboard')"
 			><i class="mdi mdi-home"></i
 		></a>
+		<a :class="isAtTables" href="javascript:void(0)" @click="redirect('/dashboard/tables')"
+			><i class="mdi mdi-table-furniture"></i
+		></a>
 		<a :class="isAtSettings" href="javascript:void(0)" @click="redirect('/dashboard/settings')"
 			><i class="mdi mdi-tune"></i
 		></a>
@@ -74,6 +77,7 @@ export default {
 			user: null,
 			isAtHome: "",
 			isAtSettings: "",
+			isAtTables: "",
 			// colorMode: localStorage.colorMode || "light",
 			// colorModeClass: localStorage.colorModeIcon || "mdi mdi-weather-night",
 		};
@@ -130,6 +134,11 @@ export default {
 				case "/dashboard/settings":
 					this.isAtSettings = "active";
 					break;
+
+				case "/dashboard/tables":
+					this.isAtTables = "active";
+					break;
+
 				default:
 					// console.log(path);
 					break;
@@ -143,6 +152,7 @@ export default {
 		resetIsAtVariables() {
 			this.isAtHome = "";
 			this.isAtSettings = "";
+			this.isAtTables = "";
 		},
 		// changeColorMode() {
 		// 	this.colorMode === "light"

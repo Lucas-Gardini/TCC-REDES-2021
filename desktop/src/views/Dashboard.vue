@@ -1,5 +1,5 @@
 <template>
-	<MDBContainer>
+	<MDBContainer v-if="isLoaded">
 		<h1>Bem vindo {{ user }}</h1>
 		<MDBRow class="d-flex">
 			<!-- Products Card -->
@@ -75,6 +75,15 @@
 			</MDBCol>
 		</MDBRow>
 	</MDBContainer>
+	<div class="overlay" v-else>
+		<div
+			class="mask"
+			style="background: linear-gradient(45deg, rgba(29, 236, 197, 0.7), rgba(91, 14, 214, 0.7) 100%);"
+		></div>
+		<div>
+			<MDBSpinner color="success" style="width: 50px; height: 50px;" />
+		</div>
+	</div>
 </template>
 
 <script>
@@ -90,6 +99,7 @@ import {
 	MDBCardText,
 	MDBCardTitle,
 	MDBIcon,
+	MDBSpinner,
 } from "mdb-vue-ui-kit";
 export default {
 	components: {
@@ -102,12 +112,14 @@ export default {
 		MDBCardText,
 		MDBCardTitle,
 		MDBIcon,
+		MDBSpinner,
 	},
 	data: () => {
 		return {
 			user: "",
 			products_quantity: 0,
 			tables: { indexed: 0, available: 0 },
+			isLoaded: false,
 		};
 	},
 	async mounted() {
@@ -122,6 +134,7 @@ export default {
 			this.tables.indexed = TABLES_REQUEST.data[0];
 			this.tables.available = TABLES_REQUEST.data[1];
 			this.products_quantity = PRODUCTS_REQUEST.data;
+			this.isLoaded = true;
 		} catch (err) {
 			console.log(err);
 		}

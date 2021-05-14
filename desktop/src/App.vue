@@ -41,4 +41,15 @@ export default {
 	opacity: 0;
 	transform: translateX(50vw);
 }
+
+.overlay {
+	position: fixed;
+	top: 0%;
+	left: 0%;
+	min-width: 100%;
+	min-height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 </style>
