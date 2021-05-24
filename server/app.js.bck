@@ -13,7 +13,6 @@ function startServer() {
 		const path = require("path");
 		const fs = require("fs");
 		const env = require("./env.json");
-		// const host = require("localtunnel");
 
 		let serverConfig = {};
 
@@ -22,6 +21,8 @@ function startServer() {
 		} catch (err) {
 			serverConfig = require("./config.json");
 		}
+
+		console.log(serverConfig);
 
 		// Routes
 		const loginRoute = require("./src/routes/userRoute.js");
@@ -65,7 +66,10 @@ function startServer() {
 					if (allowedOrigins.indexOf(origin) !== -1) {
 						callback(null, true);
 					} else {
-						callback(console.log("ass"));
+						callback(
+							console.log(`Access from a not allowed origin: ${origin}`),
+							console.log(`Allowed origins: ${allowedOrigins}`)
+						);
 					}
 				},
 				methods: ["POST", "GET", "OPTIONS", "DELETE"],
@@ -80,6 +84,7 @@ function startServer() {
 		app.use("/app", express.static("./requests_app"));
 
 		function authMiddleware(req, res, next) {
+			console.log(req.session);
 			if (req.baseUrl === "/user" && (req.url === "/get" || req.url === "/logoff")) {
 				return next();
 			}
@@ -107,7 +112,8 @@ function startServer() {
 			res.sendFile(path.join(__dirname, "/response_pages/404.html"));
 		});
 
-		server.listen(port, env.SERVER_IP, () => {
+		//env.SERVER_IP
+		server.listen(port, () => {
 			console.log(`SERVER STARTED at port ${process.env.PORT || port}`);
 		});
 	} catch (err) {
