@@ -14,6 +14,9 @@
 		<a :class="isAtHome" href="javascript:void(0)" @click="redirect('/dashboard')"
 			><i class="mdi mdi-home"></i
 		></a>
+		<a :class="isAtProducts" href="javascript:void(0)" @click="redirect('/dashboard/products')"
+			><i class="mdi mdi-food"></i
+		></a>
 		<a :class="isAtTables" href="javascript:void(0)" @click="redirect('/dashboard/tables')"
 			><i class="mdi mdi-table-furniture"></i
 		></a>
@@ -78,6 +81,7 @@ export default {
 			isAtHome: "",
 			isAtSettings: "",
 			isAtTables: "",
+			isAtProducts: "",
 			// colorMode: localStorage.colorMode || "light",
 			// colorModeClass: localStorage.colorModeIcon || "mdi mdi-weather-night",
 		};
@@ -131,6 +135,10 @@ export default {
 					this.isAtHome = "active";
 					break;
 
+				case "/dashboard/products":
+					this.isAtProducts = "active";
+					break;
+
 				case "/dashboard/settings":
 					this.isAtSettings = "active";
 					break;
@@ -153,6 +161,7 @@ export default {
 			this.isAtHome = "";
 			this.isAtSettings = "";
 			this.isAtTables = "";
+			this.isAtProducts = "";
 		},
 		// changeColorMode() {
 		// 	this.colorMode === "light"

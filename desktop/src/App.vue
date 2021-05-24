@@ -14,16 +14,32 @@
 <script>
 import ToolBar from "./components/ToolBar.vue";
 import SideNav from "./components/SideNav.vue";
+import axios from "axios";
 export default {
-	components: { ToolBar, SideNav },
-	data: () => {
-		return {};
+	watch: {
+		async $route() {
+			try {
+				(await axios.get(`${localStorage.serverAddress}/ping`)).data;
+			} catch (e) {
+				localStorage.currentUser = null;
+				localStorage.user = null;
+				this.$router.push("/");
+			}
+		},
 	},
+	components: { ToolBar, SideNav },
 	methods: {},
 };
 </script>
 <style>
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+/* @import url("https://fonts.googleapis.com/css2?family=Oswald&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Kdam+Thmor&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap");
+
+body {
+	font-family: "Noto Serif", serif;
+} */
+
 #app {
 	transition: margin-left 0.5s;
 	padding: 20px;

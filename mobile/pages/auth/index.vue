@@ -127,10 +127,25 @@ export default {
 		error: '',
 		erroralert: 'display: none',
 	}),
-	beforeCreate() {
+	async beforeCreate() {
 		if (this.$store.getters.getAuthentication) {
 			this.$router.push('/');
 			return true;
+		}
+		try {
+			const USER_LOGIN_RESULT = await this.$axios.post(
+				'http://localhost:8080/user/get',
+				{
+					headers: {
+						withCredentials: true,
+					},
+				}
+			);
+			if (USER_LOGIN_RESULT.data === 'ALREADY_LOGGED_IN') {
+				this.$router.push('/');
+			}
+		} catch (error) {
+			console.log(error);
 		}
 	},
 	methods: {

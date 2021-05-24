@@ -18,14 +18,57 @@
 					</MDBCardBody>
 				</MDBCard>
 			</MDBCol>
+		</MDBRow>
+		<MDBRow>
 			<MDBCol>
 				<MDBCard text="center">
-					<MDBCardHeader>TEMPLATE</MDBCardHeader>
+					<MDBCardHeader>Endereço da Api</MDBCardHeader>
 					<MDBCardBody>
-						<MDBCardTitle>template</MDBCardTitle>
-						<div style="display: flex">
-							<div style="margin: auto"></div>
-						</div>
+						<MDBRow>
+							<MDBCol col="7">
+								<MDBInput
+									v-model="serverIp"
+									label="Endereço Ip"
+									maxlength="15"
+									type="text"
+								/>
+							</MDBCol>
+							<MDBCol col="3">
+								<MDBInput
+									v-model="serverPort"
+									label="Porta"
+									maxlength="15"
+									type="text"
+								/>
+							</MDBCol>
+							<MDBCol col="auto">
+								<MDBBtn @click="saveConfigs()" color="success" floating>
+									<MDBIcon icon="save" iconStyle="fas" />
+								</MDBBtn>
+							</MDBCol>
+						</MDBRow>
+					</MDBCardBody>
+				</MDBCard>
+			</MDBCol>
+			<MDBCol>
+				<MDBCard text="center">
+					<MDBCardHeader>Endereço do Websocket</MDBCardHeader>
+					<MDBCardBody>
+						<MDBRow>
+							<MDBCol col="10">
+								<MDBInput
+									v-model="websocketPort"
+									label="Porta"
+									maxlength="15"
+									type="text"
+								/>
+							</MDBCol>
+							<MDBCol col="auto">
+								<MDBBtn @click="saveConfigs()" color="success" floating>
+									<MDBIcon icon="save" iconStyle="fas" />
+								</MDBBtn>
+							</MDBCol>
+						</MDBRow>
 					</MDBCardBody>
 				</MDBCard>
 			</MDBCol>
@@ -43,6 +86,9 @@ import {
 	MDBCardBody,
 	MDBCardTitle,
 	MDBSwitch,
+	MDBInput,
+	MDBBtn,
+	MDBIcon,
 } from "mdb-vue-ui-kit";
 export default {
 	components: {
@@ -54,21 +100,42 @@ export default {
 		MDBCardBody,
 		MDBCardTitle,
 		MDBSwitch,
+		MDBInput,
+		MDBBtn,
+		MDBIcon,
 	},
 	mounted() {
-		localStorage.notification = this.notification;
+		console.log(this.notification);
+		this.notification = Boolean(localStorage.notification);
+		if (localStorage.serverAddress) {
+			this.serverIp = String(String(localStorage.serverAddress).split("//")[1]).split(":")[0];
+			this.serverPort = String(String(localStorage.serverAddress).split("//")[1]).split(
+				":"
+			)[1];
+			this.websocketPort = localStorage.websocketPort;
+		}
 	},
 	data: () => {
 		return {
-			notification: localStorage.notifications || true,
+			notification: false,
+			// Pegando Ip
+			serverIp: "",
+			serverPort: "",
+			websocketPort: "",
 		};
 	},
 	methods: {
 		saveConfigs() {
+			localStorage.serverAddress = `http://${this.serverIp}:${this.serverPort}`;
+			localStorage.websocketPort = this.websocketPort;
 			localStorage.notification = !this.notification;
 		},
 	},
 };
 </script>
 
-<style></style>
+<style scoped>
+.row {
+	margin-bottom: 10px !important;
+}
+</style>

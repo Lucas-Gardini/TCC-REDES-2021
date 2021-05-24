@@ -24,6 +24,9 @@ export default {
 			title: 'Orderify',
 		};
 	},
+	created() {
+		this.$axios.defaults.withCredentials = true;
+	},
 };
 </script>
 

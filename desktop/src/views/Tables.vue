@@ -53,23 +53,27 @@
 							>{{ table.table }}</MDBCardTitle
 						>
 						<MDBCardText>
-							<span v-if="table.available" style="color: green">Disponível Hoje</span>
-							<span v-else style="color: red">Indisponível Hoje</span>
+							<p v-if="table.available" style="color: #00B74A" class="fs-2">
+								Disponível Hoje
+							</p>
+							<p v-else style="color: #F93154" class="fs-2">Indisponível Hoje</p>
 						</MDBCardText>
 						<div class="row">
 							<div class="col" style="margin-bottom: 10px">
 								<MDBBtn
 									v-if="table.available"
 									@click="toggleAvailability(i)"
-									color="warning"
-									>Desabilitar</MDBBtn
-								>
+									color="danger"
+									><MDBIcon icon="times" iconStyle="fas"
+								/></MDBBtn>
 								<MDBBtn v-else @click="toggleAvailability(i)" color="success"
-									>Habilitar</MDBBtn
-								>
+									><MDBIcon icon="check" iconStyle="fas"
+								/></MDBBtn>
 							</div>
 							<div class="col" style="margin-bottom: 10px">
-								<MDBBtn @click="deleteFromDatabase(i)" color="danger"
+								<MDBBtn
+									@click="deleteFromDatabase(i)"
+									style="background-color: #E0E0E0"
 									><MDBIcon icon="trash-alt" iconStyle="fas"
 								/></MDBBtn>
 							</div>
@@ -121,11 +125,11 @@ export default {
 	},
 	methods: {
 		async getData() {
-			this.tables = (await axios.get("http://localhost:8080/tables/getall")).data;
+			this.tables = (await axios.get(`${localStorage.serverAddress}/tables/getall`)).data;
 		},
 		async addToDatabase() {
 			const addResult = (
-				await axios.post("http://localhost:8080/tables/add", {
+				await axios.post(`${localStorage.serverAddress}/tables/add`, {
 					table: this.newTable,
 					available: this.newTableAvailability,
 				})
@@ -136,7 +140,7 @@ export default {
 		},
 		async toggleAvailability(table_index) {
 			const updateResult = await axios.post(
-				`http://localhost:8080/tables/availability/${this.tables[table_index]._id}`,
+				`${localStorage.serverAddress}/tables/availability/${this.tables[table_index]._id}`,
 				{
 					available: !this.tables[table_index].available,
 				}
@@ -148,7 +152,7 @@ export default {
 		async deleteFromDatabase(table_index) {
 			const delResult = (
 				await axios.delete(
-					`http://localhost:8080/tables/del/${this.tables[table_index]._id}`
+					`${localStorage.serverAddress}/tables/del/${this.tables[table_index]._id}`
 				)
 			).data;
 			if (delResult === "OK") {

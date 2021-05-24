@@ -12,10 +12,22 @@ export const mutations = {
 		state.authenticated = true;
 		state.authentication = payload;
 	},
-	unAuthenticate(state) {
-		state.authenticated = false;
-		state.authentication = { name: '', passwd: '' };
+	async unAuthenticate(state) {
 		this.$router.push('/auth');
+		try {
+			const logoff = await this.$axios.post(
+				'http://localhost:8080/user/logoff'
+			);
+			if (logoff.data.success === true) {
+				state.authenticated = false;
+				state.authentication = { name: '', passwd: '' };
+				this.$router.push('/auth');
+			} else {
+				this.loggedOutError = true;
+			}
+		} catch (e) {
+			console.log(e);
+		}
 	},
 };
 

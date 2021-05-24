@@ -139,7 +139,7 @@ export default {
 	async mounted() {
 		this.clientHeight = `height: ${window.screen.availHeight}px; margin-top: -50px`;
 		try {
-			const USER_LOGIN_RESULT = await axios.post("http://localhost:8080/user/get", {
+			const USER_LOGIN_RESULT = await axios.post(`${localStorage.serverAddress}/user/get`, {
 				headers: {
 					withCredentials: true,
 				},
@@ -164,7 +164,7 @@ export default {
 	methods: {
 		async logIn() {
 			this.isLoading = true;
-			const USER_LOGIN_RESULT = await axios.post("http://localhost:8080/user/get", {
+			const USER_LOGIN_RESULT = await axios.post(`${localStorage.serverAddress}/user/get`, {
 				user: this.user,
 				password: this.passwd,
 				headers: {
@@ -185,7 +185,7 @@ export default {
 		},
 		async checkServerConnection() {
 			try {
-				const ping = await axios.get("http://localhost:8080/ping");
+				const ping = await axios.get(`${localStorage.serverAddress}/ping`);
 				if (ping.data === "Pong!") {
 					this.isLoading = false;
 					this.serverConnection = true;
