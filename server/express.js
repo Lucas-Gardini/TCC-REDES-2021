@@ -1,3 +1,0 @@
-class expressServer {
-	constructor() {}
-}
