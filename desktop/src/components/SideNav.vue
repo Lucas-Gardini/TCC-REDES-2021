@@ -215,7 +215,7 @@ export default {
 				localStorage.currentUser = null;
 				localStorage.user = null;
 				try {
-					const logoff = await axios.post("http://localhost:8080/user/logoff");
+					const logoff = await axios.post(`${localStorage.serverAddress}/user/logoff`);
 					if (logoff.data.success === true) {
 						this.$router.push("/");
 					} else {
