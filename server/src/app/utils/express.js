@@ -1,6 +1,6 @@
 class expressServer {
 	constructor() {
-		console.log("> Iniciando Servidor...");
+		console.log("\n> Iniciando Servidor...\n");
 	}
 
 	start() {
@@ -19,6 +19,8 @@ class expressServer {
 		this.cors = require("cors");
 		this.path = require("path");
 		this.fs = require("fs");
+		this.baianisse = require("chalk");
+		this.createTable = require("ascii-table");
 		this.serverConfig = require("./serverConfig.json");
 	}
 
@@ -37,10 +39,21 @@ class expressServer {
 			})
 		);
 
+		const allowedOriginsTable = new this.createTable();
+		allowedOriginsTable.setHeading("Origens Aceitas");
+
 		let allowedOrigins = [];
 		for (let obj of this.serverConfig.allowedHosts) {
 			allowedOrigins.push("http://" + obj.host);
+			allowedOriginsTable.addRow("http://" + obj.host);
 		}
+
+		console.log(allowedOriginsTable.toString() + "\n");
+		console.log(
+			`? Para modificar as origens, modifique o arquivo 'serverConfig.json' que se encontra no caminho:\n  ${this.baianisse.yellow(
+				this.path.join(__dirname, "./serverConfig.json")
+			)}\n`
+		);
 
 		this.app.use(
 			this.cors({

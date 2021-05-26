@@ -15,9 +15,9 @@ async function start() {
 
 	ws.on("listening", () => {
 		console.log(
-			baianisse.bgCyan(
-				`Websocket Iniciado no endereço: ws://${serverAddress.ip}:${serverAddress.port}`
-			)
+			`> Websocket Iniciado no endereço: ${baianisse.cyan(
+				`ws://${serverAddress.ip}:${serverAddress.port}`
+			)}\n`
 		);
 	});
 

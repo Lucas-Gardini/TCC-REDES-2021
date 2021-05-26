@@ -1,3 +1,4 @@
+const baianisse = require("chalk");
 const mongoose = require("mongoose");
 const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "../../.env") });
@@ -15,6 +16,6 @@ require("./products");
 require("./requests");
 require("./tables");
 
-console.log(mongoose.models);
+console.log(`> Modelos do Banco carregados com ${baianisse.greenBright("sucesso")}!\n`);
 
 module.exports = mongoose.models;

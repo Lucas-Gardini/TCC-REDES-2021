@@ -38,7 +38,7 @@
 					md="6"
 					style="margin-bottom: 10px"
 				>
-					<MDBCard style="height: 100%" text="left">
+					<MDBCard v-if="!product.isEditing" style="height: 100%" text="left">
 						<MDBCardHeader
 							style="display: flex; flex-direction: row; align-content: space-between;"
 						>
@@ -49,7 +49,12 @@
 								</div>
 							</MDBCardTitle>
 							<div style="margin-left: auto">
-								<MDBBtn color="warning" floating size="sm">
+								<MDBBtn
+									@click.prevent="product.isEditing = true"
+									color="warning"
+									floating
+									size="sm"
+								>
 									<MDBIcon icon="pencil-alt" iconStyle="fas" /> </MDBBtn
 								>&nbsp;
 								<MDBBtn v-if="product.available" color="danger" floating size="sm">
@@ -60,6 +65,57 @@
 								>&nbsp;
 								<MDBBtn style="background-color: #E0E0E0" floating size="sm">
 									<MDBIcon icon="trash-alt" iconStyle="fas" />
+								</MDBBtn>
+							</div>
+						</MDBCardHeader>
+						<MDBCardBody>
+							<div style="display: flex">
+								<div>
+									<span>Ingredientes: </span>
+									<ul>
+										<li v-for="(ingredient, i) in product.ingredients" :key="i">
+											{{ ingredient }}
+										</li>
+									</ul>
+								</div>
+							</div>
+						</MDBCardBody>
+						<MDBCardFooter style="display: flex; flex-direction: row">
+							<span
+								style="position: absolute; bottom: 0%; left: 1%; font-size: small"
+							>
+								<span class="text-danger" v-if="!product.available"
+									>Indisponível</span
+								>
+								<span class="text-success" v-else>Disponível</span>
+							</span>
+							<span class="fs-2" style="margin-left: auto"
+								>R$ {{ product.price }}</span
+							>
+						</MDBCardFooter>
+					</MDBCard>
+					<MDBCard v-else style="height: 100%" text="left">
+						<MDBCardHeader
+							style="display: flex; flex-direction: row; align-content: space-between;"
+						>
+							<MDBCardTitle style="margin-top: auto; margin-bottom: auto;">
+								<div style="display: flex;">
+									<pulsating-dots :color="!product.available ? 'red' : 'green'" />
+									<MDBContainer>
+										<MDBInput v-model="product.name" />
+									</MDBContainer>
+								</div>
+							</MDBCardTitle>
+							<div style="margin-left: auto">
+								<MDBBtn pcolor="success" floating size="sm">
+									<MDBIcon icon="check" iconStyle="fas" /> </MDBBtn
+								>&nbsp;
+								<MDBBtn color="danger" floating size="sm">
+									<MDBIcon
+										@click="product.isEditing = false"
+										icon="times"
+										iconStyle="fas"
+									/>
 								</MDBBtn>
 							</div>
 						</MDBCardHeader>
@@ -172,6 +228,9 @@ export default {
 				const productsData = (
 					await axios.get(`${localStorage.serverAddress}/products/getall`)
 				).data;
+				for (let product in productsData) {
+					productsData[product].isEditing = false;
+				}
 				return productsData;
 			} catch (e) {
 				return [{}];
