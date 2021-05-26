@@ -1,5 +1,6 @@
 {
 	"allowedHosts": [
+		{ "host": "localhost:8081" },
 		{ "host": "localhost:8082" },
 		{ "host": "192.168.0.101" },
 		{ "host": "192.168.0.102" },

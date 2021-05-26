@@ -8,6 +8,7 @@ const userController = {
 		res.send(await users.find({}).exec());
 	},
 	async getUser(req, res, next) {
+		console.log(users);
 		const { user, password } = req.body;
 		if (!(typeof req.session.auth !== "undefined") || !(req.session.auth !== null)) {
 			try {

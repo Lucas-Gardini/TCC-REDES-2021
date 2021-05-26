@@ -79,7 +79,6 @@ class expressServer {
 		const tablesRoute = require("../../routes/tablesRoute.js");
 
 		function authMiddleware(req, res, next) {
-			console.log(req.session);
 			if (req.baseUrl === "/user" && (req.url === "/get" || req.url === "/logoff")) {
 				return next();
 			}
