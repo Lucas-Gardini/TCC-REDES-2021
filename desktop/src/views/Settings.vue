@@ -1,6 +1,10 @@
 <template>
 	<MDBContainer>
-		<h1>Configurações</h1>
+		<MDBContainer>
+			<h1 style="margin-top: 20px">
+				Produtos
+			</h1>
+		</MDBContainer>
 		<MDBRow class="d-flex">
 			<MDBCol md="6">
 				<MDBCard text="center">
@@ -50,28 +54,6 @@
 					</MDBCardBody>
 				</MDBCard>
 			</MDBCol>
-			<MDBCol>
-				<MDBCard text="center">
-					<MDBCardHeader>Endereço do Websocket</MDBCardHeader>
-					<MDBCardBody>
-						<MDBRow>
-							<MDBCol col="10">
-								<MDBInput
-									v-model="websocketPort"
-									label="Porta"
-									maxlength="15"
-									type="text"
-								/>
-							</MDBCol>
-							<MDBCol col="auto">
-								<MDBBtn @click="saveConfigs()" color="success" floating>
-									<MDBIcon icon="save" iconStyle="fas" />
-								</MDBBtn>
-							</MDBCol>
-						</MDBRow>
-					</MDBCardBody>
-				</MDBCard>
-			</MDBCol>
 		</MDBRow>
 	</MDBContainer>
 </template>
@@ -105,14 +87,12 @@ export default {
 		MDBIcon,
 	},
 	mounted() {
-		console.log(this.notification);
 		this.notification = Boolean(localStorage.notification);
 		if (localStorage.serverAddress) {
 			this.serverIp = String(String(localStorage.serverAddress).split("//")[1]).split(":")[0];
 			this.serverPort = String(String(localStorage.serverAddress).split("//")[1]).split(
 				":"
 			)[1];
-			this.websocketPort = localStorage.websocketPort;
 		}
 	},
 	data: () => {
@@ -121,13 +101,14 @@ export default {
 			// Pegando Ip
 			serverIp: "",
 			serverPort: "",
-			websocketPort: "",
 		};
 	},
 	methods: {
 		saveConfigs() {
+			if (localStorage.currentUser === "null") {
+				this.$router.push("/");
+			}
 			localStorage.serverAddress = `http://${this.serverIp}:${this.serverPort}`;
-			localStorage.websocketPort = this.websocketPort;
 			localStorage.notification = !this.notification;
 		},
 	},

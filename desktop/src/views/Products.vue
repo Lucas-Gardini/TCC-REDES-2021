@@ -1,7 +1,7 @@
 <template>
 	<MDBContainer>
 		<h1 style="margin-top: 20px">
-			Mesas
+			Produtos
 			<MDBBtn color="success" @click="isAddingProduct = !isAddingProduct" floating>
 				<MDBIcon v-if="!isAddingProduct" icon="plus"></MDBIcon>
 				<MDBIcon v-else icon="minus"></MDBIcon>
@@ -38,16 +38,56 @@
 					md="6"
 					style="margin-bottom: 10px"
 				>
-					<MDBCard text="center">
-						<MDBCardHeader>{{ product.name }}</MDBCardHeader>
+					<MDBCard style="height: 100%" text="left">
+						<MDBCardHeader
+							style="display: flex; flex-direction: row; align-content: space-between;"
+						>
+							<MDBCardTitle style="margin-top: auto; margin-bottom: auto;">
+								<div style="display: flex;">
+									<pulsating-dots :color="!product.available ? 'red' : 'green'" />
+									<span style="margin-left: 10px">{{ product.name }}</span>
+								</div>
+							</MDBCardTitle>
+							<div style="margin-left: auto">
+								<MDBBtn color="warning" floating size="sm">
+									<MDBIcon icon="pencil-alt" iconStyle="fas" /> </MDBBtn
+								>&nbsp;
+								<MDBBtn v-if="product.available" color="danger" floating size="sm">
+									<MDBIcon icon="times" iconStyle="fas" /> </MDBBtn
+								>&nbsp;
+								<MDBBtn v-else color="success" floating size="sm">
+									<MDBIcon icon="check" iconStyle="fas" /> </MDBBtn
+								>&nbsp;
+								<MDBBtn style="background-color: #E0E0E0" floating size="sm">
+									<MDBIcon icon="trash-alt" iconStyle="fas" />
+								</MDBBtn>
+							</div>
+						</MDBCardHeader>
 						<MDBCardBody>
-							<MDBCardTitle>Quantidade de Produtos Cadastrados</MDBCardTitle>
 							<div style="display: flex">
-								<div style="margin: auto">
-									<h1></h1>
+								<div>
+									<span>Ingredientes: </span>
+									<ul>
+										<li v-for="(ingredient, i) in product.ingredients" :key="i">
+											{{ ingredient }}
+										</li>
+									</ul>
 								</div>
 							</div>
 						</MDBCardBody>
+						<MDBCardFooter style="display: flex; flex-direction: row">
+							<span
+								style="position: absolute; bottom: 0%; left: 1%; font-size: small"
+							>
+								<span class="text-danger" v-if="!product.available"
+									>Indisponível</span
+								>
+								<span class="text-success" v-else>Disponível</span>
+							</span>
+							<span class="fs-2" style="margin-left: auto"
+								>R$ {{ product.price }}</span
+							>
+						</MDBCardFooter>
 					</MDBCard>
 				</MDBCol>
 			</MDBRow>
@@ -73,12 +113,14 @@ import {
 	MDBCard,
 	MDBCardHeader,
 	MDBCardBody,
+	MDBCardFooter,
 	MDBCardTitle,
 	MDBSpinner,
 	MDBBtn,
 	MDBInput,
 	MDBIcon,
 } from "mdb-vue-ui-kit";
+import PulsatingDots from "../components/PulsatingDots.vue";
 
 export default {
 	components: {
@@ -88,19 +130,17 @@ export default {
 		MDBCard,
 		MDBCardHeader,
 		MDBCardBody,
+		MDBCardFooter,
 		MDBCardTitle,
 		MDBSpinner,
 		MDBBtn,
 		MDBInput,
 		MDBIcon,
+		PulsatingDots,
 	},
 	data: () => {
 		return {
-			ws: new WebSocket(
-				`ws://${String(String(localStorage.serverAddress).split("//")[1]).split(":")[0]}:${
-					localStorage.websocketPort
-				}`
-			),
+			ws: new WebSocket(`ws://${String(localStorage.serverAddress).split("://")[1]}`),
 			products: [],
 			isLoaded: false,
 			isAddingProduct: false,
@@ -117,7 +157,6 @@ export default {
 					await this.getTables();
 					break;
 			}
-			console.log(event);
 		};
 	},
 	async mounted() {
@@ -137,6 +176,9 @@ export default {
 			} catch (e) {
 				return [{}];
 			}
+		},
+		async updateProductAvailability(productId, productAvailability) {
+			console.log(productId, productAvailability);
 		},
 	},
 };

@@ -46,10 +46,10 @@
 		</MDBContainer>
 		<div class="row" style="margin-top: 10px">
 			<div class="col-4" v-for="(table, i) in tables" :key="i" style="margin-bottom: 10px;">
-				<MDBCard class="bg-dark" text="center">
+				<MDBCard class="bg-light" text="center">
 					<MDBCardBody>
 						<MDBCardTitle
-							style="color: #FBFBFB; border-bottom: 0.2px solid #424242; padding-bottom: 5px"
+							style="color: #262626; border-bottom: 0.2px solid #424242; padding-bottom: 5px"
 							>{{ table.table }}</MDBCardTitle
 						>
 						<MDBCardText>
@@ -114,10 +114,20 @@ export default {
 	},
 	data: () => {
 		return {
+			ws: new WebSocket(`ws://${String(localStorage.serverAddress).split("://")[1]}`),
 			tables: {},
 			isAddingTable: false,
 			newTable: null,
 			newTableAvailability: true,
+		};
+	},
+	created() {
+		this.ws.onmessage = async (event) => {
+			switch (event.data) {
+				case "tables":
+					await this.getData();
+					break;
+			}
 		};
 	},
 	async mounted() {

@@ -119,6 +119,13 @@ export default {
 					padding: 20px;
 					margin-left: 0px;`;
 				document.querySelector("html").style = `overflow: hidden`;
+			} else if (localStorage.currentUser === "null") {
+				this.isLoggedIn = false;
+				document.getElementById("app").style = `
+					transition: margin-left 0.5s;
+					padding: 20px;
+					margin-left: 0px;`;
+				document.querySelector("html").style = `overflow: hidden`;
 			} else {
 				this.isLoggedIn = true;
 				document.getElementById("app").style = `

@@ -120,11 +120,7 @@ export default {
 	},
 	data: () => {
 		return {
-			ws: new WebSocket(
-				`ws://${String(String(localStorage.serverAddress).split("//")[1]).split(":")[0]}:${
-					localStorage.websocketPort
-				}`
-			),
+			ws: new WebSocket(`ws://${String(localStorage.serverAddress).split("://")[1]}`),
 			user: "",
 			products_quantity: 0,
 			tables: { indexed: 0, available: 0 },

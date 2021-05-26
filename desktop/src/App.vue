@@ -21,14 +21,24 @@ export default {
 			try {
 				(await axios.get(`${localStorage.serverAddress}/ping`)).data;
 			} catch (e) {
-				localStorage.currentUser = null;
-				localStorage.user = null;
-				this.$router.push("/");
+				if (!localStorage.serverAddress) {
+					this.checkServerConfig();
+				} else {
+					localStorage.currentUser = null;
+					localStorage.user = null;
+					this.$router.push("/");
+				}
 			}
 		},
 	},
 	components: { ToolBar, SideNav },
-	methods: {},
+	methods: {
+		checkServerConfig() {
+			if (!localStorage.serverAddress) {
+				this.$router.push("/dashboard/settings");
+			}
+		},
+	},
 };
 </script>
 <style>
