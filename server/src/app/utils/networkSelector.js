@@ -88,6 +88,7 @@ async function getNetworkInterface() {
 					console.clear();
 					console.log(baianisse.red("O valor informado não é um número!\n"));
 				} else {
+					console.clear();
 					resolve(answer);
 				}
 			});

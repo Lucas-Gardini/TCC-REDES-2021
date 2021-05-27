@@ -1,7 +1,5 @@
 class expressServer {
-	constructor() {
-		console.log("\n> Iniciando Servidor...\n");
-	}
+	constructor() {}
 
 	start() {
 		this.requireModules();
