@@ -78,15 +78,6 @@
 				</MDBCol>
 			</MDBRow>
 		</MDBContainer>
-		<div class="overlay" v-else>
-			<div
-				class="mask"
-				style="background: linear-gradient(45deg, rgba(29, 236, 197, 0.7), rgba(91, 14, 214, 0.7) 100%);"
-			></div>
-			<div>
-				<MDBSpinner color="success" style="width: 50px; height: 50px;" />
-			</div>
-		</div>
 	</MDBContainer>
 </template>
 
@@ -102,7 +93,6 @@ import {
 	MDBCardText,
 	MDBCardTitle,
 	MDBIcon,
-	MDBSpinner,
 } from "mdb-vue-ui-kit";
 
 export default {
@@ -116,7 +106,6 @@ export default {
 		MDBCardText,
 		MDBCardTitle,
 		MDBIcon,
-		MDBSpinner,
 	},
 	data: () => {
 		return {

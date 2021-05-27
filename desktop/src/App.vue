@@ -18,11 +18,12 @@ import axios from "axios";
 export default {
 	watch: {
 		async $route() {
+			console.log(this.$route.path);
 			try {
 				(await axios.get(`${localStorage.serverAddress}/ping`)).data;
 			} catch (e) {
-				if (!localStorage.serverAddress) {
-					this.checkServerConfig();
+				if (!localStorage.serverAddress || this.$route.path === "/dashboard/settings") {
+					this.$router.push("/dashboard/settings");
 				} else {
 					localStorage.currentUser = null;
 					localStorage.user = null;
@@ -32,13 +33,6 @@ export default {
 		},
 	},
 	components: { ToolBar, SideNav },
-	methods: {
-		checkServerConfig() {
-			if (!localStorage.serverAddress) {
-				this.$router.push("/dashboard/settings");
-			}
-		},
-	},
 };
 </script>
 <style>

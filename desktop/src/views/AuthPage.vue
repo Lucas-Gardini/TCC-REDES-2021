@@ -62,7 +62,12 @@
 						<MDBCardText>
 							Verifique se o servidor está de pé e que a conexão está estabelecida!
 						</MDBCardText>
-						<MDBBtn @click="checkServerConnection" color="primary">Entendi!</MDBBtn>
+						<MDBBtn @click="checkServerConnection" color="success"
+							><MDBIcon icon="check" iconStyle="fas" /> Entendi!</MDBBtn
+						>
+						<MDBBtn @click="$router.push('/dashboard/settings')" color="secondary">
+							<MDBIcon icon="wrench" iconStyle="fas" /> Configurações
+						</MDBBtn>
 					</MDBCardBody>
 					<MDBCardFooter class="text-muted"
 						>Caso o erro persista, contate o suporte!</MDBCardFooter
@@ -83,6 +88,11 @@
 				</MDBBtn>
 			</MDBModalFooter>
 		</MDBModal>
+		<div id="serverAddressChanged">
+			<a href="javascript:void(0)" @click.prevent="redirectToSettings()"
+				>servidor não configurado?</a
+			>
+		</div>
 	</div>
 </template>
 
@@ -196,6 +206,9 @@ export default {
 				this.serverConnection = false;
 			}
 		},
+		redirectToSettings() {
+			this.$router.push("/dashboard/settings");
+		},
 	},
 };
 </script>
@@ -222,5 +235,18 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+#serverAddressChanged {
+	transition: text-decoration 1s;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	text-decoration: none;
+}
+
+#serverAddressChanged:hover {
+	transition: text-decoration 1s;
+	text-decoration: underline;
 }
 </style>
