@@ -55,6 +55,16 @@
 				</MDBCard>
 			</MDBCol>
 		</MDBRow>
+
+		<MDBModal tabindex="-1" v-model="isServerNotConfigurated">
+			<MDBModalHeader>
+				<MDBModalTitle> Servidor Não Configurado! </MDBModalTitle>
+			</MDBModalHeader>
+			<MDBModalBody>Preencha os campos de configuração abaixo para prosseguir!</MDBModalBody>
+			<MDBModalFooter>
+				<MDBBtn color="success" @click="isServerNotConfigurated = false">Entendi</MDBBtn>
+			</MDBModalFooter>
+		</MDBModal>
 	</MDBContainer>
 </template>
 
@@ -71,6 +81,11 @@ import {
 	MDBInput,
 	MDBBtn,
 	MDBIcon,
+	MDBModal,
+	MDBModalHeader,
+	MDBModalTitle,
+	MDBModalBody,
+	MDBModalFooter,
 } from "mdb-vue-ui-kit";
 export default {
 	components: {
@@ -85,6 +100,11 @@ export default {
 		MDBInput,
 		MDBBtn,
 		MDBIcon,
+		MDBModal,
+		MDBModalHeader,
+		MDBModalTitle,
+		MDBModalBody,
+		MDBModalFooter,
 	},
 	mounted() {
 		this.notification = Boolean(localStorage.notification);
@@ -93,6 +113,8 @@ export default {
 			this.serverPort = String(String(localStorage.serverAddress).split("//")[1]).split(
 				":"
 			)[1];
+		} else {
+			this.isServerNotConfigurated = true;
 		}
 	},
 	data: () => {
@@ -101,6 +123,7 @@ export default {
 			// Pegando Ip
 			serverIp: "",
 			serverPort: "",
+			isServerNotConfigurated: false,
 		};
 	},
 	methods: {
