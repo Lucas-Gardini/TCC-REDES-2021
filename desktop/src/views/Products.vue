@@ -38,113 +38,178 @@
 					md="6"
 					style="margin-bottom: 10px"
 				>
-					<MDBCard v-if="!product.isEditing" style="height: 100%" text="left">
-						<MDBCardHeader
-							style="display: flex; flex-direction: row; align-content: space-between;"
-						>
-							<MDBCardTitle style="margin-top: auto; margin-bottom: auto;">
-								<div style="display: flex;">
-									<pulsating-dots :color="!product.available ? 'red' : 'green'" />
-									<span style="margin-left: 10px">{{ product.name }}</span>
-								</div>
-							</MDBCardTitle>
-							<div style="margin-left: auto">
-								<MDBBtn
-									@click.prevent="product.isEditing = true"
-									color="warning"
-									floating
-									size="sm"
-								>
-									<MDBIcon icon="pencil-alt" iconStyle="fas" /> </MDBBtn
-								>&nbsp;
-								<MDBBtn v-if="product.available" color="danger" floating size="sm">
-									<MDBIcon icon="times" iconStyle="fas" /> </MDBBtn
-								>&nbsp;
-								<MDBBtn v-else color="success" floating size="sm">
-									<MDBIcon icon="check" iconStyle="fas" /> </MDBBtn
-								>&nbsp;
-								<MDBBtn style="background-color: #E0E0E0" floating size="sm">
-									<MDBIcon icon="trash-alt" iconStyle="fas" />
-								</MDBBtn>
+					<div :class="product.isEditing ? 'flipper flipped' : 'flipper'">
+						<div class="content">
+							<div class="front">
+								<transition name="cardTransition">
+									<MDBCard
+										v-if="!product.isEditing"
+										class="border"
+										style="height: 100%"
+										text="left"
+									>
+										<MDBCardHeader
+											style="display: flex; flex-direction: row; align-content: space-between;"
+										>
+											<MDBCardTitle
+												style="margin-top: auto; margin-bottom: auto;"
+											>
+												<div style="display: flex;">
+													<pulsating-dots
+														:color="
+															!product.available ? 'red' : 'green'
+														"
+													/>
+													<span style="margin-left: 10px">{{
+														product.name
+													}}</span>
+												</div>
+											</MDBCardTitle>
+											<div style="margin-left: auto">
+												<MDBBtn
+													@click.prevent="product.isEditing = true"
+													color="warning"
+													floating
+													size="sm"
+												>
+													<MDBIcon
+														icon="pencil-alt"
+														iconStyle="fas"
+													/> </MDBBtn
+												>&nbsp;
+												<MDBBtn
+													v-if="product.available"
+													color="danger"
+													floating
+													size="sm"
+												>
+													<MDBIcon
+														icon="times"
+														iconStyle="fas"
+													/> </MDBBtn
+												>&nbsp;
+												<MDBBtn v-else color="success" floating size="sm">
+													<MDBIcon
+														icon="check"
+														iconStyle="fas"
+													/> </MDBBtn
+												>&nbsp;
+												<MDBBtn
+													style="background-color: #E0E0E0"
+													floating
+													size="sm"
+												>
+													<MDBIcon icon="trash-alt" iconStyle="fas" />
+												</MDBBtn>
+											</div>
+										</MDBCardHeader>
+										<MDBCardBody>
+											<div style="display: flex">
+												<div>
+													<span>Ingredientes: </span>
+													<ul>
+														<li
+															v-for="(ingredient,
+															i) in product.ingredients"
+															:key="i"
+														>
+															{{ ingredient }}
+														</li>
+													</ul>
+												</div>
+											</div>
+										</MDBCardBody>
+										<MDBCardFooter style="display: flex; flex-direction: row">
+											<span
+												style="position: absolute; bottom: 0%; left: 1%; font-size: small"
+											>
+												<span class="text-danger" v-if="!product.available"
+													>Indisponível</span
+												>
+												<span class="text-success" v-else>Disponível</span>
+											</span>
+											<span class="fs-2" style="margin-left: auto"
+												>R$ {{ product.price }}</span
+											>
+										</MDBCardFooter>
+									</MDBCard>
+								</transition>
 							</div>
-						</MDBCardHeader>
-						<MDBCardBody>
-							<div style="display: flex">
-								<div>
-									<span>Ingredientes: </span>
-									<ul>
-										<li v-for="(ingredient, i) in product.ingredients" :key="i">
-											{{ ingredient }}
-										</li>
-									</ul>
-								</div>
+							<div class="back">
+								<transition name="cardTransition">
+									<MDBCard
+										v-if="product.isEditing"
+										class="border"
+										style="height: 100%"
+										text="left"
+									>
+										<MDBCardHeader
+											style="display: flex; flex-direction: row; align-content: space-between;"
+										>
+											<MDBCardTitle
+												style="margin-top: auto; margin-bottom: auto;"
+											>
+												<div style="display: flex;">
+													<pulsating-dots
+														:color="
+															!product.available ? 'red' : 'green'
+														"
+													/>
+													<MDBContainer>
+														<MDBInput v-model="product.name" />
+													</MDBContainer>
+												</div>
+											</MDBCardTitle>
+											<div style="margin-left: auto">
+												<MDBBtn pcolor="success" floating size="sm">
+													<MDBIcon
+														icon="check"
+														iconStyle="fas"
+													/> </MDBBtn
+												>&nbsp;
+												<MDBBtn color="danger" floating size="sm">
+													<MDBIcon
+														@click="product.isEditing = false"
+														icon="times"
+														iconStyle="fas"
+													/>
+												</MDBBtn>
+											</div>
+										</MDBCardHeader>
+										<MDBCardBody>
+											<div style="display: flex">
+												<div>
+													<span>Ingredientes: </span>
+													<ul>
+														<li
+															v-for="(ingredient,
+															i) in product.ingredients"
+															:key="i"
+														>
+															{{ ingredient }}
+														</li>
+													</ul>
+												</div>
+											</div>
+										</MDBCardBody>
+										<MDBCardFooter style="display: flex; flex-direction: row">
+											<span
+												style="position: absolute; bottom: 0%; left: 1%; font-size: small"
+											>
+												<span class="text-danger" v-if="!product.available"
+													>Indisponível</span
+												>
+												<span class="text-success" v-else>Disponível</span>
+											</span>
+											<span class="fs-2" style="margin-left: auto"
+												>R$ {{ product.price }}</span
+											>
+										</MDBCardFooter>
+									</MDBCard>
+								</transition>
 							</div>
-						</MDBCardBody>
-						<MDBCardFooter style="display: flex; flex-direction: row">
-							<span
-								style="position: absolute; bottom: 0%; left: 1%; font-size: small"
-							>
-								<span class="text-danger" v-if="!product.available"
-									>Indisponível</span
-								>
-								<span class="text-success" v-else>Disponível</span>
-							</span>
-							<span class="fs-2" style="margin-left: auto"
-								>R$ {{ product.price }}</span
-							>
-						</MDBCardFooter>
-					</MDBCard>
-					<MDBCard v-else style="height: 100%" text="left">
-						<MDBCardHeader
-							style="display: flex; flex-direction: row; align-content: space-between;"
-						>
-							<MDBCardTitle style="margin-top: auto; margin-bottom: auto;">
-								<div style="display: flex;">
-									<pulsating-dots :color="!product.available ? 'red' : 'green'" />
-									<MDBContainer>
-										<MDBInput v-model="product.name" />
-									</MDBContainer>
-								</div>
-							</MDBCardTitle>
-							<div style="margin-left: auto">
-								<MDBBtn pcolor="success" floating size="sm">
-									<MDBIcon icon="check" iconStyle="fas" /> </MDBBtn
-								>&nbsp;
-								<MDBBtn color="danger" floating size="sm">
-									<MDBIcon
-										@click="product.isEditing = false"
-										icon="times"
-										iconStyle="fas"
-									/>
-								</MDBBtn>
-							</div>
-						</MDBCardHeader>
-						<MDBCardBody>
-							<div style="display: flex">
-								<div>
-									<span>Ingredientes: </span>
-									<ul>
-										<li v-for="(ingredient, i) in product.ingredients" :key="i">
-											{{ ingredient }}
-										</li>
-									</ul>
-								</div>
-							</div>
-						</MDBCardBody>
-						<MDBCardFooter style="display: flex; flex-direction: row">
-							<span
-								style="position: absolute; bottom: 0%; left: 1%; font-size: small"
-							>
-								<span class="text-danger" v-if="!product.available"
-									>Indisponível</span
-								>
-								<span class="text-success" v-else>Disponível</span>
-							</span>
-							<span class="fs-2" style="margin-left: auto"
-								>R$ {{ product.price }}</span
-							>
-						</MDBCardFooter>
-					</MDBCard>
+						</div>
+					</div>
 				</MDBCol>
 			</MDBRow>
 		</MDBContainer>
@@ -232,4 +297,46 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.flipper {
+	position: relative;
+	min-width: 300px;
+	min-height: 300px;
+	perspective: 500px;
+}
+
+.content {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+
+	transition: transform 1s;
+	transform-style: preserve-3d;
+}
+
+.flipper.flipped .content {
+	transform: rotateY(180deg);
+	transition: transform 0.5s;
+}
+
+.front,
+.back {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	backface-visibility: hidden;
+}
+
+.back {
+	transform: rotateY(180deg);
+}
+
+.cardTransition-enter-active,
+.cardTransition-leave-active {
+	transition: opacity 1s;
+}
+.cardTransition-enter, .cardTransition-leave-to /* .fade-leave-active em versões anteriores a 2.1.8 */ {
+	opacity: 0;
+}
+</style>
