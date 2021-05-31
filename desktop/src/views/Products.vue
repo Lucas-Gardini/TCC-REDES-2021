@@ -35,6 +35,7 @@
 				<MDBCol
 					v-for="(product, i) in products"
 					:key="i"
+					:id="i"
 					md="6"
 					style="margin-bottom: 10px"
 				>
@@ -103,7 +104,7 @@
 												</MDBBtn>
 											</div>
 										</MDBCardHeader>
-										<MDBCardBody>
+										<MDBCardBody style="overflow-y: scroll">
 											<div style="display: flex">
 												<div>
 													<span>Ingredientes: </span>
@@ -232,6 +233,7 @@ import {
 	MDBIcon,
 } from "mdb-vue-ui-kit";
 import PulsatingDots from "../components/PulsatingDots.vue";
+import { useToast } from "vue-toastification";
 
 export default {
 	components: {
@@ -248,10 +250,18 @@ export default {
 		MDBIcon,
 		PulsatingDots,
 	},
+	setup() {
+		const toast = useToast();
+		return { toast };
+	},
 	data: () => {
 		return {
 			ws: new WebSocket(`ws://${String(localStorage.serverAddress).split("://")[1]}`),
 			products: [],
+			oldProducts: [],
+			firstAddedProducts: [],
+			productTimeout: null,
+			productSaveToast: null,
 			isLoaded: false,
 			isAddingProduct: false,
 			newProduct: {},
@@ -271,6 +281,8 @@ export default {
 	},
 	async mounted() {
 		this.products = await this.getproducts();
+		this.firstAddedProducts = this.products.map((o) => ({ ...o }));
+		this.oldProducts = this.products.map((o) => ({ ...o }));
 		this.isLoaded = true;
 	},
 	beforeUnmount() {
@@ -294,10 +306,74 @@ export default {
 			console.log(productId, productAvailability);
 		},
 	},
+	watch: {
+		products: {
+			handler: function() {
+				const products = [...this.products];
+				const firstAddedProducts = [...this.firstAddedProducts];
+				this.oldProducts = products.map((o) => ({ ...o }));
+				this.toast.dismiss(this.productSaveToast);
+				clearTimeout(this.productTimeout);
+				let isSomethingDiferent = false;
+				for (let index in products) {
+					if (
+						!(
+							products[index].ingredients == firstAddedProducts[index].ingredients &&
+							products[index].name == firstAddedProducts[index].name &&
+							products[index].price == firstAddedProducts[index].price &&
+							products[index].available == firstAddedProducts[index].available
+						)
+					) {
+						isSomethingDiferent = true;
+					}
+				}
+				if (isSomethingDiferent) {
+					this.productTimeout = setTimeout(() => {
+						this.productSaveToast = this.toast.error("Existem alterações não salvas!", {
+							position: "top-right",
+							timeout: false,
+							closeOnClick: true,
+							pauseOnFocusLoss: true,
+							pauseOnHover: true,
+							draggable: true,
+							draggablePercent: 1,
+							showCloseButtonOnHover: false,
+							hideProgressBar: true,
+							closeButton: "button",
+							icon: true,
+							rtl: false,
+						});
+					}, 1000);
+				}
+				return;
+			},
+			deep: true,
+		},
+	},
 };
 </script>
 
 <style>
+/* width */
+.card-body::-webkit-scrollbar {
+	width: 5px;
+}
+
+/* Track */
+.card-body::-webkit-scrollbar-track {
+	background: rgb(241, 251, 251);
+}
+
+/* Handle */
+.card-body::-webkit-scrollbar-thumb {
+	background: #888;
+}
+
+/* Handle on hover */
+.card-body::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
 .flipper {
 	position: relative;
 	min-width: 300px;

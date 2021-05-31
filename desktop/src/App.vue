@@ -15,10 +15,10 @@
 import ToolBar from "./components/ToolBar.vue";
 import SideNav from "./components/SideNav.vue";
 import axios from "axios";
+
 export default {
 	watch: {
 		async $route() {
-			console.log(this.$route.path);
 			try {
 				(await axios.get(`${localStorage.serverAddress}/ping`)).data;
 			} catch (e) {
@@ -49,6 +49,26 @@ body {
 	padding: 20px;
 	margin-left: 50px;
 	overflow-x: hidden;
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #121212;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #00b74a;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
 }
 
 .fade-enter-active,
