@@ -1,5 +1,5 @@
 <template>
-	<MDBContainer>
+	<MDBContainer v-if="!reloading">
 		<h1 style="margin-top: 20px">
 			Produtos
 			<MDBBtn color="success" @click="isAddingProduct = !isAddingProduct" floating>
@@ -66,9 +66,12 @@
 													}}</span>
 												</div>
 											</MDBCardTitle>
-											<div style="margin-left: auto">
+											<div style="margin-left: auto" v-if="!isEditingProduct">
 												<MDBBtn
-													@click.prevent="product.isEditing = true"
+													@click.prevent="
+														(product.isEditing = true),
+															(this.isEditingProduct = true)
+													"
 													color="warning"
 													floating
 													size="sm"
@@ -129,9 +132,12 @@
 												>
 												<span class="text-success" v-else>Disponível</span>
 											</span>
-											<span class="fs-2" style="margin-left: auto"
-												>R$ {{ product.price }}</span
-											>
+											<span class="fs-2" style="margin-left: auto">{{
+												product.price.toLocaleString("pt-br", {
+													style: "currency",
+													currency: "BRL",
+												})
+											}}</span>
 										</MDBCardFooter>
 									</MDBCard>
 								</transition>
@@ -170,27 +176,90 @@
 												>&nbsp;
 												<MDBBtn color="danger" floating size="sm">
 													<MDBIcon
-														@click="product.isEditing = false"
+														@click="
+															(product.isEditing = false),
+																(this.isEditingProduct = false),
+																this.reload()
+														"
 														icon="times"
 														iconStyle="fas"
 													/>
 												</MDBBtn>
 											</div>
 										</MDBCardHeader>
-										<MDBCardBody>
+										<MDBCardBody style="overflow-y: scroll">
+											<span>Ingredientes: </span>
 											<div style="display: flex">
-												<div>
-													<span>Ingredientes: </span>
-													<ul>
-														<li
-															v-for="(ingredient,
-															i) in product.ingredients"
-															:key="i"
-														>
-															{{ ingredient }}
-														</li>
-													</ul>
-												</div>
+												<ul style="min-width: 100%">
+													<li
+														v-for="(ingredient,
+														i) in product.ingredients"
+														:key="i"
+													>
+														<MDBRow>
+															<MDBCol md="8" sm="4" lg="8">{{
+																ingredient
+															}}</MDBCol>
+															<MDBCol md="2" sm="2" lg="8">
+																<a
+																	class="m-1"
+																	role="button"
+																	style="color: #F93154"
+																	@click="
+																		product.ingredients.splice(
+																			i,
+																			1
+																		)
+																	"
+																>
+																	<MDBIcon
+																		icon="ban"
+																		iconStyle="fas"
+																	/>
+																</a>
+															</MDBCol>
+														</MDBRow>
+													</li>
+													<li>
+														<MDBRow>
+															<MDBCol md="12">
+																<MDBInput
+																	v-model="product.newIngredient"
+																	class="mt-2"
+																	label="Adicionar Ingrediente"
+																	type="text"
+																/>
+																<MDBBtn
+																	class="mt-1"
+																	size="sm"
+																	color="success"
+																	@click="
+																		product.ingredients.push(
+																			product.newIngredient
+																		),
+																			(product.newIngredient =
+																				'')
+																	"
+																>
+																	<MDBIcon
+																		icon="check"
+																		iconStyle="fas"
+																	/>
+																</MDBBtn>
+																<MDBBtn
+																	class="mt-1"
+																	size="sm"
+																	color="warning"
+																>
+																	<MDBIcon
+																		icon="eraser"
+																		iconStyle="fas"
+																	/>
+																</MDBBtn>
+															</MDBCol>
+														</MDBRow>
+													</li>
+												</ul>
 											</div>
 										</MDBCardBody>
 										<MDBCardFooter style="display: flex; flex-direction: row">
@@ -264,7 +333,16 @@ export default {
 			productSaveToast: null,
 			isLoaded: false,
 			isAddingProduct: false,
+			isEditingProduct: false,
 			newProduct: {},
+			money: new Intl.NumberFormat("pt-BR", {
+				style: "currency",
+				currency: "BRL",
+				// These options are needed to round to whole numbers if that's what you want.
+				//minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+				//maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+			}),
+			reloading: false,
 		};
 	},
 	created() {
@@ -295,6 +373,7 @@ export default {
 					await axios.get(`${localStorage.serverAddress}/products/getall`)
 				).data;
 				for (let product in productsData) {
+					productsData[product].newIngredient = "";
 					productsData[product].isEditing = false;
 				}
 				return productsData;
@@ -305,12 +384,16 @@ export default {
 		async updateProductAvailability(productId, productAvailability) {
 			console.log(productId, productAvailability);
 		},
+		reload() {
+			this.reloading = true;
+			this.$router.go();
+		},
 	},
 	watch: {
 		products: {
 			handler: function() {
-				const products = [...this.products];
-				const firstAddedProducts = [...this.firstAddedProducts];
+				const products = this.products.map((o) => ({ ...o }));
+				const firstAddedProducts = this.firstAddedProducts.map((o) => ({ ...o }));
 				this.oldProducts = products.map((o) => ({ ...o }));
 				this.toast.dismiss(this.productSaveToast);
 				clearTimeout(this.productTimeout);
