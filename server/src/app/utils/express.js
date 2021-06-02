@@ -42,8 +42,13 @@ class expressServer {
 
 		let allowedOrigins = [];
 		for (let obj of this.serverConfig.allowedHosts) {
-			allowedOrigins.push("http://" + obj.host);
-			allowedOriginsTable.addRow("http://" + obj.host);
+			if (obj.host.indexOf("://") > 1) {
+				allowedOrigins.push(obj.host);
+				allowedOriginsTable.addRow(obj.host);
+			} else {
+				allowedOrigins.push("http://" + obj.host);
+				allowedOriginsTable.addRow("http://" + obj.host);
+			}
 		}
 
 		console.log(allowedOriginsTable.toString() + "\n");

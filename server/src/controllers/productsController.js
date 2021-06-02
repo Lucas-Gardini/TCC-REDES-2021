@@ -27,6 +27,30 @@ const productsController = {
 			res.sendStatus(418);
 		}
 	},
+	async updateProduct(req, res) {
+		const product = req.body.product;
+		await products.updateOne(
+			{ _id: product },
+			{
+				name: product.name,
+				price: product.price,
+				ingredients: product.ingredients,
+				available: product.available,
+			},
+			(err) => {
+				if (err) res.sendStatus(500).end();
+				res.sendStatus(200).end();
+			}
+		);
+	},
+	async delProduct(req, res) {
+		await products.deleteOne({ _id: req.params.id }, (err) => {
+			if (err) res.sendStatus(500).end();
+			else {
+				res.sendStatus(200);
+			}
+		});
+	},
 };
 
 module.exports = productsController;
