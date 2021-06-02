@@ -2,27 +2,9 @@
 	<MDBContainer>
 		<MDBContainer>
 			<h1 style="margin-top: 20px">
-				Produtos
+				Configurações
 			</h1>
 		</MDBContainer>
-		<MDBRow class="d-flex">
-			<MDBCol md="6">
-				<MDBCard text="center">
-					<MDBCardHeader>Notificações</MDBCardHeader>
-					<MDBCardBody>
-						<MDBCardTitle>Receber notificações?</MDBCardTitle>
-						<div style="display: flex">
-							<div style="margin: auto">
-								<MDBSwitch
-									@click="saveConfigs()"
-									v-model="notification"
-								></MDBSwitch>
-							</div>
-						</div>
-					</MDBCardBody>
-				</MDBCard>
-			</MDBCol>
-		</MDBRow>
 		<MDBRow>
 			<MDBCol>
 				<MDBCard text="center">
@@ -76,8 +58,6 @@ import {
 	MDBCard,
 	MDBCardHeader,
 	MDBCardBody,
-	MDBCardTitle,
-	MDBSwitch,
 	MDBInput,
 	MDBBtn,
 	MDBIcon,
@@ -95,8 +75,6 @@ export default {
 		MDBCard,
 		MDBCardHeader,
 		MDBCardBody,
-		MDBCardTitle,
-		MDBSwitch,
 		MDBInput,
 		MDBBtn,
 		MDBIcon,

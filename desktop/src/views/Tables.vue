@@ -31,13 +31,14 @@
 					<MDBCheckbox v-model="newTableAvailability" label="Disponível?" inline />
 				</div>
 				<div>
-					<MDBBtn color="info" @click="addToDatabase" floating>
-						<MDBIcon icon="download"></MDBIcon>
-					</MDBBtn>
+					<MDBBtn @click="addToDatabase" color="success" floating size="sm">
+						<MDBIcon icon="check" iconStyle="fas" /> </MDBBtn
+					>&nbsp;
 					<MDBBtn
-						color="secondary"
-						@click="(newTable = ``), (newTableAvailability = false)"
+						color="warning"
 						floating
+						size="sm"
+						@click="(newTable = ``), (newTableAvailability = false)"
 					>
 						<MDBIcon icon="eraser"></MDBIcon>
 					</MDBBtn>
@@ -46,7 +47,7 @@
 		</MDBContainer>
 		<div class="row" style="margin-top: 10px">
 			<div class="col-4" v-for="(table, i) in tables" :key="i" style="margin-bottom: 10px;">
-				<MDBCard class="bg-light" text="center">
+				<MDBCard class="bg-light border" text="center">
 					<MDBCardBody>
 						<MDBCardTitle
 							style="color: #262626; border-bottom: 0.2px solid #424242; padding-bottom: 5px"
