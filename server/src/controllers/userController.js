@@ -21,6 +21,7 @@ const userController = {
 							user_id: result[0]._id,
 							user_name: result[0].user,
 							user_function: result[0].function,
+							is_adm: result[0].adm,
 						};
 						res.send("OK").end();
 					} else {
@@ -35,23 +36,25 @@ const userController = {
 		}
 	},
 	async getSession(req, res, next) {
-		res.send(`Session after login: ${JSON.stringify(req.session.auth)}`);
+		res.send(req.session.auth.is_adm);
 	},
 	async addUser(req, res) {
 		// Encrypting Password
 		bcrypt.genSalt(saltRounds, function (err, salt) {
-			bcrypt.hash("admin", salt, async function (err, hash) {
-				const create = await users.create(
-					{ user: "admin", passwd: hash, function: null, adm: true },
-					(err) => {
-						if (err) res.send(`Error code: ${err.code}`);
-						else {
-							res.send(create);
-						}
+			if (err) {
+				console.log(err);
+				res.sendStatus(500).end();
+				return;
+			}
+			const { user, password, user_function, adm } = req.body;
+			bcrypt.hash(password, salt, async function (err, hash) {
+				await users.create({ user, passwd: hash, function: user_function, adm }, (err) => {
+					console.log(err);
+					if (err) res.sendStatus(500).end();
+					else {
+						res.sendStatus(200);
 					}
-				);
-
-				console.log(hash);
+				});
 			});
 		});
 	},

@@ -69,6 +69,7 @@ class expressServer {
 					"Allowed-Methods",
 				],
 				origin: function (origin, callback) {
+					console.log(`Access from: ${origin}`);
 					if (allowedOrigins.indexOf(origin) !== -1) {
 						callback(null, true);
 					} else {

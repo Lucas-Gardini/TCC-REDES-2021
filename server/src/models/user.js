@@ -7,7 +7,7 @@ const usersSchema = new mongoose.Schema({
 		unique: true,
 	},
 	passwd: String,
-	function: Number || null, // 0 -> client (wip), 1 -> waiter, 2-> Chef
+	function: String || null,
 	adm: Boolean,
 });
 

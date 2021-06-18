@@ -35,7 +35,7 @@ class mongoDB {
 		userModel.watch().on("change", (change) => {
 			console.log("Database changed: " + "user");
 			for (let conn in this.connections) {
-				this.connections[conn].send("user");
+				this.connections[conn].send("users");
 			}
 		});
 		productsModel.watch().on("change", (change) => {

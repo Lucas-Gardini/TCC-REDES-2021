@@ -7,9 +7,9 @@ router.post("/add", loginController.addUser);
 
 router.post("/get", loginController.getUser);
 
-router.post("/getall", loginController.getAllUsers);
+router.get("/getall", loginController.getAllUsers);
 
-router.post("/getsession", loginController.getSession);
+router.get("/getsession", loginController.getSession);
 
 router.delete("/del", loginController.deleteUser);
 

@@ -1,8 +1,22 @@
 const { products } = require("../models/index.js");
+const yup = require("yup");
+
+const productSchema = yup.object().shape({
+	name: yup.string().required(),
+	price: yup.number().required(),
+	ingredients: yup.array().required(),
+	available: yup.boolean().required(),
+});
 
 const productsController = {
 	async addProduct(req, res) {
 		const { name, price, ingredients, available } = req.body;
+		try {
+			await productSchema.validate(req.body);
+		} catch (error) {
+			res.sendStatus(418);
+			return;
+		}
 		const create = await products.create({ name, price, ingredients, available }, (err) => {
 			if (err) res.send(`Error code: ${err.code}`);
 			else {
