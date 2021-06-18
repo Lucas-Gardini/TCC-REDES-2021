@@ -26,7 +26,7 @@
 											:color="!newProduct.available ? 'red' : 'green'"
 										/>
 										<MDBContainer style="display: flex; flex-direction: row">
-											<MDBInput v-model="newProduct.name" />
+											<MDBInput label="Produto" v-model="newProduct.name" />
 											<span class=""
 												><input
 													style="position: relative; margin-top: 11px; margin-left: 10px; transform: scale(2);"
@@ -46,18 +46,25 @@
 									>
 										<MDBIcon icon="check" iconStyle="fas" /> </MDBBtn
 									>&nbsp;
-									<MDBBtn color="danger" floating size="sm">
-										<MDBIcon
-											@click="
-												(newProduct.name = null),
-													(newProduct.ingredients = []),
-													(newProduct.available = true),
-													(newProduct.price = null),
-													(newProduct.newIngredient = null)
-											"
-											icon="times"
-											iconStyle="fas"
-										/>
+									<MDBBtn
+										v-if="
+											newProduct.name !== null ||
+												newProduct.ingredients.length > 1 ||
+												newProduct.price !== null ||
+												newProduct.newIngredient !== null
+										"
+										@click="
+											(newProduct.name = null),
+												(newProduct.ingredients = []),
+												(newProduct.available = true),
+												(newProduct.price = null),
+												(newProduct.newIngredient = null)
+										"
+										color="warning"
+										floating
+										size="sm"
+									>
+										<MDBIcon icon="eraser" iconStyle="fas" />
 									</MDBBtn>
 								</div>
 							</MDBCardHeader>
@@ -314,9 +321,7 @@
 												<MDBBtn color="danger" floating size="sm">
 													<MDBIcon
 														@click="
-															(product.isEditing = false),
-																(this.isEditingProduct = false),
-																this.reload()
+															clearEdit(), (product.isEditing = false)
 														"
 														icon="times"
 														iconStyle="fas"
@@ -370,6 +375,11 @@
 																	class="mt-1"
 																	size="sm"
 																	color="success"
+																	v-if="
+																		String(
+																			product.newIngredient
+																		).length > 0
+																	"
 																	@click="
 																		product.ingredients.push(
 																			product.newIngredient
@@ -387,6 +397,11 @@
 																	class="mt-1"
 																	size="sm"
 																	color="warning"
+																	v-if="
+																		String(
+																			product.newIngredient
+																		).length > 0
+																	"
 																	@click="
 																		product.newIngredient = ''
 																	"
@@ -620,24 +635,44 @@ export default {
 		},
 		async deleteProduct(productIndex) {
 			try {
-				await axios.delete(
-					`${localStorage.serverAddress}/products/delete/${this.products[productIndex]._id}`
+				const deleting = confirm(
+					`Deseja realmente excluir o produto '${this.products[productIndex].name}'?`
 				);
-				this.toast.success("Produto excluído", {
-					position: "top-right",
-					timeout: 1000,
-					closeOnClick: true,
-					pauseOnFocusLoss: false,
-					pauseOnHover: true,
-					draggable: true,
-					draggablePercent: 1,
-					showCloseButtonOnHover: false,
-					hideProgressBar: false,
-					closeButton: "button",
-					icon: true,
-					rtl: false,
-				});
-				this.reload();
+				if (deleting) {
+					await axios.delete(
+						`${localStorage.serverAddress}/products/delete/${this.products[productIndex]._id}`
+					);
+					this.toast.success("Produto excluído", {
+						position: "top-right",
+						timeout: 1000,
+						closeOnClick: true,
+						pauseOnFocusLoss: false,
+						pauseOnHover: true,
+						draggable: true,
+						draggablePercent: 1,
+						showCloseButtonOnHover: false,
+						hideProgressBar: false,
+						closeButton: "button",
+						icon: true,
+						rtl: false,
+					});
+					this.reload();
+				} else {
+					this.toast.warning("Ação Cancelada", {
+						position: "top-right",
+						timeout: 1000,
+						closeOnClick: true,
+						pauseOnFocusLoss: false,
+						pauseOnHover: true,
+						draggable: true,
+						draggablePercent: 1,
+						showCloseButtonOnHover: false,
+						hideProgressBar: false,
+						closeButton: "button",
+						icon: true,
+						rtl: false,
+					});
+				}
 			} catch (error) {
 				this.toast.error("Algo deu errado!!", {
 					position: "top-right",
@@ -654,6 +689,10 @@ export default {
 					rtl: false,
 				});
 			}
+		},
+		clearEdit() {
+			this.isEditingProduct = false;
+			this.reload();
 		},
 		reload() {
 			this.show_hide = "hide";

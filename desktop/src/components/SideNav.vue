@@ -20,6 +20,9 @@
 		<a :class="isAtTables" href="javascript:void(0)" @click="redirect('/dashboard/tables')"
 			><i class="mdi mdi-table-furniture"></i
 		></a>
+		<a :class="isAtUsers" href="javascript:void(0)" @click="redirect('/dashboard/users')"
+			><i class="mdi mdi-account-cog"></i
+		></a>
 		<a :class="isAtSettings" href="javascript:void(0)" @click="redirect('/dashboard/settings')"
 			><i class="mdi mdi-tune"></i
 		></a>
@@ -82,6 +85,7 @@ export default {
 			isAtSettings: "",
 			isAtTables: "",
 			isAtProducts: "",
+			isAtUsers: "",
 			// colorMode: localStorage.colorMode || "light",
 			// colorModeClass: localStorage.colorModeIcon || "mdi mdi-weather-night",
 		};
@@ -104,6 +108,9 @@ export default {
 					this.isMan = false;
 				}
 			} else {
+				this.isAdm = true;
+			}
+			if (localStorage.currentUser === "admin") {
 				this.isAdm = true;
 			}
 		}
@@ -154,6 +161,10 @@ export default {
 					this.isAtTables = "active";
 					break;
 
+				case "/dashboard/users":
+					this.isAtUsers = "active";
+					break;
+
 				default:
 					// console.log(path);
 					break;
@@ -169,54 +180,8 @@ export default {
 			this.isAtSettings = "";
 			this.isAtTables = "";
 			this.isAtProducts = "";
+			this.isAtUsers = "";
 		},
-		// changeColorMode() {
-		// 	this.colorMode === "light"
-		// 		? ((this.colorMode = "dark"), (this.colorModeClass = "mdi mdi-weather-night"))
-		// 		: ((this.colorMode = "light"), (this.colorModeClass = "mdi mdi-weather-sunny"));
-		// 	localStorage.colorMode = this.colorMode;
-		// 	localStorage.colorModeClass = this.colorModeClass;
-		// 	this.changeActualColors();
-		// },
-		// changeActualColors() {
-		// 	setTimeout(() => {
-		// 		try {
-		// 			const NAVBAR = document.querySelector("#sidenav");
-		// 			document.querySelector("body").style =
-		// 				this.colorMode === "light"
-		// 					? "background-color: #121212 !important; color: aliceblue;"
-		// 					: "background-color: white !important; color: black;";
-		// 			NAVBAR.style =
-		// 				this.colorMode === "light"
-		// 					? "background-color: aliceblue !important; color: aliceblue"
-		// 					: "background-color: #121212 !important; color: black !important";
-		// 			NAVBAR.querySelector("#userPicture").style =
-		// 				this.colorMode === "light"
-		// 					? "text-align: center; font-size: xx-large; color: black;display: grid"
-		// 					: "text-align: center; font-size: xx-large; color: aliceblue;display: grid";
-		// 			const NAVBAR_A = NAVBAR.querySelectorAll("a");
-		// 			for (let a of NAVBAR_A) {
-		// 				if (String(a.style.cssText).indexOf("absolute") === 10) {
-		// 					a.style =
-		// 						this.colorMode === "light"
-		// 							? "position: absolute; bottom: 0%; left: 0%; color: black"
-		// 							: "position: absolute; bottom: 0%; left: 0%; color: aliceblue";
-		// 				} else {
-		// 					a.style =
-		// 						this.colorMode === "light"
-		// 							? "text-align: center; color: black;"
-		// 							: "text-align: center; color: aliceblue;";
-		// 				}
-		// 			}
-		// 		} catch (e) {
-		// 			console.log("slk");
-		// 		}
-		// 	}, 100);
-		// 	// document.querySelector(".ToolBar").style =
-		// 	// 	this.colorMode === "light"
-		// 	// 		? "background-color: white !important; color: black;"
-		// 	// 		: "background-color: #121212 !important; color: aliceblue;";
-		// },
 		async loggout(isLoggingOut = false) {
 			if (isLoggingOut) {
 				localStorage.currentUser = null;

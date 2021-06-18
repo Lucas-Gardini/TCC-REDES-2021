@@ -13,27 +13,11 @@
 </template>
 
 <script>
-const { BrowserWindow } = require("@electron/remote");
+const { ipcRenderer } = require("electron");
 export default {
 	methods: {
 		manageWindow(method) {
-			const window = BrowserWindow.getFocusedWindow();
-			switch (method) {
-				case "MINIMIZE":
-					window.minimize();
-					break;
-
-				case "MAXIMIZE":
-					window.isMaximized() ? window.unmaximize() : window.maximize();
-					break;
-
-				case "CLOSE":
-					BrowserWindow.getAllWindows().forEach((window) => {
-						window.close();
-					});
-					break;
-			}
-			BrowserWindow.getFocusedWindow();
+			ipcRenderer.invoke("manageWindow", { method });
 		},
 	},
 };

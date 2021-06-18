@@ -4,6 +4,7 @@ import Dashboard from "../views/Dashboard.vue";
 import Products from "../views/Products.vue";
 import Tables from "../views/Tables.vue";
 import Settings from "../views/Settings.vue";
+import Users from "../views/Users.vue";
 
 const routes = [
 	{ path: "/", name: "Home", component: AuthPage },
@@ -11,6 +12,7 @@ const routes = [
 	{ path: "/dashboard/products", name: "Products", component: Products },
 	{ path: "/dashboard/tables", name: "Tables", component: Tables },
 	{ path: "/dashboard/settings", name: "Settings", component: Settings },
+	{ path: "/dashboard/users", name: "Users", component: Users },
 ];
 
 const router = createRouter({

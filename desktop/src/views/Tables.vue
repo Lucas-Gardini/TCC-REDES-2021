@@ -47,17 +47,25 @@
 		</MDBContainer>
 		<div class="row" style="margin-top: 10px">
 			<div class="col-4" v-for="(table, i) in tables" :key="i" style="margin-bottom: 10px;">
-				<MDBCard class="bg-light border" text="center">
+				<MDBCard
+					:class="
+						table.available
+							? 'bg-light border border-success'
+							: 'bg-light border border-danger'
+					"
+					style="border-width: 5px !important; margin-bottom: 15px"
+					text="center"
+				>
 					<MDBCardBody>
 						<MDBCardTitle
 							style="color: #262626; border-bottom: 0.2px solid #424242; padding-bottom: 5px"
 							>{{ table.table }}</MDBCardTitle
 						>
 						<MDBCardText>
-							<p v-if="table.available" style="color: #00B74A" class="fs-2">
+							<p v-if="table.available" style="color: #181818" class="fs-2">
 								Disponível Hoje
 							</p>
-							<p v-else style="color: #F93154" class="fs-2">Indisponível Hoje</p>
+							<p v-else style="color: #181818" class="fs-2">Indisponível Hoje</p>
 						</MDBCardText>
 						<div class="row">
 							<div class="col" style="margin-bottom: 10px">

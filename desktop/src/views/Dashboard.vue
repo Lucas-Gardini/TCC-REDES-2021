@@ -5,7 +5,7 @@
 			<MDBRow class="d-flex">
 				<!-- Products Card -->
 				<MDBCol md="6" style="margin-bottom: 10px">
-					<MDBCard text="center">
+					<MDBCard text="center" class="border">
 						<MDBCardHeader
 							><MDBIcon
 								style="font-size: 2em; color: #FFAB40"
@@ -24,7 +24,7 @@
 				</MDBCol>
 				<!-- Tables Card -->
 				<MDBCol md="6" style="margin-bottom: 10px">
-					<MDBCard text="center">
+					<MDBCard text="center" class="border">
 						<MDBCardHeader
 							><MDBIcon
 								style="font-size: 2em; color: #795548"
@@ -52,7 +52,7 @@
 				</MDBCol>
 				<!-- Sells Card -->
 				<MDBCol md="6" style="margin-bottom: 10px">
-					<MDBCard text="center">
+					<MDBCard text="center" class="border">
 						<MDBCardHeader
 							><MDBIcon
 								style="font-size: 2em; color: #00B74A"

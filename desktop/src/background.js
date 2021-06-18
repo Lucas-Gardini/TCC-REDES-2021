@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow } from "electron";
+import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -11,9 +11,11 @@ protocol.registerSchemesAsPrivileged([
 	{ scheme: "app", privileges: { secure: true, standard: true } },
 ]);
 
+var win;
+
 async function createWindow() {
 	// Create the browser window.
-	const win = new BrowserWindow({
+	win = new BrowserWindow({
 		width: 800,
 		height: 600,
 		webPreferences: {
@@ -54,6 +56,22 @@ app.on("activate", () => {
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
 	createWindow();
+});
+
+ipcMain.handle("manageWindow", async (event, ...args) => {
+	switch (args[0].method) {
+		case "MINIMIZE":
+			win.minimize();
+			break;
+
+		case "MAXIMIZE":
+			win.isMaximized() ? win.unmaximize() : win.maximize();
+			break;
+
+		case "CLOSE":
+			win.close();
+			break;
+	}
 });
 
 // Exit cleanly on request from parent process in development mode.

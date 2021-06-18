@@ -39,10 +39,7 @@ export default {
 /* @import url("https://fonts.googleapis.com/css2?family=Oswald&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Kdam+Thmor&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap");
-
-body {
-	font-family: "Noto Serif", serif;
-} */
+*/
 
 #app {
 	transition: margin-left 0.5s;

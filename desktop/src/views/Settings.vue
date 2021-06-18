@@ -106,11 +106,9 @@ export default {
 	},
 	methods: {
 		saveConfigs() {
-			if (localStorage.currentUser === "null") {
-				this.$router.push("/");
-			}
 			localStorage.serverAddress = `http://${this.serverIp}:${this.serverPort}`;
 			localStorage.notification = !this.notification;
+			this.$router.push("/");
 		},
 	},
 };
