@@ -35,8 +35,15 @@ const userController = {
 			res.send("ALREADY_LOGGED_IN").end();
 		}
 	},
-	async getSession(req, res, next) {
+	async getSession(req, res) {
 		res.send(req.session.auth.is_adm);
+	},
+	async getIsLoggedIn(req, res) {
+		if (req.session.auth.loggedin) {
+			res.send(true);
+		} else {
+			res.send(false);
+		}
 	},
 	async addUser(req, res) {
 		// Encrypting Password

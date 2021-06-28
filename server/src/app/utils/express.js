@@ -58,6 +58,11 @@ class expressServer {
 			)}\n`
 		);
 
+		this.app.use((req, res, next) => {
+			console.log(req.ip);
+			next();
+		});
+
 		this.app.use(
 			this.cors({
 				allowedHeaders: [
@@ -69,7 +74,7 @@ class expressServer {
 					"Allowed-Methods",
 				],
 				origin: function (origin, callback) {
-					console.log(`Access from: ${origin}`);
+					console.log(`Origin: ${origin}`);
 					if (allowedOrigins.indexOf(origin) !== -1) {
 						callback(null, true);
 					} else {

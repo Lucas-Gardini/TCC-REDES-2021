@@ -7,6 +7,8 @@ router.post("/add", loginController.addUser);
 
 router.post("/get", loginController.getUser);
 
+router.get("/getlogin", loginController.getIsLoggedIn);
+
 router.get("/getall", loginController.getAllUsers);
 
 router.get("/getsession", loginController.getSession);

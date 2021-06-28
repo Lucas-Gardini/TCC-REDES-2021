@@ -181,8 +181,6 @@ export default {
 					withCredentials: true,
 				},
 			});
-			console.log(USER_LOGIN_RESULT);
-
 			if (USER_LOGIN_RESULT.data === "ALREADY_LOGGED_IN") {
 				this.$router.push("/dashboard");
 				this.isLoading = false;

@@ -8,21 +8,37 @@
 			</MDBBtn>
 		</h1>
 		<MDBContainer v-if="isLoaded">
-			<MDBRow v-if="isCreatingUser">
-				<MDBCard>
+			<MDBRow v-if="isCreatingUser" style="margin-bottom: 100px">
+				<MDBCard class="border">
 					<MDBCardHeader
 						style="display: flex; flex-direction: row; align-content: space-between;"
 					>
 						<MDBCardTitle style="margin-top: auto; margin-bottom: auto;">
 							<div style="display: flex;">
-								<span style="margin-left: 10px">Novo Usuário</span>
+								<span style="margin-left: 10px"
+									><i class="mdi mdi-account-multiple-plus"></i> Novo
+									Usuário</span
+								>
 							</div>
 						</MDBCardTitle>
 						<div style="margin-left: auto">
 							<MDBBtn @click="saveNewUser()" color="success" floating size="sm">
 								<MDBIcon icon="check" iconStyle="fas" /> </MDBBtn
 							>&nbsp;
-							<MDBBtn color="danger" floating size="sm">
+							<MDBBtn
+								@click="
+									(newUser = {
+										user: null,
+										password: null,
+										user_function: null,
+										adm: false,
+									}),
+										(isCreatingUser = false)
+								"
+								color="danger"
+								floating
+								size="sm"
+							>
 								<MDBIcon icon="times" iconStyle="fas" />
 							</MDBBtn>
 						</div>
@@ -32,33 +48,39 @@
 							<MDBListGroup>
 								<MDBListGroupItem>
 									<MDBRow>
-										<MDBCol>ID</MDBCol>
+										<MDBCol><i class="mdi mdi-card-text"></i> ID</MDBCol>
 										<MDBCol
 											><span style="color: #757575"
 												>Será preenchido no cadastro</span
 											></MDBCol
 										>
+										<MDBCol style="text-align: right" col="2">&nbsp;</MDBCol>
 									</MDBRow>
 								</MDBListGroupItem>
 								<MDBListGroupItem>
 									<MDBRow>
-										<MDBCol>Usuário</MDBCol>
+										<MDBCol
+											><i class="mdi mdi-card-account-details"></i>
+											Usuário</MDBCol
+										>
 										<MDBCol>
 											<MDBInput v-model="newUser.user" />
 										</MDBCol>
+										<MDBCol style="text-align: right" col="2">&nbsp;</MDBCol>
 									</MDBRow>
 								</MDBListGroupItem>
 								<MDBListGroupItem>
 									<MDBRow>
-										<MDBCol>Senha</MDBCol>
+										<MDBCol><i class="mdi mdi-key"></i> Senha</MDBCol>
 										<MDBCol>
 											<MDBInput v-model="newUser.password" />
 										</MDBCol>
+										<MDBCol style="text-align: right" col="2">&nbsp;</MDBCol>
 									</MDBRow>
 								</MDBListGroupItem>
 								<MDBListGroupItem>
 									<MDBRow>
-										<MDBCol>Função</MDBCol>
+										<MDBCol><i class="mdi mdi-account-tie"></i> Cargo</MDBCol>
 										<MDBCol>
 											<div class="form-outline">
 												<select
@@ -86,16 +108,21 @@
 												</div>
 											</div>
 										</MDBCol>
+										<MDBCol style="text-align: right" col="2">&nbsp;</MDBCol>
 									</MDBRow>
 								</MDBListGroupItem>
 								<MDBListGroupItem>
 									<MDBRow>
-										<MDBCol>Administrador</MDBCol>
+										<MDBCol
+											><i class="mdi mdi-hat-fedora"></i>
+											Administrador</MDBCol
+										>
 										<MDBCol>
 											<MDBBtn
 												v-if="newUser.adm"
 												@click="newUser.adm = false"
 												color="success"
+												size="sm"
 											>
 												<MDBIcon iconStyle="fas" icon="check"></MDBIcon>
 											</MDBBtn>
@@ -103,10 +130,12 @@
 												v-else
 												@click="newUser.adm = true"
 												color="danger"
+												size="sm"
 											>
 												<MDBIcon iconStyle="fas" icon="times"></MDBIcon>
 											</MDBBtn>
 										</MDBCol>
+										<MDBCol style="text-align: right" col="2">&nbsp;</MDBCol>
 									</MDBRow>
 								</MDBListGroupItem>
 							</MDBListGroup>
@@ -114,15 +143,22 @@
 					</MDBCardBody>
 				</MDBCard>
 			</MDBRow>
-			<MDBRow v-for="(user, i) in users" :key="i">
+			<MDBRow
+				class="border-bottom"
+				style="margin-bottom: 50px !important;"
+				v-for="(user, i) in users"
+				:key="i"
+			>
 				<MDBCol>
-					<MDBCard>
+					<MDBCard class="border">
 						<MDBCardHeader
 							style="display: flex; flex-direction: row; align-content: space-between;"
 						>
 							<MDBCardTitle style="margin-top: auto; margin-bottom: auto;">
 								<div style="display: flex;">
-									<span style="margin-left: 10px">{{ user.user }}</span>
+									<span style="margin-left: 10px"
+										><i class="mdi mdi-account"></i> {{ user.user }}</span
+									>
 								</div>
 							</MDBCardTitle>
 						</MDBCardHeader>
@@ -131,7 +167,7 @@
 								<MDBListGroup>
 									<MDBListGroupItem>
 										<MDBRow>
-											<MDBCol>ID</MDBCol>
+											<MDBCol><i class="mdi mdi-card-text"></i> ID</MDBCol>
 											<MDBCol>{{ user._id }}</MDBCol>
 											<MDBCol style="text-align: right" col="2"
 												>&nbsp;</MDBCol
@@ -140,7 +176,10 @@
 									</MDBListGroupItem>
 									<MDBListGroupItem>
 										<MDBRow>
-											<MDBCol>Usuário</MDBCol>
+											<MDBCol
+												><i class="mdi mdi-card-account-details"></i>
+												Usuário</MDBCol
+											>
 											<MDBCol>{{ user.user }}</MDBCol>
 											<MDBCol style="text-align: right" col="2"
 												><MDBBtn color="warning" floating size="sm">
@@ -153,7 +192,7 @@
 									</MDBListGroupItem>
 									<MDBListGroupItem>
 										<MDBRow>
-											<MDBCol>Senha</MDBCol>
+											<MDBCol><i class="mdi mdi-key"></i> Senha</MDBCol>
 											<MDBCol>••••••••••</MDBCol>
 											<MDBCol style="text-align: right" col="2"
 												><MDBBtn color="warning" floating size="sm">
@@ -166,7 +205,9 @@
 									</MDBListGroupItem>
 									<MDBListGroupItem>
 										<MDBRow>
-											<MDBCol>Função</MDBCol>
+											<MDBCol
+												><i class="mdi mdi-account-tie"></i> Cargo</MDBCol
+											>
 											<MDBCol>{{
 												translateUserFunction(user.function)
 											}}</MDBCol>
@@ -181,18 +222,28 @@
 									</MDBListGroupItem>
 									<MDBListGroupItem>
 										<MDBRow>
-											<MDBCol>Administrador</MDBCol>
+											<MDBCol
+												><i class="mdi mdi-hat-fedora"></i>
+												Administrador</MDBCol
+											>
 											<MDBCol>{{ user.adm ? "Sim" : "Não" }}</MDBCol>
 											<MDBCol style="text-align: right" col="2">
 												<MDBBtn
 													v-if="user.adm"
+													@click="manageUserAdminRole(user, false)"
 													color="danger"
 													floating
 													size="sm"
 												>
 													<MDBIcon icon="times" iconStyle="fas" />
 												</MDBBtn>
-												<MDBBtn v-else color="success" floating size="sm">
+												<MDBBtn
+													v-else
+													@click="manageUserAdminRole(user, true)"
+													color="success"
+													floating
+													size="sm"
+												>
 													<MDBIcon icon="check" iconStyle="fas" />
 												</MDBBtn>
 											</MDBCol>
@@ -244,7 +295,8 @@ export default {
 	},
 	data: () => {
 		return {
-			ws: new WebSocket(`ws://${String(localStorage.serverAddress).split("://")[1]}`),
+			ws: null,
+			isAdm: false,
 			user: "",
 			users: [],
 			isLoaded: false,
@@ -257,40 +309,42 @@ export default {
 			},
 		};
 	},
-	created() {
-		this.ws.onmessage = async (event) => {
-			switch (event.data) {
-				case "users":
-					await this.getUsers();
-					break;
-			}
-		};
-	},
-	async beforeMount() {
+	async mounted() {
 		const isAdmin = (await axios.get(`${localStorage.serverAddress}/user/getsession`)).data;
 		if (!isAdmin) {
-			this.$route.push("/dashboard");
-		}
-	},
-	async mounted() {
-		if (localStorage.currentUser === "admin") {
-			this.user = "Administrador";
+			this.$router.push("/dashboard");
 		} else {
-			this.user = localStorage.currentUser;
+			this.ws = new WebSocket(`ws://${String(localStorage.serverAddress).split("://")[1]}`);
+			this.ws.onmessage = async (event) => {
+				switch (event.data) {
+					case "users":
+						await this.getUsers();
+						break;
+				}
+			};
 		}
-		try {
-			await this.getUsers();
-			this.isLoaded = true;
-		} catch (err) {
-			console.log(err);
+		this.isAdm = isAdmin;
+		if (this.isAdm) {
+			if (localStorage.currentUser === "admin") {
+				this.user = "Administrador";
+			} else {
+				this.user = localStorage.currentUser;
+			}
+			try {
+				await this.getUsers();
+				this.isLoaded = true;
+			} catch (err) {
+				console.log(err);
+			}
 		}
 	},
 	beforeUnmount() {
-		this.ws.close();
+		if (this.ws) {
+			this.ws.close();
+		}
 	},
 	methods: {
 		async getUsers() {
-			console.log("holy shit");
 			this.users = (await axios.get(`${localStorage.serverAddress}/user/getall`)).data;
 		},
 		async saveNewUser() {
@@ -313,7 +367,17 @@ export default {
 				case "kitchen":
 					return "Cozinha";
 				case "manager":
-					return "Recepcionista / Gerente";
+					return "Recepcionista / Gerente	";
+			}
+		},
+		manageUserAdminRole(user, value) {
+			const question = confirm(
+				value
+					? "Deseja remover a permissão de Administrador?"
+					: "Deseja adicionar a permissão de Administrador?"
+			);
+			if (question) {
+				user.adm = value;
 			}
 		},
 	},
