@@ -6,6 +6,7 @@ import {
 	ScrollView,
 	Dimensions,
 	ActivityIndicator,
+	Alert,
 } from 'react-native';
 import {
 	Button,
@@ -14,6 +15,7 @@ import {
 	Text,
 	ListItem,
 	BottomSheet,
+	ButtonGroup,
 } from 'react-native-elements';
 import KeyStorage from 'react-native-sensitive-info';
 import axios from 'axios';
@@ -52,14 +54,33 @@ export default () => {
 							}, 800);
 						});
 				});
+			const ws = new WebSocket(`ws://${serverAddress}`);
+
+			ws.onmessage = message => {
+				console.log(message);
+			};
 		});
 	}, []);
+
+	function manageNewProducts(newProduct, quantity) {
+		if (!newProduct.available) {
+			Alert.alert('Produto Indisponível');
+			return;
+		}
+		console.log(newProduct, +quantity);
+	}
 
 	return (
 		<View style={styles.mainContainer}>
 			{isMakingNewRequest && !isLoading ? (
 				<ScrollView>
 					<Text h1={true} style={{marginLeft: 10}}>
+						<Icon
+							name="plus"
+							type="font-awesome-5"
+							color="#121212"
+							style={{marginRight: 10}}
+						/>
 						Novo Pedido
 					</Text>
 					<ListItem>
@@ -67,6 +88,9 @@ export default () => {
 							buttonStyle={{
 								justifyContent: 'flex-start',
 								width: deviceDimensions.width - 35,
+							}}
+							titleStyle={{
+								color: '#00B74A',
 							}}
 							title={` Escolher Mesa: ${newRequest.table_id} `}
 							type="clear"
@@ -112,7 +136,12 @@ export default () => {
 							<ListItem.Content>
 								<ListItem.Title>
 									<View>
-										<Text>{product.name}</Text>
+										<Text style={{fontSize: 25}}>
+											{product.name} -{' '}
+											{product.available
+												? 'Disponível'
+												: 'Indisponível'}
+										</Text>
 									</View>
 								</ListItem.Title>
 								<ListItem.Subtitle>
@@ -126,7 +155,7 @@ export default () => {
 											(ingredient, ii) => {
 												return (
 													<View key={ii}>
-														<Button
+														{/* <Button
 															buttonStyle={{
 																justifyContent:
 																	'flex-start',
@@ -134,15 +163,71 @@ export default () => {
 																	deviceDimensions.width -
 																	35,
 															}}
-															title={` ${ingredient} `}
+															title={}
 															type="clear"
-														/>
+														/> */}
+														<Text>
+															• {ingredient}
+														</Text>
 													</View>
 												);
 											},
 										)}
 									</View>
 								</ListItem.Subtitle>
+								<View
+									style={{
+										flexDirection: 'row',
+										marginTop: 15,
+									}}>
+									<View style={{marginRight: 15}}>
+										<Button
+											buttonStyle={{
+												backgroundColor: '#fff',
+											}}
+											icon={
+												<Icon
+													type="font-awesome-5"
+													name="plus"
+													color="#00B74A"
+													size={15}
+												/>
+											}
+											onPress={() => {
+												manageNewProducts(product, 1);
+											}}
+										/>
+									</View>
+									<View style={{marginRight: 15}}>
+										<Button
+											buttonStyle={{
+												backgroundColor: '#fff',
+											}}
+											icon={
+												<Icon
+													type="font-awesome-5"
+													name="minus"
+													color="#F93154"
+													size={15}
+												/>
+											}
+											onPress={() => {
+												manageNewProducts(product, -1);
+											}}
+										/>
+									</View>
+									<View>
+										<Button
+											buttonStyle={{
+												backgroundColor: '#fff',
+											}}
+											titleStyle={{
+												color: '#121212',
+											}}
+											title="Quantidade: 0"
+										/>
+									</View>
+								</View>
 							</ListItem.Content>
 						</ListItem>
 					))}
