@@ -7,25 +7,15 @@
 		</MDBContainer>
 		<MDBRow>
 			<MDBCol>
-				<MDBCard text="center">
+				<MDBCard text="center" style="border: 1px solid #1212122f">
 					<MDBCardHeader>Endereço da Api</MDBCardHeader>
 					<MDBCardBody>
 						<MDBRow>
 							<MDBCol col="7">
-								<MDBInput
-									v-model="serverIp"
-									label="Endereço Ip"
-									maxlength="15"
-									type="text"
-								/>
+								<MDBInput v-model="serverIp" label="Endereço Ip" maxlength="15" type="text" />
 							</MDBCol>
 							<MDBCol col="3">
-								<MDBInput
-									v-model="serverPort"
-									label="Porta"
-									maxlength="15"
-									type="text"
-								/>
+								<MDBInput v-model="serverPort" label="Porta" maxlength="15" type="text" />
 							</MDBCol>
 							<MDBCol col="auto">
 								<MDBBtn @click="saveConfigs()" color="success" floating>
@@ -88,9 +78,7 @@ export default {
 		this.notification = Boolean(localStorage.notification);
 		if (localStorage.serverAddress) {
 			this.serverIp = String(String(localStorage.serverAddress).split("//")[1]).split(":")[0];
-			this.serverPort = String(String(localStorage.serverAddress).split("//")[1]).split(
-				":"
-			)[1];
+			this.serverPort = String(String(localStorage.serverAddress).split("//")[1]).split(":")[1];
 		} else {
 			this.isServerNotConfigurated = true;
 		}

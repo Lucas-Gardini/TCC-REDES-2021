@@ -3,53 +3,6 @@
 		<h1 style="margin-top: 20px">Bem vindo {{ user }}</h1>
 		<MDBContainer v-if="isLoaded">
 			<MDBRow class="d-flex">
-				<!-- Products Card -->
-				<MDBCol md="6" style="margin-bottom: 10px">
-					<MDBCard text="center" class="border">
-						<MDBCardHeader
-							><MDBIcon
-								style="font-size: 2em; color: #FFAB40"
-								icon="hamburger"
-								iconStyle="fas"
-						/></MDBCardHeader>
-						<MDBCardBody>
-							<MDBCardTitle>Quantidade de Produtos Cadastrados</MDBCardTitle>
-							<div style="display: flex">
-								<div style="margin: auto">
-									<h1>{{ products_quantity }}</h1>
-								</div>
-							</div>
-						</MDBCardBody>
-					</MDBCard>
-				</MDBCol>
-				<!-- Tables Card -->
-				<MDBCol md="6" style="margin-bottom: 10px">
-					<MDBCard text="center" class="border">
-						<MDBCardHeader
-							><MDBIcon
-								style="font-size: 2em; color: #795548"
-								icon="chair"
-								iconStyle="fas"
-						/></MDBCardHeader>
-						<MDBCardBody>
-							<MDBCardTitle>Quantidade de Mesas</MDBCardTitle>
-							<MDBRow class="d-flex">
-								<MDBCol md="6">
-									<MDBCardText style="font-size: 0.9em"
-										>Mesas Cadastradas</MDBCardText
-									>
-									{{ tables.indexed }}
-								</MDBCol>
-								<MDBCol md="6">
-									<MDBCardText style="font-size: 0.9em"
-										>Mesas Disponíveis</MDBCardText
-									>
-									{{ tables.available }}
-								</MDBCol>
-							</MDBRow>
-						</MDBCardBody>
-					</MDBCard>
-				</MDBCol>
 				<!-- Sells Card -->
 				<MDBCol md="6" style="margin-bottom: 10px">
 					<MDBCard text="center" class="border">
@@ -67,10 +20,64 @@
 									0
 								</MDBCol>
 								<MDBCol md="6">
-									<MDBCardText style="font-size: 0.9em"
-										>Total Arrecadado</MDBCardText
-									>
+									<MDBCardText style="font-size: 0.9em">Total Arrecadado</MDBCardText>
 									R$00,00
+								</MDBCol>
+							</MDBRow>
+						</MDBCardBody>
+					</MDBCard>
+				</MDBCol>
+				<!-- Requests Card -->
+				<MDBCol md="6" style="margin-bottom: 10px">
+					<MDBCard text="center" class="border">
+						<MDBCardHeader
+							><MDBIcon
+								style="font-size: 2em; color: #1266F1"
+								icon="cash-register"
+								iconStyle="fas"
+						/></MDBCardHeader>
+						<MDBCardBody>
+							<MDBCardTitle>Quantidade de Pedidos</MDBCardTitle>
+							<div style="display: flex">
+								<div style="margin: auto">
+									<h1>0</h1>
+								</div>
+							</div>
+						</MDBCardBody>
+					</MDBCard>
+				</MDBCol>
+				<!-- Products Card -->
+				<MDBCol md="6" style="margin-bottom: 10px">
+					<MDBCard text="center" class="border">
+						<MDBCardHeader
+							><MDBIcon style="font-size: 2em; color: #FFAB40" icon="hamburger" iconStyle="fas"
+						/></MDBCardHeader>
+						<MDBCardBody>
+							<MDBCardTitle>Quantidade de Produtos Cadastrados</MDBCardTitle>
+							<div style="display: flex">
+								<div style="margin: auto">
+									<h1>{{ products_quantity }}</h1>
+								</div>
+							</div>
+						</MDBCardBody>
+					</MDBCard>
+				</MDBCol>
+				<!-- Tables Card -->
+				<MDBCol md="6" style="margin-bottom: 10px">
+					<MDBCard text="center" class="border">
+						<MDBCardHeader
+							><MDBIcon style="font-size: 2em; color: #795548" icon="chair" iconStyle="fas"
+						/></MDBCardHeader>
+						<MDBCardBody>
+							<MDBCardTitle>Quantidade de Mesas</MDBCardTitle>
+							<MDBRow class="d-flex">
+								<MDBCol md="6">
+									<MDBCardText style="font-size: 0.9em">Mesas Cadastradas</MDBCardText>
+									{{ tables.indexed }}
+								</MDBCol>
+								<MDBCol md="6">
+									<MDBCardText style="font-size: 0.9em">Mesas Disponíveis</MDBCardText>
+									{{ tables.available }}
 								</MDBCol>
 							</MDBRow>
 						</MDBCardBody>
@@ -159,9 +166,7 @@ export default {
 		},
 		async getTables() {
 			try {
-				const TABLES_REQUEST = await axios.get(
-					`${localStorage.serverAddress}/tables/getquantity`
-				);
+				const TABLES_REQUEST = await axios.get(`${localStorage.serverAddress}/tables/getquantity`);
 				this.tables.indexed = TABLES_REQUEST.data[0];
 				this.tables.available = TABLES_REQUEST.data[1];
 			} catch (error) {

@@ -65,6 +65,46 @@ const userController = {
 			});
 		});
 	},
+	async updateUser(req, res) {
+		const user = req.body;
+		if (user.newPasswd.length > 0) {
+			bcrypt.genSalt(saltRounds, function (err, salt) {
+				if (err) {
+					console.log(err);
+					res.sendStatus(500).end();
+					return;
+				}
+				bcrypt.hash(user.newPasswd, salt, async function (err, hash) {
+					await users.updateOne(
+						{ _id: user._id },
+						{
+							user: user.user,
+							passwd: hash,
+							function: user.function,
+							adm: user.adm,
+						},
+						(err) => {
+							if (err) res.sendStatus(500).end();
+							res.sendStatus(200).end();
+						}
+					);
+				});
+			});
+		} else {
+			await users.updateOne(
+				{ _id: user._id },
+				{
+					user: user.user,
+					function: user.function,
+					adm: user.adm,
+				},
+				(err) => {
+					if (err) res.sendStatus(500).end();
+					res.sendStatus(200).end();
+				}
+			);
+		}
+	},
 	async deleteUser(req, res) {
 		res.send(await users.collection.drop());
 	},

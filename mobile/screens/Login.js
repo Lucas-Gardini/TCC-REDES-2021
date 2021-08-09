@@ -40,6 +40,13 @@ export default () => {
 			);
 			if (StorageServerAddress) {
 				try {
+					const serverTimeout = setTimeout(() => {
+						Alert.alert(
+							'Tempo Esgotado',
+							'O servidor demorou mais de 10 segundos para responder! Verifique se ele está funcionando e que sua conexão está estável!',
+						);
+						router.push('/serverconfig');
+					}, 12000);
 					axios
 						.post(`http://${StorageServerAddress}/user/get`, {
 							headers: {
@@ -47,6 +54,7 @@ export default () => {
 							},
 						})
 						.then(USER_LOGIN_RESULT => {
+							clearTimeout(serverTimeout);
 							setIsLoading(false);
 							if (
 								USER_LOGIN_RESULT.data === 'ALREADY_LOGGED_IN'
@@ -55,16 +63,26 @@ export default () => {
 							} else {
 								setServerAddress(StorageServerAddress);
 							}
+						})
+						.catch(err => {
+							clearTimeout(serverTimeout);
+							Alert.alert(
+								`${err}`,
+								'Ocorreu um erro! Talvez o servidor não esteja configurado corretamente.',
+							);
+							router.push('/serverconfig');
 						});
 				} catch (err) {
 					if (err) {
 						Alert.alert(
-							`Erro: ${err}`,
+							`${err}`,
 							'Ocorreu um erro! Talvez o servidor não esteja configurado corretamente.',
 						);
 						router.push('/serverconfig');
 					}
 				}
+			} else {
+				setIsLoading(false);
 			}
 		}
 		getLogin();
@@ -197,6 +215,7 @@ export default () => {
 					<View style={styles.serverConfig}>
 						<Button
 							title="Configurar Servidor"
+							buttonStyle={styles.configButton}
 							type="clear"
 							onPress={() => {
 								router.push('/serverconfig');
@@ -248,5 +267,8 @@ const styles = StyleSheet.create({
 		alignContent: 'flex-end',
 		alignItems: 'flex-end',
 		alignSelf: 'flex-end',
+	},
+	configButton: {
+		color: '#00B74A',
 	},
 });

@@ -7,9 +7,7 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 require("@electron/remote/main").initialize();
 
 // Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([
-	{ scheme: "app", privileges: { secure: true, standard: true } },
-]);
+protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: true, standard: true } }]);
 
 var win;
 

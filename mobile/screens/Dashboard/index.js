@@ -15,7 +15,9 @@ import {
 	Text,
 	ListItem,
 	BottomSheet,
-	ButtonGroup,
+	Overlay,
+	PricingCard,
+	Input,
 } from 'react-native-elements';
 import KeyStorage from 'react-native-sensitive-info';
 import axios from 'axios';
@@ -24,13 +26,15 @@ import {useHistory} from 'react-router-native';
 export default () => {
 	const router = useHistory();
 	const [isLoading, setIsLoading] = useState(true);
+	const [isReviewing, setIsReviewing] = useState(false);
 	const [open, setOpen] = useState(false);
 	const [isMakingNewRequest, setIsMakingNewRequest] = useState(false);
 	const [changingTable, setChangingTable] = useState(false);
 	const [products, setProducts] = useState([]);
 	const [tables, setTables] = useState([]);
 	const [newRequest, setNewRequest] = useState({
-		table_id: 0,
+		table_id: '',
+		table_number: 0,
 		products: [],
 		observations: '',
 	});
@@ -67,11 +71,148 @@ export default () => {
 			Alert.alert('Produto Indisponível');
 			return;
 		}
-		console.log(newProduct, +quantity);
+		let newProducts = [...newRequest.products];
+		const alreadyAdded = newProducts.findIndex(product => {
+			return product.productId === newProduct._id;
+		});
+		if (alreadyAdded > -1) {
+			newProducts[alreadyAdded].quantity += quantity;
+			if (newProducts[alreadyAdded].quantity <= 0) {
+				newProducts.splice(alreadyAdded, 1);
+			}
+		} else {
+			if (quantity === -1) {
+				return;
+			}
+			newProducts.push({
+				name: newProduct.name,
+				productId: newProduct._id,
+				quantity,
+				price: newProduct.price,
+			});
+		}
+
+		setNewRequest({
+			table_id: newRequest.table_id,
+			table_number: newRequest.table_number,
+			observations: newRequest.observations,
+			products: newProducts,
+		});
+	}
+
+	function getPrice() {
+		let totalPrice = 0;
+		newRequest.products.map(product => {
+			totalPrice += product.quantity * product.price;
+		});
+		return `R$ ${String(
+			totalPrice.toFixed(2).toLocaleString('pt-br', {
+				style: 'currency',
+				currency: 'BRL',
+			}),
+		).replace('.', ',')}`;
+	}
+
+	async function sendRequest() {
+		axios
+			.post(
+				`http://${await KeyStorage.getItem('serverAddress', {
+					sharedPreferencesName: 'appConfig',
+					keychainService: 'appConfig',
+				})}/requests/add`,
+				newRequest,
+			)
+			.then(response => {
+				if (response.data === 'OK') {
+					Alert.alert('Pedido Enviado!');
+				} else {
+					Alert.alert(response.data);
+				}
+			});
 	}
 
 	return (
 		<View style={styles.mainContainer}>
+			<Overlay
+				isVisible={isReviewing}
+				onBackdropPress={() => {
+					setIsReviewing(false);
+				}}>
+				<View
+					style={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
+					<Text>Mesa: {newRequest.table_number}</Text>
+				</View>
+				<PricingCard
+					containerStyle={{width: 100}}
+					color="#00B74A"
+					title="Total"
+					titleStyle={{color: '#00B74A'}}
+					price={getPrice()}
+					button={{
+						title: ' Finalizar Pedido',
+						icon: {
+							name: 'clipboard-check',
+							type: 'font-awesome-5',
+							color: '#fff',
+						},
+						// color: '#00B74A',
+						onPress: sendRequest,
+					}}
+				/>
+				<View>
+					<Input
+						placeholder="Observações"
+						leftIcon={{
+							type: 'font-awesome-5',
+							solid: true,
+							name: 'eye',
+						}}
+						value={newRequest.observations}
+						onChangeText={obs => {
+							setNewRequest({
+								observations: obs,
+								products: newRequest.products,
+								table_id: newRequest.table_id,
+								table_number: newRequest.table_number,
+							});
+						}}
+					/>
+				</View>
+				<View
+					style={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
+					<Text>Produtos: </Text>
+				</View>
+				<ScrollView style={{maxHeight: 200}}>
+					{newRequest.products.map((product, i) => (
+						<View
+							style={{
+								alignItems: 'flex-start',
+								justifyContent: 'flex-start',
+							}}
+							key={i}>
+							<Text>
+								{product.name} | x{product.quantity}
+							</Text>
+						</View>
+					))}
+				</ScrollView>
+				<Button
+					type="clear"
+					titleStyle={{color: '#F93154'}}
+					title="Cancelar"
+					onPress={() => {
+						setIsReviewing(false);
+					}}
+				/>
+			</Overlay>
 			{isMakingNewRequest && !isLoading ? (
 				<ScrollView>
 					<Text h1={true} style={{marginLeft: 10}}>
@@ -92,7 +233,7 @@ export default () => {
 							titleStyle={{
 								color: '#00B74A',
 							}}
-							title={` Escolher Mesa: ${newRequest.table_id} `}
+							title={` Escolher Mesa: ${newRequest.table_number} `}
 							type="clear"
 							onPress={() => setChangingTable(!changingTable)}
 						/>
@@ -103,10 +244,13 @@ export default () => {
 							}}>
 							{tables.map((table, i) => (
 								<ListItem
+									disabled={!table.available}
+									disabledStyle={{backgroundColor: 'gray'}}
 									onPress={() => {
 										const newTableOnRequest = newRequest;
-										newTableOnRequest.table_id =
+										newTableOnRequest.table_number =
 											table.table;
+										newTableOnRequest.table_id = table._id;
 										setNewRequest(newTableOnRequest);
 										setChangingTable(false);
 									}}
@@ -224,7 +368,37 @@ export default () => {
 											titleStyle={{
 												color: '#121212',
 											}}
-											title="Quantidade: 0"
+											disabled={true}
+											disabledStyle={{
+												backgroundColor: '#fff',
+											}}
+											disabledTitleStyle={{
+												color: '#121212',
+											}}
+											title={
+												newRequest.products.findIndex(
+													prod => {
+														return (
+															prod.productId ===
+															product._id
+														);
+													},
+												) === -1
+													? 'Quantidade: 0'
+													: `Quantidade: ${
+															newRequest.products[
+																newRequest.products.findIndex(
+																	prod => {
+																		return (
+																			prod.productId ===
+																			product._id
+																		);
+																	},
+																)
+															].quantity
+															// eslint-disable-next-line no-mixed-spaces-and-tabs
+													  }`
+											}
 										/>
 									</View>
 								</View>
@@ -262,6 +436,26 @@ export default () => {
 					}
 					onOpen={() => setOpen(!open)}
 					onClose={() => setOpen(!open)}>
+					{newRequest.products.length > 0 ? (
+						<SpeedDial.Action
+							icon={
+								<Icon
+									name="clipboard-check"
+									type="font-awesome-5"
+									color="#fff"
+									size={20}
+								/>
+							}
+							color="#00B74A"
+							title="Revisar Pedido"
+							onPress={() => {
+								setIsReviewing(true);
+								// sendRequest();
+							}}
+						/>
+					) : (
+						false
+					)}
 					<SpeedDial.Action
 						icon={
 							isMakingNewRequest ? (

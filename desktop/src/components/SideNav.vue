@@ -1,9 +1,6 @@
 <template>
 	<div v-if="isLoggedIn" id="sidenav" class="sidenav">
-		<div
-			id="userPicture"
-			style="text-align: center; font-size: xx-large; color: white;display: grid"
-		>
+		<div id="userPicture" style="text-align: center; font-size: xx-large; color: white;display: grid">
 			<i v-if="isMan" class="mdi mdi-face"></i>
 			<i v-else-if="isAdm" class="mdi mdi-account-cowboy-hat"></i>
 			<i v-else class="mdi mdi-face-woman"></i>
@@ -13,6 +10,9 @@
 
 		<a :class="isAtHome" href="javascript:void(0)" @click="redirect('/dashboard')"
 			><i class="mdi mdi-home"></i
+		></a>
+		<a :class="isAtRequests" href="javascript:void(0)" @click="redirect('/dashboard/requests')"
+			><i class="mdi mdi-cash-register"></i
 		></a>
 		<a :class="isAtProducts" href="javascript:void(0)" @click="redirect('/dashboard/products')"
 			><i class="mdi mdi-food"></i
@@ -33,13 +33,7 @@
 			@click="changeColorMode()"
 			><i :class="colorModeClass"></i
 		></a> -->
-		<MDBModal
-			id="loggingout"
-			tabindex="-1"
-			labelledby="loggingout"
-			v-model="isLoggingOut"
-			centered
-		>
+		<MDBModal id="loggingout" tabindex="-1" labelledby="loggingout" v-model="isLoggingOut" centered>
 			<MDBModalHeader>
 				<MDBModalTitle id="exampleModalCenterTitle"> Deseja mesmo sair? </MDBModalTitle>
 			</MDBModalHeader>
@@ -48,13 +42,7 @@
 				<MDBBtn color="success" @click="loggout(true)"> Sim </MDBBtn>
 			</MDBModalFooter>
 		</MDBModal>
-		<MDBModal
-			id="loggingout"
-			tabindex="-1"
-			labelledby="loggingout"
-			v-model="loggedOutError"
-			centered
-		>
+		<MDBModal id="loggingout" tabindex="-1" labelledby="loggingout" v-model="loggedOutError" centered>
 			<MDBModalHeader>
 				<MDBModalTitle color="danger" id="exampleModalCenterTitle">
 					ERRO AO ENCERRAR SESSÂO! VERIFIQUE A CONEXÃO COM O SERVIDOR
@@ -84,6 +72,7 @@ export default {
 			isAtHome: "",
 			isAtSettings: "",
 			isAtTables: "",
+			isAtRequests: "",
 			isAtProducts: "",
 			isAtUsers: "",
 			// colorMode: localStorage.colorMode || "light",
@@ -149,6 +138,10 @@ export default {
 					this.isAtHome = "active";
 					break;
 
+				case "/dashboard/requests":
+					this.isAtRequests = "active";
+					break;
+
 				case "/dashboard/products":
 					this.isAtProducts = "active";
 					break;
@@ -179,12 +172,14 @@ export default {
 			this.isAtHome = "";
 			this.isAtSettings = "";
 			this.isAtTables = "";
+			this.isAtRequests = "";
 			this.isAtProducts = "";
 			this.isAtUsers = "";
 		},
 		async loggout(isLoggingOut = false) {
 			if (isLoggingOut) {
 				localStorage.currentUser = null;
+				localStorage.currentPasswd = null;
 				localStorage.user = null;
 				try {
 					const logoff = await axios.post(`${localStorage.serverAddress}/user/logoff`);

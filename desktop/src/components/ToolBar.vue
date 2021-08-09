@@ -1,5 +1,8 @@
 <template>
 	<div class="ToolBar">
+		<div class="appName">
+			orderify
+		</div>
 		<button @click="manageWindow('MINIMIZE')" class="tb-minimize">
 			<i class="mdi mdi-minus"></i>
 		</button>
@@ -24,6 +27,8 @@ export default {
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap");
+
 .ToolBar {
 	position: fixed;
 	top: 0%;
@@ -34,6 +39,17 @@ export default {
 	background-color: #121212;
 	-webkit-app-region: drag;
 	z-index: 9;
+}
+
+.ToolBar .appName {
+	position: absolute;
+	top: 50%;
+	left: 0%;
+	transform: translateY(-50%);
+	margin-left: 10px;
+	color: #fff;
+	font-family: "Major Mono Display", monospace;
+	font-size: 0.9em;
 }
 
 .ToolBar button {
