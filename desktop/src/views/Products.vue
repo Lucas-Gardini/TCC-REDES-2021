@@ -237,31 +237,6 @@
 															aria-required="false"
 															:id="`checkbox_${i}`"
 														/>
-														<!-- <span class=""
-															><input
-																class="btn-check"
-																type="checkbox"
-																v-model="product.available"
-																aria-required="false"
-																:id="`checkbox_${i}`"
-															/><label
-																:class="
-																	product.available
-																		? 'btn btn-danger'
-																		: 'btn btn-success'
-																"
-																:for="`checkbox_${i}`"
-																><MDBIcon
-																	style="color: #fbfbfb"
-																	:icon="
-																		product.available
-																			? 'times'
-																			: 'check'
-																	"
-																	iconStyle="fas"
-																/>&nbsp;</label
-															></span
-														> -->
 													</MDBContainer>
 												</div>
 											</MDBCardTitle>

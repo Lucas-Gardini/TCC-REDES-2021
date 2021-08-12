@@ -12,7 +12,7 @@
 						<div>
 							<MDBInput
 								inputGroup
-								:formOutline="false"
+								:formOutline="true"
 								v-model="user"
 								aria-label="Usuário"
 								placeholder="Usuário"
@@ -28,6 +28,7 @@
 						<div>
 							<div>
 								<MDBInput
+									style="border-right: 0px solid transparent !important"
 									inputGroup
 									:formOutline="false"
 									v-model="passwd"
@@ -86,7 +87,9 @@
 					</div>
 				</MDBCol>
 				<transition name="fade">
-					<MDBCol class="right-panel" v-if="!smallMode"> </MDBCol>
+					<MDBCol class="right-panel" v-if="!smallMode">
+						<img src="../assets/auth-rightpanel-undraw.svg" />
+					</MDBCol>
 				</transition>
 			</MDBRow>
 		</MDBContainer>
@@ -254,6 +257,7 @@ export default {
 				this.$router.push("/dashboard");
 			} else {
 				localStorage.user = null;
+				localStorage.currentUser = this.user;
 			}
 		} catch (err) {
 			if (err) {
@@ -261,8 +265,7 @@ export default {
 				this.serverConnection = false;
 			}
 		}
-
-		if (localStorage.remembertUser) {
+		if (localStorage.rememberUser && localStorage.currentUser.length > 0) {
 			this.user = localStorage.currentUser;
 			this.passwd = localStorage.currentPasswd;
 			this.logIn();
@@ -298,6 +301,7 @@ export default {
 			} else if (USER_LOGIN_RESULT.data === "OK") {
 				localStorage.currentUser = this.user;
 				localStorage.currentPasswd = this.passwd;
+				localStorage.rememberUser = this.rememberUserLoginCredentials;
 				this.$router.push("/dashboard");
 				this.isLoading = false;
 			} else {
@@ -394,10 +398,10 @@ export default {
 }
 .right-panel {
 	text-align: center;
-	background-image: url("../assets/background2.png");
+	background-image: url("../assets/authBackground.svg");
 	background-position: center;
 	background-repeat: no-repeat;
-	background-size: 100% 100%;
+	background-size: cover;
 	margin-right: 10%;
 	border: 0.5px solid rgba(18, 18, 18, 0.75);
 	border-left: none;
@@ -405,14 +409,24 @@ export default {
 	display: flex;
 }
 
+.right-panel img {
+	margin: auto;
+	width: 80%;
+	height: 80%;
+}
+
 .btn.btn-success.btn-rounded.ripple-surface {
 	min-width: 100%;
 }
 
+.showPasswordButton {
+	border-left: 0px solid transparent !important;
+}
+
 .showPasswordButton:hover {
 	cursor: pointer;
-	background-color: #505050;
-	color: #fff;
+	background-color: #5050500f;
+	color: #121212;
 }
 
 /* Checkbox Style */

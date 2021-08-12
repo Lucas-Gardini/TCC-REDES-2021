@@ -14,6 +14,10 @@ const tablesController = {
 		const result = await tables.find().exec();
 		res.json(result);
 	},
+	async getTableById(req, res) {
+		const result = await tables.findOne({ _id: req.params.id }).exec();
+		res.json(result);
+	},
 	async getQuantity(req, res) {
 		const result = await tables.find().exec();
 		const quantity = result.length;

@@ -28,6 +28,10 @@ const productsController = {
 		const result = await products.find().exec();
 		res.json(result);
 	},
+	async getProductById(req, res) {
+		const result = await products.find({ _id: req.params.id }).exec();
+		res.json(result);
+	},
 	async getQuantity(req, res) {
 		try {
 			if (req.session.auth.loggedin === true) {

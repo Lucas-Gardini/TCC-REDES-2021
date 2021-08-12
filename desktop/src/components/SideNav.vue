@@ -7,32 +7,74 @@
 			<!-- {{ user }} -->
 		</div>
 		<hr />
-
-		<a :class="isAtHome" href="javascript:void(0)" @click="redirect('/dashboard')"
-			><i class="mdi mdi-home"></i
-		></a>
-		<a :class="isAtRequests" href="javascript:void(0)" @click="redirect('/dashboard/requests')"
-			><i class="mdi mdi-cash-register"></i
-		></a>
-		<a :class="isAtProducts" href="javascript:void(0)" @click="redirect('/dashboard/products')"
-			><i class="mdi mdi-food"></i
-		></a>
-		<a :class="isAtTables" href="javascript:void(0)" @click="redirect('/dashboard/tables')"
-			><i class="mdi mdi-table-furniture"></i
-		></a>
-		<a :class="isAtUsers" href="javascript:void(0)" @click="redirect('/dashboard/users')"
-			><i class="mdi mdi-account-cog"></i
-		></a>
-		<a :class="isAtSettings" href="javascript:void(0)" @click="redirect('/dashboard/settings')"
-			><i class="mdi mdi-tune"></i
-		></a>
-		<a href="javascript:void(0)" @click="loggout()"><i class="mdi mdi-exit-to-app"></i></a>
-		<!-- <a
-			style="position: absolute; bottom: 0%; left: 0%"
-			href="javascript:void(0)"
-			@click="changeColorMode()"
-			><i :class="colorModeClass"></i
-		></a> -->
+		<MDBTooltip arrow v-model="homeTooltip" direction="right">
+			<template #reference>
+				<a :class="isAtHome" href="javascript:void(0)" @click="redirect('/dashboard')"
+					><i class="mdi mdi-home"></i
+				></a>
+			</template>
+			<template #tip>
+				Início
+			</template> </MDBTooltip
+		><br />
+		<MDBTooltip arrow v-model="requestsTooltip" direction="right">
+			<template #reference>
+				<a :class="isAtRequests" href="javascript:void(0)" @click="redirect('/dashboard/requests')"
+					><i class="mdi mdi-cash-register"></i
+				></a>
+			</template>
+			<template #tip>
+				Pedidos
+			</template> </MDBTooltip
+		><br />
+		<MDBTooltip arrow v-model="productsTooltip" direction="right">
+			<template #reference>
+				<a :class="isAtProducts" href="javascript:void(0)" @click="redirect('/dashboard/products')"
+					><i class="mdi mdi-food"></i
+				></a>
+			</template>
+			<template #tip>
+				Produtos
+			</template> </MDBTooltip
+		><br />
+		<MDBTooltip arrow v-model="tablesTooltip" direction="right">
+			<template #reference>
+				<a :class="isAtTables" href="javascript:void(0)" @click="redirect('/dashboard/tables')"
+					><i class="mdi mdi-table-furniture"></i
+				></a>
+			</template>
+			<template #tip>
+				Mesas
+			</template> </MDBTooltip
+		><br />
+		<MDBTooltip arrow v-model="usersTooltip" direction="right">
+			<template #reference>
+				<a :class="isAtUsers" href="javascript:void(0)" @click="redirect('/dashboard/users')"
+					><i class="mdi mdi-account-cog"></i
+				></a>
+			</template>
+			<template #tip>
+				Usuários
+			</template> </MDBTooltip
+		><br />
+		<MDBTooltip arrow v-model="settingsTooltip" direction="right">
+			<template #reference>
+				<a :class="isAtSettings" href="javascript:void(0)" @click="redirect('/dashboard/settings')"
+					><i class="mdi mdi-tune"></i
+				></a>
+			</template>
+			<template #tip>
+				Configurações
+			</template> </MDBTooltip
+		><br />
+		<MDBTooltip arrow v-model="logoutTooltip" direction="right">
+			<template #reference>
+				<a href="javascript:void(0)" @click="loggout()"><i class="mdi mdi-exit-to-app"></i></a>
+			</template>
+			<template #tip>
+				Sair
+			</template>
+		</MDBTooltip>
 		<MDBModal id="loggingout" tabindex="-1" labelledby="loggingout" v-model="isLoggingOut" centered>
 			<MDBModalHeader>
 				<MDBModalTitle id="exampleModalCenterTitle"> Deseja mesmo sair? </MDBModalTitle>
@@ -57,7 +99,8 @@
 
 <script>
 import detectGender from "detect-gender";
-import { MDBModal, MDBModalHeader, MDBModalTitle, MDBModalFooter, MDBBtn } from "mdb-vue-ui-kit";
+import { MDBModal, MDBModalHeader, MDBModalTitle, MDBModalFooter, MDBBtn, MDBTooltip } from "mdb-vue-ui-kit";
+import { ref } from "vue";
 import axios from "axios";
 
 export default {
@@ -85,6 +128,26 @@ export default {
 		MDBModalTitle,
 		MDBModalFooter,
 		MDBBtn,
+		MDBTooltip,
+	},
+	setup() {
+		const homeTooltip = ref(false);
+		const settingsTooltip = ref(false);
+		const tablesTooltip = ref(false);
+		const usersTooltip = ref(false);
+		const requestsTooltip = ref(false);
+		const productsTooltip = ref(false);
+		const logoutTooltip = ref(false);
+
+		return {
+			homeTooltip,
+			settingsTooltip,
+			tablesTooltip,
+			usersTooltip,
+			requestsTooltip,
+			productsTooltip,
+			logoutTooltip,
+		};
 	},
 	async mounted() {
 		if (localStorage.currentUser !== null || typeof localStorage.currentUser !== "undefined") {
@@ -178,9 +241,11 @@ export default {
 		},
 		async loggout(isLoggingOut = false) {
 			if (isLoggingOut) {
-				localStorage.currentUser = null;
-				localStorage.currentPasswd = null;
-				localStorage.user = null;
+				localStorage.currentUser = "";
+				localStorage.currentPasswd = "";
+				localStorage.user = "";
+				localStorage.rememberUser = false;
+				localStorage.setItem("rememberUser", false);
 				try {
 					const logoff = await axios.post(`${localStorage.serverAddress}/user/logoff`);
 					if (logoff.data.success === true) {
@@ -209,7 +274,7 @@ export default {
 	top: 0; /* Stay at the top */
 	left: 0;
 	background-color: #121212; /* Black*/
-	overflow-x: hidden; /* Disable horizontal scroll */
+	overflow-x: visible; /* Disable horizontal scroll */
 	padding-top: 30px;
 	transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 	text-align: center;

@@ -17,7 +17,68 @@
 
 <script>
 const { ipcRenderer } = require("electron");
+import { useToast } from "vue-toastification";
+import notificationAudio from "../assets/notification-development.mp3";
+
 export default {
+	setup() {
+		const toast = useToast();
+		return { toast };
+	},
+	data() {
+		return {
+			ws: new WebSocket(`ws://${String(localStorage.serverAddress).split("://")[1]}`),
+			currentPath: "",
+			notificationSound: new Audio(notificationAudio),
+		};
+	},
+	watch: {
+		$route() {
+			this.currentPath = this.$route.path;
+		},
+	},
+	created() {
+		this.ws.onmessage = async (event) => {
+			switch (event.data) {
+				case "products":
+					if (this.currentPath === "/dashboard/products") {
+						return;
+					}
+					ipcRenderer.invoke("notify", { type: "products" });
+					break;
+				case "requests":
+					if (this.currentPath === "/dashboard/requests") {
+						this.notificationSound.play();
+						this.notificationSound.onended = () => {
+							this.notificationSound.currentTime = 0;
+						};
+						this.toast.success("Novo Pedido!", {
+							position: "top-right",
+							timeout: 5000,
+							closeOnClick: true,
+							pauseOnFocusLoss: false,
+							pauseOnHover: true,
+							draggable: true,
+							draggablePercent: 1,
+							showCloseButtonOnHover: false,
+							hideProgressBar: false,
+							closeButton: "button",
+							icon: true,
+							rtl: false,
+						});
+						return;
+					}
+					ipcRenderer.invoke("notify", { type: "requests" });
+					break;
+				case "tables":
+					if (this.currentPath === "/dashboard/tables") {
+						return;
+					}
+					ipcRenderer.invoke("notify", { type: "tables" });
+					break;
+			}
+		};
+	},
 	methods: {
 		manageWindow(method) {
 			ipcRenderer.invoke("manageWindow", { method });

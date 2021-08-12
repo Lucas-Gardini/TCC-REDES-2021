@@ -41,6 +41,7 @@
 		"electron-devtools-installer": "^3.1.0",
 		"eslint": "^6.7.2",
 		"eslint-plugin-vue": "^7.0.0",
+		"moment": "^2.29.1",
 		"vfg-field-array": "^0.0.6",
 		"vue-cli-plugin-electron-builder": "~2.0.0",
 		"vue-cli-plugin-mdb5": "~1.2.0",

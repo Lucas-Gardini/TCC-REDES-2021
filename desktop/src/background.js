@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, ipcMain } from "electron";
+import { app, protocol, BrowserWindow, ipcMain, Notification } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -15,7 +15,9 @@ async function createWindow() {
 	// Create the browser window.
 	win = new BrowserWindow({
 		width: 800,
+		minWidth: 470,
 		height: 600,
+		minHeight: 325,
 		webPreferences: {
 			nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
 			contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
@@ -68,6 +70,47 @@ ipcMain.handle("manageWindow", async (event, ...args) => {
 
 		case "CLOSE":
 			win.close();
+			break;
+	}
+});
+
+ipcMain.handle("notify", async (event, ...args) => {
+	let notification;
+	switch (args[0].type) {
+		case "products":
+			notification = new Notification({
+				title: "Orderify",
+				body: "Novo produto adicionado!",
+				timeoutType: "default",
+			});
+			notification.onclick = () => {
+				win.loadURL("./products");
+			};
+			notification.show();
+			break;
+
+		case "requests":
+			notification = new Notification({
+				title: "Orderify",
+				body: "Novo pedido!",
+				timeoutType: "default",
+			});
+			notification.onclick = () => {
+				win.loadURL("./requests");
+			};
+			notification.show();
+			break;
+
+		case "tables":
+			notification = new Notification({
+				title: "Orderify",
+				body: "Nova mesa adicionada!",
+				timeoutType: "default",
+			});
+			notification.onclick = () => {
+				win.loadURL("./tables");
+			};
+			notification.show();
 			break;
 	}
 });

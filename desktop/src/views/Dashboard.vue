@@ -1,6 +1,6 @@
 <template>
 	<MDBContainer>
-		<h1 style="margin-top: 20px">Bem vindo {{ user }}</h1>
+		<h1 style="margin-top: 20px">Bem vind@ {{ user }}</h1>
 		<MDBContainer v-if="isLoaded">
 			<MDBRow class="d-flex">
 				<!-- Sells Card -->
@@ -38,11 +38,16 @@
 						/></MDBCardHeader>
 						<MDBCardBody>
 							<MDBCardTitle>Quantidade de Pedidos</MDBCardTitle>
-							<div style="display: flex">
-								<div style="margin: auto">
-									<h1>0</h1>
-								</div>
-							</div>
+							<MDBRow class="d-flex">
+								<MDBCol md="6">
+									<MDBCardText style="font-size: 0.9em">Hoje</MDBCardText>
+									{{ requests.today }}
+								</MDBCol>
+								<MDBCol md="6">
+									<MDBCardText style="font-size: 0.9em">Total</MDBCardText>
+									{{ requests.all }}
+								</MDBCol>
+							</MDBRow>
 						</MDBCardBody>
 					</MDBCard>
 				</MDBCol>
@@ -120,6 +125,7 @@ export default {
 			user: "",
 			products_quantity: 0,
 			tables: { indexed: 0, available: 0 },
+			requests: { today: 0, all: 0 },
 			isLoaded: false,
 		};
 	},
@@ -131,6 +137,9 @@ export default {
 					break;
 				case "tables":
 					await this.getTables();
+					break;
+				case "requests":
+					await this.getRequests();
 					break;
 			}
 			console.log(event);
@@ -145,6 +154,7 @@ export default {
 		try {
 			await this.getProducts();
 			await this.getTables();
+			await this.getRequests();
 			this.isLoaded = true;
 		} catch (err) {
 			console.log(err);
@@ -169,6 +179,16 @@ export default {
 				const TABLES_REQUEST = await axios.get(`${localStorage.serverAddress}/tables/getquantity`);
 				this.tables.indexed = TABLES_REQUEST.data[0];
 				this.tables.available = TABLES_REQUEST.data[1];
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		async getRequests() {
+			try {
+				const REQUESTS_REQUEST = await axios.get(
+					`${localStorage.serverAddress}/requests/getquantity`
+				);
+				this.requests = REQUESTS_REQUEST.data;
 			} catch (error) {
 				console.log(error);
 			}

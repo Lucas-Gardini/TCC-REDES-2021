@@ -1,5 +1,5 @@
 <template>
-	<MDBContainer>
+	<MDBContainer class="wholePage">
 		<MDBContainer>
 			<h1 style="margin-top: 20px">
 				Configurações
@@ -105,5 +105,9 @@ export default {
 <style scoped>
 .row {
 	margin-bottom: 10px !important;
+}
+
+.wholePage {
+	min-height: 100vh;
 }
 </style>
