@@ -23,7 +23,7 @@ import KeyStorage from 'react-native-sensitive-info';
 import axios from 'axios';
 import {useHistory} from 'react-router-native';
 
-export default () => {
+export default ({onLoad}) => {
 	const router = useHistory();
 	const [isLoading, setIsLoading] = useState(true);
 	const [isReviewing, setIsReviewing] = useState(false);
@@ -41,6 +41,7 @@ export default () => {
 	const deviceDimensions = Dimensions.get('window');
 
 	useEffect(() => {
+		onLoad();
 		KeyStorage.getItem('serverAddress', {
 			sharedPreferencesName: 'appConfig',
 			keychainService: 'appConfig',
@@ -64,7 +65,7 @@ export default () => {
 				console.log(message);
 			};
 		});
-	}, []);
+	}, [onLoad]);
 
 	function manageNewProducts(newProduct, quantity) {
 		if (!newProduct.available) {

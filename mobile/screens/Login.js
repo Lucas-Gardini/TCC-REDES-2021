@@ -5,7 +5,7 @@ import {useHistory} from 'react-router-native';
 import KeyStorage from 'react-native-sensitive-info';
 import axios from 'axios';
 
-export default () => {
+export default ({onLoad}) => {
 	const router = useHistory();
 
 	const [serverAddress, setServerAddress] = useState('');
@@ -14,6 +14,7 @@ export default () => {
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
+		onLoad();
 		KeyStorage.getItem('user', {
 			sharedPreferencesName: 'userLogin',
 			keychainService: 'userLogin',
@@ -86,7 +87,7 @@ export default () => {
 			}
 		}
 		getLogin();
-	}, [router, serverAddress]);
+	}, [router, serverAddress, onLoad]);
 
 	return (
 		<View style={styles.mainContainer}>

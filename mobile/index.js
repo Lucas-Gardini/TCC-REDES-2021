@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, AppRegistry} from 'react-native';
 import {Appearance} from 'react-native-appearance';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -15,26 +15,64 @@ Appearance.set({colorScheme: 'light'});
 axios.defaults.withCredentials = true;
 
 const App = () => {
+	const [isAtLogin, setIsAtLogin] = useState(false);
+	const [currentPage, setCurrentPage] = useState('');
 	return (
 		<SafeAreaProvider>
 			<NativeRouter>
-				<Header
-					backgroundColor="#00B74A"
-					placement="left"
-					leftComponent={{
-						text: 'ORDERIFY',
-						style: {color: '#fff', fontSize: 15},
-					}}
-					rightComponent={{
-						icon: 'utensils',
-						type: 'font-awesome-5',
-						color: '#fff',
-					}}
-				/>
+				{!isAtLogin ? (
+					<Header
+						backgroundColor="#00B74A"
+						placement="left"
+						leftComponent={{
+							text: `ORDERIFY - ${currentPage}`,
+							style: {color: '#fff', fontSize: 15},
+						}}
+						rightComponent={{
+							icon: 'utensils',
+							type: 'font-awesome-5',
+							color: '#fff',
+						}}
+					/>
+				) : (
+					<View />
+				)}
 				<View style={styles.container}>
-					<Route exact path="/" component={Login} />
-					<Route exact path="/serverconfig" component={AppConfig} />
-					<Route exact path="/dashboard" component={Dashboard} />
+					<Route
+						exact
+						path="/"
+						children={
+							<Login
+								onLoad={() => {
+									setIsAtLogin(true);
+								}}
+							/>
+						}
+					/>
+					<Route
+						exact
+						path="/serverconfig"
+						children={
+							<AppConfig
+								onLoad={() => {
+									setIsAtLogin(false);
+									setCurrentPage('Configurações');
+								}}
+							/>
+						}
+					/>
+					<Route
+						exact
+						path="/dashboard"
+						children={
+							<Dashboard
+								onLoad={() => {
+									setIsAtLogin(false);
+									setCurrentPage('Início');
+								}}
+							/>
+						}
+					/>
 				</View>
 			</NativeRouter>
 		</SafeAreaProvider>

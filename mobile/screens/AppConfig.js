@@ -4,12 +4,13 @@ import {Input, Button, Icon, Text} from 'react-native-elements';
 import {useHistory} from 'react-router-native';
 import KeyStorage from 'react-native-sensitive-info';
 
-export default () => {
+export default ({onLoad}) => {
 	const router = useHistory();
 	const [serverIp, setServerIp] = useState('');
 	const [serverPort, setServerPort] = useState('');
 
 	useEffect(() => {
+		onLoad();
 		async function checkStorage() {
 			const StorageServerAddress = await KeyStorage.getItem(
 				'serverAddress',
@@ -24,11 +25,10 @@ export default () => {
 			}
 		}
 		checkStorage();
-	}, []);
+	}, [onLoad]);
 
 	return (
 		<View style={styles.mainContainer}>
-			<Text style={styles.title}>ORDERIFY - Configurar Servidor</Text>
 			<View style={styles.container}>
 				<View>
 					<Input
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#00B74A',
 	},
 	container: {
-		marginTop: '30%',
+		marginTop: '5%',
 		padding: 10,
 		display: 'flex',
 		paddingTop: '20%',
@@ -104,17 +104,6 @@ const styles = StyleSheet.create({
 		borderTopRightRadius: 60,
 		borderColor: '#fff',
 		backgroundColor: '#fff',
-	},
-	title: {
-		fontSize: 30,
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center',
-		alignContent: 'center',
-		alignSelf: 'center',
-		textAlign: 'center',
-		paddingTop: '10%',
-		color: '#fff',
 	},
 	checkbox: {
 		color: '#121212',
