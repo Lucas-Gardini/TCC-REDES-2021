@@ -27,73 +27,83 @@ export default () => {
 	}, []);
 
 	return (
-		<View style={styles.container}>
-			<Text style={styles.title}>ORDERIFY - Configurações</Text>
-			<View>
-				<Input
-					placeholder="Endereço IP"
-					leftIcon={{
-						type: 'font-awesome-5',
-						solid: true,
-						name: 'server',
-					}}
-					value={serverIp}
-					onChangeText={newIp => {
-						setServerIp(newIp);
-					}}
-				/>
-				<Input
-					placeholder="Porta"
-					leftIcon={{type: 'font-awesome-5', name: 'door-open'}}
-					value={serverPort}
-					onChangeText={newPort => {
-						setServerPort(newPort);
+		<View style={styles.mainContainer}>
+			<Text style={styles.title}>ORDERIFY - Configurar Servidor</Text>
+			<View style={styles.container}>
+				<View>
+					<Input
+						placeholder="Endereço IP"
+						leftIcon={{
+							type: 'font-awesome-5',
+							solid: true,
+							name: 'server',
+						}}
+						value={serverIp}
+						onChangeText={newIp => {
+							setServerIp(newIp);
+						}}
+					/>
+					<Input
+						placeholder="Porta"
+						leftIcon={{type: 'font-awesome-5', name: 'door-open'}}
+						value={serverPort}
+						onChangeText={newPort => {
+							setServerPort(newPort);
+						}}
+					/>
+				</View>
+				<Button
+					icon={
+						<Icon
+							name="save"
+							solid={true}
+							type="font-awesome-5"
+							size={20}
+							color="#00B74A"
+						/>
+					}
+					title=" Salvar"
+					buttonStyle={styles.loginButton}
+					titleStyle={styles.loginButtonText}
+					onPress={async () => {
+						try {
+							await KeyStorage.setItem(
+								'serverAddress',
+								`${serverIp}:${serverPort}`,
+								{
+									sharedPreferencesName: 'appConfig',
+									keychainService: 'appConfig',
+								},
+							);
+							router.push('/');
+						} catch (err) {
+							Alert.alert(
+								'Erro',
+								`Não foi possível salvar as informações, erro: ${err}`,
+							);
+						}
 					}}
 				/>
 			</View>
-			<Button
-				icon={
-					<Icon
-						name="save"
-						solid={true}
-						type="font-awesome-5"
-						size={20}
-						color="#00B74A"
-					/>
-				}
-				title=" Salvar"
-				buttonStyle={styles.loginButton}
-				titleStyle={styles.loginButtonText}
-				onPress={async () => {
-					try {
-						await KeyStorage.setItem(
-							'serverAddress',
-							`${serverIp}:${serverPort}`,
-							{
-								sharedPreferencesName: 'appConfig',
-								keychainService: 'appConfig',
-							},
-						);
-						router.push('/');
-					} catch (err) {
-						Alert.alert(
-							'Erro',
-							`Não foi possível salvar as informações, erro: ${err}`,
-						);
-					}
-				}}
-			/>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
+	mainContainer: {
+		backgroundColor: '#00B74A',
+	},
 	container: {
-		marginTop: -10,
+		marginTop: '30%',
 		padding: 10,
 		display: 'flex',
+		paddingTop: '20%',
 		height: '100%',
-		justifyContent: 'center',
+		borderWidth: 1,
+		borderTopLeftRadius: 60,
+		borderTopRightRadius: 60,
+		borderColor: '#fff',
+		backgroundColor: '#fff',
 	},
 	title: {
 		fontSize: 30,
@@ -103,6 +113,8 @@ const styles = StyleSheet.create({
 		alignContent: 'center',
 		alignSelf: 'center',
 		textAlign: 'center',
+		paddingTop: '10%',
+		color: '#fff',
 	},
 	checkbox: {
 		color: '#121212',

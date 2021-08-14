@@ -89,152 +89,163 @@ export default () => {
 	}, [router, serverAddress]);
 
 	return (
-		<View style={styles.container}>
-			{isLoading ? (
-				<ActivityIndicator
-					// eslint-disable-next-line react-native/no-inline-styles
-					style={{
-						position: 'absolute',
-						left: 0,
-						right: 0,
-						top: 0,
-						bottom: 0,
-						alignItems: 'center',
-						justifyContent: 'center',
-					}}
-					size="large"
-					color="#00B74A"
-				/>
-			) : (
-				<View>
-					<Text style={styles.title}>ORDERIFY - Login</Text>
-					<View>
-						<Input
-							placeholder="Usuário"
-							leftIcon={{
-								type: 'font-awesome-5',
-								solid: true,
-								name: 'user',
-							}}
-							value={login.user}
-							onChangeText={user => {
-								setLogin({
-									user,
-									password: login.password,
-								});
-							}}
-						/>
-						<Input
-							secureTextEntry={true}
-							placeholder="Senha"
-							leftIcon={{type: 'font-awesome-5', name: 'key'}}
-							value={login.password}
-							onChangeText={password => {
-								setLogin({
-									user: login.user,
-									password,
-								});
-							}}
-						/>
-					</View>
-					<Button
-						icon={
-							<Icon
-								name="sign-in-alt"
-								type="font-awesome-5"
-								size={20}
-								color="#00B74A"
-							/>
-						}
-						title=" Entrar"
-						buttonStyle={styles.loginButton}
-						titleStyle={styles.loginButtonText}
-						onPress={() => {
-							console.log(`Server Address: ${serverAddress}`);
-							try {
-								axios
-									.post(`http://${serverAddress}/user/get`, {
-										user: login.user,
-										password: login.password,
-										headers: {
-											withCredentials: true,
-										},
-									})
-									.then(USER_LOGIN_RESULT => {
-										console.log(
-											`USER_LOGIN_RESULT: ${USER_LOGIN_RESULT}`,
-										);
-										if (
-											USER_LOGIN_RESULT.data ===
-											'ALREADY_LOGGED_IN'
-										) {
-											router.push('/dashboard');
-										} else if (
-											USER_LOGIN_RESULT.data === 'OK'
-										) {
-											KeyStorage.setItem(
-												'user',
-												JSON.stringify({
-													user: login.user,
-													password: '',
-												}),
-												{
-													sharedPreferencesName:
-														'userLogin',
-													keychainService:
-														'userLogin',
-												},
-											)
-												.then(() => {
-													router.push('/dashboard');
-												})
-												.catch(err => {
-													console.log(err);
-												});
-										} else {
-											Alert.alert(
-												'Erro na Autenticação!',
-												'Cheque suas credenciais e verifique se o servidor se encontra ativo!',
-											);
-										}
-									})
-									.catch(err => {
-										console.log(
-											`http://${serverAddress}/user/get`,
-										);
-										console.log(`ass: ${err}`);
-									});
-							} catch (error) {
-								Alert.alert(
-									'Erro',
-									'Ocorreu um erro! Talvez o servidor não esteja configurado ou não esteja rodando!',
-								);
-							}
+		<View style={styles.mainContainer}>
+			<Text style={styles.title}>ORDERIFY - Login</Text>
+			<View style={styles.container}>
+				{isLoading ? (
+					<ActivityIndicator
+						// eslint-disable-next-line react-native/no-inline-styles
+						style={{
+							position: 'absolute',
+							left: 0,
+							right: 0,
+							top: 0,
+							bottom: 0,
+							alignItems: 'center',
+							justifyContent: 'center',
 						}}
+						size="large"
+						color="#00B74A"
 					/>
-					<View style={styles.serverConfig}>
+				) : (
+					<View>
+						<View>
+							<Input
+								placeholder="Usuário"
+								leftIcon={{
+									type: 'font-awesome-5',
+									solid: true,
+									name: 'user',
+								}}
+								value={login.user}
+								onChangeText={user => {
+									setLogin({
+										user,
+										password: login.password,
+									});
+								}}
+							/>
+							<Input
+								secureTextEntry={true}
+								placeholder="Senha"
+								leftIcon={{type: 'font-awesome-5', name: 'key'}}
+								value={login.password}
+								onChangeText={password => {
+									setLogin({
+										user: login.user,
+										password,
+									});
+								}}
+							/>
+						</View>
 						<Button
-							title="Configurar Servidor"
-							buttonStyle={styles.configButton}
-							type="clear"
+							icon={
+								<Icon
+									name="sign-in-alt"
+									type="font-awesome-5"
+									size={20}
+									color="#00B74A"
+								/>
+							}
+							title=" Entrar"
+							buttonStyle={styles.loginButton}
+							titleStyle={styles.loginButtonText}
 							onPress={() => {
-								router.push('/serverconfig');
+								try {
+									axios
+										.post(
+											`http://${serverAddress}/user/get`,
+											{
+												user: login.user,
+												password: login.password,
+												headers: {
+													withCredentials: true,
+												},
+											},
+										)
+										.then(USER_LOGIN_RESULT => {
+											if (
+												USER_LOGIN_RESULT.data ===
+												'ALREADY_LOGGED_IN'
+											) {
+												router.push('/dashboard');
+											} else if (
+												USER_LOGIN_RESULT.data === 'OK'
+											) {
+												KeyStorage.setItem(
+													'user',
+													JSON.stringify({
+														user: login.user,
+														password: '',
+													}),
+													{
+														sharedPreferencesName:
+															'userLogin',
+														keychainService:
+															'userLogin',
+													},
+												)
+													.then(() => {
+														router.push(
+															'/dashboard',
+														);
+													})
+													.catch(err => {
+														console.log(err);
+													});
+											} else {
+												Alert.alert(
+													'Erro na Autenticação!',
+													'Cheque suas credenciais e verifique se o servidor se encontra ativo!',
+												);
+											}
+										})
+										.catch(err => {
+											console.log(
+												`http://${serverAddress}/user/get`,
+											);
+											console.log(`ass: ${err}`);
+										});
+								} catch (error) {
+									Alert.alert(
+										'Erro',
+										'Ocorreu um erro! Talvez o servidor não esteja configurado ou não esteja rodando!',
+									);
+								}
 							}}
 						/>
+						<View style={styles.serverConfig}>
+							<Button
+								title="Configurar Servidor"
+								buttonStyle={styles.configButton}
+								type="clear"
+								onPress={() => {
+									router.push('/serverconfig');
+								}}
+							/>
+						</View>
 					</View>
-				</View>
-			)}
+				)}
+			</View>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
+	mainContainer: {
+		backgroundColor: '#00B74A',
+	},
 	container: {
-		marginTop: -10,
-		padding: 10,
+		marginTop: '30%',
+		// padding: 10,
 		display: 'flex',
+		paddingTop: '20%',
 		height: '100%',
-		justifyContent: 'center',
+		borderWidth: 1,
+		borderTopLeftRadius: 60,
+		borderTopRightRadius: 60,
+		borderColor: '#fff',
+		backgroundColor: '#fff',
 	},
 	title: {
 		fontSize: 30,
@@ -244,6 +255,8 @@ const styles = StyleSheet.create({
 		alignContent: 'center',
 		alignSelf: 'center',
 		textAlign: 'center',
+		paddingTop: '10%',
+		color: '#fff',
 	},
 	checkbox: {
 		color: '#121212',
@@ -267,6 +280,7 @@ const styles = StyleSheet.create({
 		alignContent: 'flex-end',
 		alignItems: 'flex-end',
 		alignSelf: 'flex-end',
+		marginTop: '45%',
 	},
 	configButton: {
 		color: '#00B74A',
