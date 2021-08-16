@@ -12,15 +12,18 @@ mongoose.connect(url, {
 	useFindAndModify: false,
 	useCreateIndex: true,
 });
-databaseLoader.succeed(
-	`Conexão com o Banco de Dados realizada com ${baianisse.greenBright("sucesso")}!`
-);
+databaseLoader.succeed(`Conexão com o Banco de Dados realizada com ${baianisse.greenBright("sucesso")}!`);
 
 const modelsLoader = ora("Carregando os modelos do banco de dados").start();
-require("./user");
-require("./products");
-require("./requests");
-require("./tables");
+const users = require("./user");
+const products = require("./products");
+const requests = require("./requests");
+const tables = require("./tables");
 modelsLoader.succeed(`Modelos do Banco carregados com ${baianisse.greenBright("sucesso")}!\n`);
 
-module.exports = mongoose.models;
+module.exports = {
+	products,
+	requests,
+	tables,
+	users,
+};

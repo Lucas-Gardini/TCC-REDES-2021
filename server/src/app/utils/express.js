@@ -74,14 +74,10 @@ class expressServer {
 					"Allowed-Methods",
 				],
 				origin: function (origin, callback) {
-					console.log(`Origin: ${origin}`);
 					if (allowedOrigins.indexOf(origin) !== -1) {
 						callback(null, true);
 					} else {
-						callback(
-							console.log(`Access from a not allowed origin: ${origin}`),
-							console.log(`Allowed origins: ${allowedOrigins}`)
-						);
+						callback(console.log(`Access from a not allowed origin: ${origin}`));
 					}
 				},
 				methods: ["POST", "GET", "OPTIONS", "DELETE"],
