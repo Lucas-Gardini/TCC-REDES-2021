@@ -35,25 +35,15 @@ Para a funcionalidade completa do projeto, os seguintes recursos serão necessá
     -   Desktop
 
         -   HTML
-        -   CSS
+        -   CSS + MDBootstrap
         -   JavaScript
         -   VueJs
-        -   Bootstrap Icons
-        -   Heroicons
-        -   UnDraw
         -   Electron (Para _build_ (criação) do app)
 
     -   Mobile
-        -   HTML
-        -   CSS
-        -   JavaScript
-        -   NuxtJs
-        -   VueJs
-        -   Vuetify
-        -   Bootstrap Icons
-        -   HeroIcons
-        -   UnDraw
-        -   Cordova (Para _build_ (criação) do app)
+        -   React Native
+        -   React Native Elements
+        -   React Router
 
 -   Server Side
 
@@ -74,16 +64,3 @@ A equipe é constituída por membros do Instituto Federal de São Paulo Campus C
 -   _**Lucas Gardini Dias**_
 -   Pedro Comelli Neto
 -   Thiago Aio
-
-## TESTANDO
-
-Digite no seu console:
-`git clone https://github.com/Lucas-Gardini/TCC-REDES-2021`
-
-Depois navegue até a pasta app e digite:
-`npm i`
-
-Depois navegue até a pasta server e digite:
-`npm i`
-
-E por fim, para funcionar dê um `npm start` nas pastas app e server
