@@ -1,11 +1,13 @@
-import { createApp } from "vue";
-import vuetify from "./plugins/vuetify";
+import Vue from "vue";
 import App from "./App.vue";
+import vuetify from "./plugins/vuetify";
 import router from "./router";
 import "animate.css";
 
-const app = createApp(App);
-app.use(router);
-app.use(vuetify);
+Vue.config.productionTip = false;
 
-app.mount("#app");
+new Vue({
+	vuetify,
+	router,
+	render: (h) => h(App),
+}).$mount("#app");

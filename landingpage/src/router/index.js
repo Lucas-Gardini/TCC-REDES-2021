@@ -1,7 +1,10 @@
-import { createRouter, createWebHistory } from "vue-router";
+import Vue from "vue";
+import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import About from "../views/About.vue";
 import Team from "../views/Team.vue";
+
+Vue.use(VueRouter);
 
 const routes = [
 	{
@@ -10,19 +13,24 @@ const routes = [
 		component: Home,
 	},
 	{
-		path: "/about",
+		path: "/sobre",
 		name: "About",
 		component: About,
 	},
 	{
-		path: "/team",
+		path: "/equipe",
 		name: "Team",
 		component: Team,
 	},
+	{
+		path: "*",
+		redirect: "/",
+	},
 ];
 
-const router = createRouter({
-	history: createWebHistory(process.env.BASE_URL),
+const router = new VueRouter({
+	mode: "history",
+	base: process.env.BASE_URL,
 	routes,
 });
 

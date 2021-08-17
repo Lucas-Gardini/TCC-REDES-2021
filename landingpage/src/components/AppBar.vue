@@ -1,53 +1,60 @@
 <template>
-	<v-app-bar density="compact">
-		<transition name="fade">
-			<v-app-bar-nav-icon @click="drawer = !drawer" v-if="isMobile" />
-		</transition>
-		<v-img v-if="!isMobile" style="border-radius: 1px" max-width="36" src="@/assets/logo.png"></v-img>
-		<v-app-bar-title style="margin-left: 0px !important" v-if="!isMobile"> Orderify </v-app-bar-title>
-		<v-spacer></v-spacer>
-		<transition name="fade">
-			<div v-if="!isMobile">
-				<v-btn @click="$router.push('/')" text
-					><v-icon left small icon="mdi-home"></v-icon> Início</v-btn
-				>
-				<v-btn @click="$router.push('/about')" class="mr-3" text
-					><v-icon left small icon="mdi-information"></v-icon> Sobre</v-btn
-				>
-				<v-btn @click="$router.push('/team')" class="mr-3" text
-					><v-icon left small icon="mdi-account-group"></v-icon> Equipe</v-btn
-				>
-				<v-btn @click="sendMail" class="mr-4" color="#00B74A" style="color: #fff" plain>
-					<v-icon left icon="mdi-email"></v-icon>
-					<span>Contato</span>
-				</v-btn>
-			</div>
-		</transition>
-		<!-- Drawer -->
-		<v-card ref="drawer" elevation="2" outlined tile class="drawer hidden">
-			<v-app-bar-nav-icon icon="mdi-backburger" @click="drawer = !drawer" v-if="isMobile" />
-			<!-- MENU ITEMS -->
-			<v-btn @click="$router.push('/')" text style="justify-content: left !important"
-				><v-icon left small icon="mdi-home"></v-icon> Início</v-btn
-			><v-divider></v-divider>
-			<v-btn @click="$router.push('/about')" text style="justify-content: left !important"
-				><v-icon left small icon="mdi-information"></v-icon> Sobre</v-btn
+	<div>
+		<v-app-bar color="#00B74A" dark>
+			<transition
+				enter-active-class="animate__animated animate__fadeInDown"
+				leave-active-class="animate__animated animate__fadeOutUp"
+				mode="out-in"
 			>
-			<v-divider></v-divider>
-			<v-btn @click="$router.push('/team')" text style="justify-content: left !important"
-				><v-icon left small icon="mdi-account-group"></v-icon> Equipe</v-btn
+				<v-app-bar-nav-icon v-if="isMobile" @click="drawer = true"></v-app-bar-nav-icon>
+			</transition>
+			<v-toolbar-title>Orderify</v-toolbar-title>
+			<v-spacer></v-spacer>
+			<transition
+				enter-active-class="animate__animated animate__fadeInDown"
+				leave-active-class="animate__animated animate__fadeOutUp"
+				mode="out-in"
 			>
-			<v-btn
-				@click="sendMail"
-				color="#00B74A"
-				style="color: #fff; margin-top: auto; margin-bottom: 5px"
-				plain
-			>
-				<v-icon left icon="mdi-email"></v-icon>
-				<span>Contato</span>
+				<div v-if="!isMobile">
+					<v-btn
+						v-for="(item, i) in menuOptions"
+						:key="i"
+						@click="closeAndRedirect(item.route)"
+						elevation="2"
+						text
+						class="mr-2"
+					>
+						<v-icon left>{{ item.icon }}</v-icon> {{ item.name }}
+					</v-btn>
+				</div>
+			</transition>
+			<v-btn icon @click="toggleDarkMode">
+				<v-icon v-if="darkMode === true">mdi-brightness-6</v-icon>
+				<v-icon v-else>mdi-weather-night</v-icon>
 			</v-btn>
-		</v-card>
-	</v-app-bar>
+		</v-app-bar>
+
+		<v-navigation-drawer v-if="isMobile" v-model="drawer" absolute temporary>
+			<v-list nav dense>
+				<v-app-bar-nav-icon @click="drawer = false"
+					><v-icon>mdi-backburger</v-icon></v-app-bar-nav-icon
+				>
+				<v-list-item-group v-model="group" active-class="green--text text--accent-4">
+					<v-list-item
+						v-for="(item, i) in menuOptions"
+						:key="i"
+						:class="currentRoute === item.route ? 'green--text text--accent-4' : ''"
+						@click="closeAndRedirect(item.route)"
+					>
+						<v-list-item-icon>
+							<v-icon>{{ item.icon }}</v-icon>
+						</v-list-item-icon>
+						<v-list-item-title>{{ item.name }}</v-list-item-title>
+					</v-list-item>
+				</v-list-item-group>
+			</v-list>
+		</v-navigation-drawer>
+	</div>
 </template>
 
 <script>
@@ -56,82 +63,36 @@ export default {
 	props: {
 		isMobile: Boolean,
 	},
-	data() {
-		return {
-			loaded: false,
-			drawer: true,
-		};
+	data: () => ({
+		darkMode: false,
+		drawer: false,
+		group: null,
+		menuOptions: [
+			{ name: "Início", icon: "mdi-home", route: "/" },
+			{ name: "Sobre", icon: "mdi-information", route: "/sobre" },
+			{ name: "Equipe", icon: "mdi-account-group", route: "/equipe" },
+		],
+		currentRoute: "/",
+	}),
+	mounted() {
+		this.darkMode = this.$vuetify.theme.dark;
+		this.currentRoute = this.$route.path;
 	},
-	watch: {
-		$route() {
-			this.drawer = true;
-		},
-		isMobile() {
-			this.drawer = true;
-		},
-		drawer(_new) {
-			const drawerClassList = this.$refs.drawer.$el.classList.value;
-			if (drawerClassList.indexOf("slide") < 0) {
-				this.$refs.drawer.$el.classList.value =
-					this.$refs.drawer.$el.classList.value.replace("hidden", "") +
-					" animate__animated animate__slideInLeft";
-				return;
-			}
-
-			if (_new === false) {
-				this.$refs.drawer.$el.classList.value = this.$refs.drawer.$el.classList.value.replace(
-					"animate__slideOutLeft",
-					"animate__slideInLeft"
-				);
-			} else {
-				this.$refs.drawer.$el.classList.value = this.$refs.drawer.$el.classList.value.replace(
-					"animate__slideInLeft",
-					"animate__slideOutLeft"
-				);
-			}
-		},
-	},
-	// mounted() {
-	// 	console.log(this.$refs);
-	// },
 	methods: {
-		sendMail() {
-			window.open("mailto:test@example.com?subject=Contato%20Orderify&body=Digite%20Aqui...");
+		closeAndRedirect(route) {
+			setTimeout(() => {
+				this.drawer = false;
+			}, 200);
+			if (this.$route.path === route) return;
+			this.$router.push(route);
+			this.currentRoute = this.$route.path;
+		},
+		toggleDarkMode() {
+			this.darkMode = !this.darkMode;
+			this.$vuetify.theme.dark = this.darkMode;
 		},
 	},
 };
 </script>
 
-<style scoped>
-.v-app-bar {
-	overflow: visible !important;
-}
-.v-app-bar-title {
-	padding-left: 5px !important;
-}
-.drawer {
-	position: fixed;
-	top: 0%;
-	left: 0%;
-	height: 100vh;
-	display: flex;
-	flex-direction: column;
-	margin: auto;
-	padding-left: 5px;
-	padding-right: 5px;
-}
-.hidden {
-	opacity: 0;
-	display: none;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-	opacity: 0;
-}
-</style>
+<style></style>
