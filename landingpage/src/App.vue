@@ -8,9 +8,9 @@
 					leave-active-class="animate__animated animate__fadeOutLeftBig"
 					mode="out-in"
 				>
-					<router-view />
+					<router-view style="margin-top: 70px" :isMobile="isMobile" />
 				</transition>
-				<FooterBar />
+				<FooterBar style="display: none" />
 			</v-main>
 		</v-theme-provider>
 	</v-app>

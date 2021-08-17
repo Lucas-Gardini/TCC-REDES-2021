@@ -1,40 +1,42 @@
 <template>
 	<div>
-		<v-app-bar color="#00B74A" dark>
-			<transition
-				enter-active-class="animate__animated animate__fadeInDown"
-				leave-active-class="animate__animated animate__fadeOutUp"
-				mode="out-in"
-			>
-				<v-app-bar-nav-icon v-if="isMobile" @click="drawer = true"></v-app-bar-nav-icon>
-			</transition>
-			<v-toolbar-title>Orderify</v-toolbar-title>
-			<v-spacer></v-spacer>
-			<transition
-				enter-active-class="animate__animated animate__fadeInDown"
-				leave-active-class="animate__animated animate__fadeOutUp"
-				mode="out-in"
-			>
-				<div v-if="!isMobile">
-					<v-btn
-						v-for="(item, i) in menuOptions"
-						:key="i"
-						@click="closeAndRedirect(item.route)"
-						elevation="2"
-						text
-						class="mr-2"
-					>
-						<v-icon left>{{ item.icon }}</v-icon> {{ item.name }}
-					</v-btn>
-				</div>
-			</transition>
-			<v-btn icon @click="toggleDarkMode">
-				<v-icon v-if="darkMode === true">mdi-brightness-6</v-icon>
-				<v-icon v-else>mdi-weather-night</v-icon>
-			</v-btn>
-		</v-app-bar>
-
-		<v-navigation-drawer v-if="isMobile" v-model="drawer" absolute temporary>
+		<div style="position: fixed; top: 0; z-index: 9; width: 100%;">
+			<v-app-bar color="#00B74A" dark>
+				<transition
+					enter-active-class="animate__animated animate__fadeInDown"
+					leave-active-class="animate__animated animate__fadeOutUp"
+					mode="out-in"
+				>
+					<v-app-bar-nav-icon v-if="isMobile" @click="drawer = true"></v-app-bar-nav-icon>
+				</transition>
+				<v-img class="ml-5 mr-5" max-height="36" max-width="36" src="../assets/logo.png"></v-img>
+				<v-toolbar-title>Orderify</v-toolbar-title>
+				<v-spacer></v-spacer>
+				<transition
+					enter-active-class="animate__animated animate__fadeInDown"
+					leave-active-class="animate__animated animate__fadeOutUp"
+					mode="out-in"
+				>
+					<div v-if="!isMobile">
+						<v-btn
+							v-for="(item, i) in menuOptions"
+							:key="i"
+							@click="closeAndRedirect(item.route)"
+							elevation="2"
+							text
+							class="mr-2"
+						>
+							<v-icon left>{{ item.icon }}</v-icon> {{ item.name }}
+						</v-btn>
+					</div>
+				</transition>
+				<v-btn icon @click="toggleDarkMode">
+					<v-icon v-if="darkMode === true">mdi-brightness-6</v-icon>
+					<v-icon v-else>mdi-weather-night</v-icon>
+				</v-btn>
+			</v-app-bar>
+		</div>
+		<v-navigation-drawer style="z-index: 10;" v-if="isMobile" v-model="drawer" absolute temporary>
 			<v-list nav dense>
 				<v-app-bar-nav-icon @click="drawer = false"
 					><v-icon>mdi-backburger</v-icon></v-app-bar-nav-icon
