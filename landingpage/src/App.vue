@@ -36,14 +36,14 @@ export default {
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Rampart+One&display=swap");
+
 body {
 	margin: 0;
 	background-color: #00aa44;
-	overflow-x: hidden;
+	overflow-x: hidden !important;
 	overflow-y: scroll;
 }
-
-@import url("https://fonts.googleapis.com/css2?family=Rampart+One&display=swap");
 
 .orderify {
 	font-family: "Rampart One", cursive;
