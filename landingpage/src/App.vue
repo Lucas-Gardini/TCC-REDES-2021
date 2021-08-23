@@ -1,28 +1,18 @@
 <template>
-	<v-app id="app">
-		<v-theme-provider root>
-			<v-main>
-				<AppBar :isMobile="isMobile" />
-				<transition
-					enter-active-class="animate__animated animate__fadeInRightBig"
-					leave-active-class="animate__animated animate__fadeOutLeftBig"
-					mode="out-in"
-				>
-					<router-view style="margin-top: 70px" :isMobile="isMobile" />
-				</transition>
-				<FooterBar style="display: none" />
-			</v-main>
-		</v-theme-provider>
-	</v-app>
+	<div>
+		<NavBar :isMobile="isMobile" />
+		<Intro :isMobile="isMobile" />
+	</div>
 </template>
 
 <script>
-import AppBar from "./components/AppBar.vue";
-import FooterBar from "./components/FooterBar.vue";
+import NavBar from "./components/NavBar.vue";
+import Intro from "./components/Intro.vue";
+
 export default {
 	components: {
-		AppBar,
-		FooterBar,
+		NavBar,
+		Intro,
 	},
 	data() {
 		return {
@@ -35,7 +25,7 @@ export default {
 	},
 	methods: {
 		checkMobile() {
-			if (window.innerWidth <= 768) {
+			if (window.innerWidth <= 600) {
 				this.isMobile = true;
 			} else {
 				this.isMobile = false;
@@ -45,7 +35,55 @@ export default {
 };
 </script>
 
-<style lang="scss">
-#app {
+<style>
+body {
+	margin: 0;
+	background-color: #00aa44;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Rampart+One&display=swap");
+
+.orderify {
+	font-family: "Rampart One", cursive;
+}
+
+::-webkit-scrollbar {
+	width: 2px;
+	height: 2px;
+}
+::-webkit-scrollbar-button {
+	width: 0px;
+	height: 0px;
+}
+::-webkit-scrollbar-thumb {
+	background: #e1e1e1;
+	border: 0px none #ffffff;
+	border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: #ffffff;
+}
+::-webkit-scrollbar-thumb:active {
+	background: #000000;
+}
+::-webkit-scrollbar-track {
+	background: #666666;
+	border: 0px none #ffffff;
+	border-radius: 50px;
+}
+::-webkit-scrollbar-track:hover {
+	background: #666666;
+}
+::-webkit-scrollbar-track:active {
+	background: #333333;
+}
+::-webkit-scrollbar-corner {
+	background: transparent;
+}
+
+.main {
+	padding-top: 70px;
 }
 </style>

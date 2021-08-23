@@ -1,13 +1,11 @@
-import Vue from "vue";
+import { createApp } from "vue";
 import App from "./App.vue";
-import vuetify from "./plugins/vuetify";
-import router from "./router";
+import Equal from "equal-vue";
+import "equal-vue/dist/style.css";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import "animate.css";
 
-Vue.config.productionTip = false;
+AOS.init();
 
-new Vue({
-	vuetify,
-	router,
-	render: (h) => h(App),
-}).$mount("#app");
+createApp(App).use(Equal).mount("#app");
