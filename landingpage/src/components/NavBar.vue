@@ -34,7 +34,7 @@
 			</ul>
 		</transition>
 		<div style="margin-left: auto; padding-right: 20px">
-			<it-button type="success" icon="email" pulse>Contato</it-button>
+			<it-button type="success" icon="email" pulse @click="sendMail">Contato</it-button>
 		</div>
 	</nav>
 	<nav id="scrolled" v-else-if="!drawerVisible" :class="scrolledNavClass">
@@ -159,6 +159,11 @@ export default {
 				this.navClass = "animate__animated animate__fadeIn";
 				this.scrolledNavClass = "animate__animated animate__fadeOut";
 			}
+		},
+		sendMail() {
+			window.open(
+				"mailto:lucasgardini.dias@hotmail.com?subject=Contato%20Orderify&body=Digite%20Aqui..."
+			);
 		},
 	},
 };

@@ -5,7 +5,7 @@
 			<h1>A sua dor de cabeça acaba agora!</h1>
 			<h2>Se torne produtivo com <span>ORDERIFY</span></h2>
 			<div style="padding-top: 20px">
-				Porcentagem de progresso do projeto
+				Progresso do projeto
 				<it-progressbar color="success" :progress="45" :show-tooltip="false" />
 			</div>
 		</div>
@@ -33,6 +33,53 @@
 			<div class="item3">
 				<it-icon class="item" color="#2FDE75" name="cloud" />
 				<p>Servidor</p>
+			</div>
+		</div>
+		<br />
+		<div class="header">
+			<div class="divider1" style="text-align: center">
+				<hr style="margin-top: auto; margin-bottom: auto; width: 100%" />
+			</div>
+			<h1 class="title" style="text-align: center">Recursos que garantem qualidade e eficiência</h1>
+			<div class="divider2" style="text-align: center">
+				<hr style="margin-top: auto; margin-bottom: auto; width: 100%" />
+			</div>
+		</div>
+		<div class="features">
+			<div class="container feature1">
+				<it-icon
+					style="margin-left: auto; margin-right: auto; font-size: 2em"
+					name="speed"
+					color="#121212"
+				/>
+				<h1>Velocidade</h1>
+				<p>Aplicativos leves que vão rodar bem em quase qualquer dispositivo!</p>
+			</div>
+			<div class="container feature2">
+				<div>
+					<it-icon
+						style="margin-left: auto; margin-right: auto; font-size: 2em"
+						name="smartphone"
+						color="#121212"
+					/>
+					&nbsp;
+					<it-icon
+						style="margin-left: auto; margin-right: auto; font-size: 2em"
+						name="computer"
+						color="#121212"
+					/>
+				</div>
+				<h1>Compatibilidade</h1>
+				<p>Compatível com o máximo de dispositivos Windows, Linux e Android!</p>
+			</div>
+			<div class="container feature3">
+				<it-icon
+					style="margin-left: auto; margin-right: auto; font-size: 2em"
+					name="accessibility_new"
+					color="#121212"
+				/>
+				<h1>Acessibilidade</h1>
+				<p>Uma aplicação acessível, fácil e simples de se usar!</p>
 			</div>
 		</div>
 		<br />
@@ -153,6 +200,52 @@ export default {
 	background-color: #2e2e2e;
 	color: #2fde75 !important;
 }
+
+.content .features {
+	display: grid;
+	grid-template-columns: repeat(3, auto);
+	grid-template-rows: auto;
+	grid-column-gap: 0px;
+	grid-row-gap: 0px;
+}
+
+.content .features .container {
+	transition: all 0.5s;
+	background-color: #fff;
+	color: #121212;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	-webkit-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.23);
+	box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.23);
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.content .features .container:hover {
+	transition: all 0.5s;
+	transform: scale(1.05);
+	background-color: #fff;
+	-webkit-box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.23);
+	box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.23);
+}
+
+.content .features .container.feature1 {
+	grid-area: 1 / 1 / 2 / 2;
+	margin: 5px;
+	padding: 10px;
+}
+.content .features .container.feature2 {
+	grid-area: 1 / 2 / 2 / 3;
+	margin: 5px;
+	padding: 10px;
+}
+.content .features .container.feature3 {
+	grid-area: 1 / 3 / 2 / 4;
+	margin: 5px;
+	padding: 10px;
+}
+
 @media screen and (max-width: 768px) {
 	.item {
 		transition: all 0.3s;
@@ -166,6 +259,46 @@ export default {
 	}
 	.content .mobile .text h2 {
 		font-size: 1em;
+	}
+
+	.content .features {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.content .features .container {
+		transition: all 0.5s;
+		background-color: #fff;
+		color: #121212;
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+		-webkit-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.23);
+		box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.23);
+	}
+
+	.content .features .container:hover {
+		transition: all 0.5s;
+		transform: scale(1.05);
+		background-color: #fff;
+		-webkit-box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.23);
+		box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.23);
+	}
+
+	.content .features .container.feature1 {
+		grid-area: 1 !important;
+		margin: 10px !important;
+		padding: 10px;
+	}
+	.content .features .container.feature2 {
+		grid-area: 1 !important;
+		margin: 10px !important;
+		padding: 10px;
+	}
+	.content .features .container.feature3 {
+		grid-area: 1 !important;
+		margin: 10px !important;
+		padding: 10px;
 	}
 }
 
