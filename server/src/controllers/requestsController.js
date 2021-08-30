@@ -14,8 +14,36 @@ const requestsController = {
 			}
 		);
 	},
+	async finishRequest(req, res) {
+		const request = req.body;
+		await requests.updateOne(
+			{ _id: requests._id },
+			{
+				completed: true,
+			},
+			(err) => {
+				if (err) res.sendStatus(500).end();
+				res.sendStatus(200).end();
+			}
+		);
+	},
 	async getAllRequests(req, res) {
 		const result = await requests.find().exec();
+		let requestsWithTables = [];
+		for (let request of result) {
+			let table = await tables.findOne({ _id: request.table_id }).exec();
+			let request2 = { ...request._doc, ...table._doc };
+			requestsWithTables.push(request2);
+		}
+		res.json(requestsWithTables);
+	},
+	async getTodayRequests(req, res) {
+		var start = new Date();
+		var end = new Date();
+		start.setHours(0, 0, 0, 0);
+		end.setHours(23, 59, 59, 999);
+
+		const result = await requests.find({ date: { $gte: start, $lt: end } }).exec();
 		let requestsWithTables = [];
 		for (let request of result) {
 			let table = await tables.findOne({ _id: request.table_id }).exec();
