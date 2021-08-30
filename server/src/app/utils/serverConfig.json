@@ -8,5 +8,6 @@
 		{ "host": "192.168.0.103" },
 		{ "host": "localhost:6924" },
 		{ "host": "app://." }
-	]
+	],
+	"serverConfiguration": { "ip": "192.168.0.103", "port": 8083 }
 }

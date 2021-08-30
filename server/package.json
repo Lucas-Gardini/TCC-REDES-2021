@@ -3,7 +3,7 @@
 	"productName": "Orderify Server",
 	"version": "1.0.0",
 	"description": "API para a plataforma de pedidos, destinada a restaurantes para melhorar o antendimento ao cliente",
-	"main": "electronStart.js",
+	"main": "src/app/server.js",
 	"scripts": {
 		"start": "electron .",
 		"host": "node serverStarter.js",

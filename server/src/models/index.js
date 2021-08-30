@@ -6,20 +6,28 @@ require("dotenv").config({ path: path.join(__dirname, "../../.env") });
 const url = `mongodb+srv://${process.env.MONGO_USR}:${process.env.MONGO_PWD}@tcc-api-data.vtvfp.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
 
 const databaseLoader = ora("Conectando ao banco de dados").start();
-mongoose.connect(url, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-	useFindAndModify: false,
-	useCreateIndex: true,
-});
-databaseLoader.succeed(`Conexão com o Banco de Dados realizada com ${baianisse.greenBright("sucesso")}!`);
+mongoose
+	.connect(url, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+		useFindAndModify: false,
+		useCreateIndex: true,
+	})
+	.then(() => {
+		databaseLoader.succeed(
+			`Conexão com o Banco de Dados realizada com ${baianisse.greenBright("sucesso")}!`
+		);
+	})
+	.catch((err) => {
+		throw err;
+	});
 
-const modelsLoader = ora("Carregando os modelos do banco de dados").start();
+const modelsLoader = ora("Carregando os modelos do MongoDB").start();
 const users = require("./user");
 const products = require("./products");
 const requests = require("./requests");
 const tables = require("./tables");
-modelsLoader.succeed(`Modelos do Banco carregados com ${baianisse.greenBright("sucesso")}!\n`);
+modelsLoader.succeed(`Modelos do MongoDB carregados com ${baianisse.greenBright("sucesso")}!\n`);
 
 module.exports = {
 	products,

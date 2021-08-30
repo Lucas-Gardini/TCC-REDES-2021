@@ -4,6 +4,8 @@ const stdout = process.stdout;
 const stdin = process.stdin;
 const stderr = process.stderr;
 const readline = require("readline");
+const path = require("path");
+const fs = require("fs");
 
 const { networkInterfaces } = require("os");
 
@@ -11,6 +13,7 @@ const { networkInterfaces } = require("os");
 
 const nets = networkInterfaces();
 const results = Object.create(null);
+const serverConfig = require("./serverConfig.json");
 
 function select() {
 	return new Promise((resolve) => {
@@ -38,6 +41,20 @@ function select() {
 }
 
 async function getNetworkInterface() {
+	if (serverConfig.serverConfiguration.ip && serverConfig.serverConfiguration.port) {
+		if (serverConfig.serverConfiguration.ip.length > 0 && serverConfig.serverConfiguration.port > 0) {
+			console.log(
+				`? Para modificar as configurações do servidor (remova os campos ip e port para selecioná-los novamente) no arquivo 'serverConfig.json' que se encontra no caminho:\n  ${baianisse.yellow(
+					path.join(__dirname, "./serverConfig.json")
+				)}\n`
+			);
+			return {
+				ip: serverConfig.serverConfiguration.ip,
+				port: serverConfig.serverConfiguration.port,
+			};
+		}
+	}
+
 	const input = readline.createInterface({
 		input: stdin,
 		output: stdout,
@@ -89,7 +106,24 @@ async function getNetworkInterface() {
 					console.log(baianisse.red("O valor informado não é um número!\n"));
 				} else {
 					console.clear();
-					resolve(answer);
+					input.question("Salvar informações (Y/n): ", (YorN) => {
+						if (YorN.toLowerCase() === "y") {
+							let networkConfig = JSON.parse(
+								fs.readFileSync(path.join(__dirname, "./serverConfig.json"))
+							);
+							networkConfig.serverConfiguration = {
+								ip: results[Object.keys(results)[networkInterface - 1]][0],
+								port: answer,
+							};
+							fs.writeFileSync(
+								path.join(__dirname, "./serverConfig.json"),
+								JSON.stringify(networkConfig)
+							);
+						} else {
+							return;
+						}
+						resolve(answer);
+					});
 				}
 			});
 		});

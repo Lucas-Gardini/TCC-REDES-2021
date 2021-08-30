@@ -20,7 +20,7 @@ async function start() {
 		wsLoader.succeed(
 			`Websocket Iniciado no endereço: ${baianisse.cyan(
 				`ws://${serverAddress.ip}:${serverAddress.port}`
-			)}`
+			)}\n`
 		);
 	});
 
@@ -30,7 +30,7 @@ async function start() {
 	serverLoader.succeed(
 		`Servidor Iniciado no endereço: ${baianisse.cyan(
 			`http://${serverAddress.ip}:${serverAddress.port}`
-		)}`
+		)}\n`
 	);
 	httpServer.listen(serverAddress.port, serverAddress.ip);
 }

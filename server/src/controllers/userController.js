@@ -106,7 +106,12 @@ const userController = {
 		}
 	},
 	async deleteUser(req, res) {
-		res.send(await users.collection.drop());
+		await users.deleteOne({ _id: req.params.id }, (err) => {
+			if (err) res.sendStatus(500).end();
+			else {
+				res.sendStatus(200);
+			}
+		});
 	},
 	async logOffUser(req, res) {
 		try {
