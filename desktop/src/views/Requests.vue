@@ -14,7 +14,7 @@
 							>
 							<div style="margin-left: auto">
 								<div class="w3tooltip">
-									<MDBBtn color="success" floating size="sm">
+									<MDBBtn @click="endRequest(request)" color="success" floating size="sm">
 										<MDBIcon icon="check" iconStyle="fas" />
 									</MDBBtn>
 									<span class="w3tooltiptext">Finalizar Pedido</span>
@@ -32,10 +32,10 @@
 					<MDBCardBody>
 						<h5><i class="mdi mdi-food"></i> Produtos</h5>
 						<div v-for="(product, ii) in request.products" :key="ii">
-							<MDBCardTitle>
+							<MDBCardTitle style="margin-bottom: 0">
 								<MDBBtn
 									class="text-truncate"
-									style="width: 100%; text-align: left"
+									style="width: 100%; text-align: left; font-size: 1em;"
 									tag="a"
 									color="link"
 									@click="
@@ -58,8 +58,9 @@
 							<MDBCardText>
 								<MDBCollapse v-model="request.collapse[ii]">
 									<div class="mt-3">
-										<MDBListGroup>
+										<MDBListGroup style="padding-left: 24px">
 											<MDBListGroupItem
+												style="padding-left: 48px !important; padding-bottom: 4px !important"
 												v-for="(ingredient, iii) in product.ingredients"
 												:key="iii"
 											>
@@ -75,7 +76,9 @@
 						<h5><i class="mdi mdi-eye"></i> Observações</h5>
 						<p>{{ request.observations }}</p>
 					</MDBCardFooter>
-					<MDBCardFooter class="text-muted">{{ convertDate(request.date) }}</MDBCardFooter>
+					<MDBCardFooter class="text-muted">
+						<TimeAgo :date="request.date" />
+					</MDBCardFooter>
 				</MDBCard>
 			</MDBRow>
 			<MDBRow>
@@ -95,8 +98,8 @@
 
 <script>
 import axios from "axios";
-import moment from "moment";
 import PulsatingDots from "../components/PulsatingDots.vue";
+import TimeAgo from "../components/TimeAgo.vue";
 import {
 	MDBContainer,
 	MDBRow,
@@ -131,6 +134,7 @@ export default {
 		MDBListGroup,
 		MDBListGroupItem,
 		PulsatingDots,
+		TimeAgo,
 	},
 	data: () => {
 		return {
@@ -157,7 +161,7 @@ export default {
 	},
 	methods: {
 		async getRequests() {
-			const requests = (await axios.get(`${localStorage.serverAddress}/requests/getall`)).data;
+			const requests = (await axios.get(`${localStorage.serverAddress}/requests/gettoday`)).data;
 			let fixedRequests = [];
 			for (let request of requests) {
 				request.collapse = [];
@@ -178,22 +182,13 @@ export default {
 			this.requests[request_index].products[prod_index].ingredients = product[0].ingredients;
 			this.requests[request_index].products[prod_index].alreadyGettedIngredients = true;
 		},
-		convertDate(date) {
-			let [days, hours, minutes, seconds] = [
-				moment().diff(date, "days"),
-				moment().diff(date, "hours"),
-				moment().diff(date, "minutes"),
-				moment().diff(date, "seconds"),
-			];
-			return `${
-				moment().diff(date, "hours") > 24
-					? `${days} dia${days > 1 ? "s" : ""}`
-					: hours > 0 && hours < 24
-					? `${hours} ${hours > 1 ? `horas` : `hora`} `
-					: minutes > 0
-					? `${minutes} ${minutes > 1 ? `minutos` : `minutos`} `
-					: `${seconds} ${seconds > 1 ? `segundos` : `segundo`}  `
-			} atrás`;
+		async endRequest(request) {
+			if (confirm(`Tem certeza que deseja finalizar o pedido da mesa: ${request.table}?`)) {
+				const result = (
+					await axios.post(`${localStorage.serverAddress}/requests/finish`, { ...request })
+				).data;
+				console.log(result);
+			}
 		},
 	},
 	watch: {},

@@ -27,8 +27,7 @@
 		"detect-gender": "^1.0.0",
 		"mdb-vue-ui-kit": "^1.0.0-beta4",
 		"vue": "^3.0.0",
-		"vue-router": "^4.0.0-0",
-		"vue-select": "^3.11.2"
+		"vue-router": "^4.0.0-0"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-babel": "~4.5.0",
