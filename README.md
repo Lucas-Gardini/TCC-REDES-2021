@@ -1,66 +1,36 @@
-# Sistema gerenciador de pedidos e comandas
+<h1 align="center">Welcome to &#34;A DEFINIR&#34; 👋</h1>
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0-blue.svg?cacheSeconds=2592000" />
+  <a href="#" target="_blank">
+    <img alt="License: GPL3.0" src="https://img.shields.io/badge/License-GPL3.0-yellow.svg" />
+  </a>
+</p>
 
-## 📝 Resumo
+> O  projeto  tem  como  objetivo auxiliar  na  organização  de  restaurantes.  Apresentando  uma  plataforma  de análise  de  vendas além  de  ter  como  seu  objetivo  principal  a  realização  de pedidos  por  meio  de  uma  plataforma  (aplicativo),  onde  garçons  podem anotar  os  pedidos  dos  clientes,  onde  este  pedido  aparecerá  em  tempo  real aos cozinheiros, recepcionistas, gerentes etc.
 
-A plataforma consiste em duas versões do aplicativo destinada aos usuários, uma _Desktop_ (Computadores de Mesa), uma _Mobile_ (Dispositivos móveis como celulares e tablets) e uma _API_ (Interface de Programação de Aplicações) para o gerenciamento dos dados e autenticação.
+### 🏠 [Homepage](https://tcc-redes-2021.vercel.app/)
 
-A versão _Mobile_ é destinada aos garçons ou funcionários que exerçam uma função semelhante, tendo as funções de registrar pedidos e observações sobres os mesmos, contendo número da mesa ou qualquer outro meio de localização do cliente.
+## Install
 
-E a versão _Desktop_ é destinada aos donos e funcionários que estejam na parte interna do estabelecimento/empresa (exemplo: Cozinheiros), onde serão disponibilizados todos os pedidos existentes, além de outras informações importantes para o controle do estabelecimento (Somente para donos, gerentes e etc.), algumas funcionalidades iniciais são:
+```sh
+npm install
+```
 
--   ✔ Confirmação de pedido
--   ❌ Cancelamento de pedido
--   📊 Visão geral e gráficos das vendas realizadas no mês/ano
--   📦 Gerenciamento de estoque (caso seja necessário)
--   👥 Gerenciamento de funcionários (possibilidade de bater ponto pelo app (com verificação de localização))
--   🕒 Outras funcionalidades serão atualizadas conforme o passar do tempo (Usuários podem dar sugestões)
+## Author
 
-## 💬 Objetivos
+👤 **Lucas Gardini Dias**
 
-O objetivo do projeto, é facilitar a organização do estabelecimento tanto para o dono quanto para os funcionários. Disponibilizando informações em tempo real de uma ponta a outra (de funcionário para funcionário (exemplo: garçom e cozinheiro), dono para funcionário e vice-versa), tornando mais rápido o atendimento e consequentemente gerando uma maior satisfação do cliente em relação a otimização do tempo.
+* Website: https://lucasg-portfolio.vercel.app/
+* Github: [@Lucas-Gardini](https://github.com/Lucas-Gardini)
+* LinkedIn: [@lucasgardini](https://linkedin.com/in/lucasgardini)
 
-## 🔌 Recursos
+## 🤝 Contributing
 
-Para a funcionalidade completa do projeto, os seguintes recursos serão necessários:
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Lucas-Gardini/TCC-REDES-2021/issues). 
 
--   Máquina servidora (Física ou Virtual), para hospedagem do serviço que tratará dos dados, sendo responsável por enviar e armazenar dados e autenticar usuários.
--   Dispositivos móveis, que serão responsáveis de enviar os pedidos ao servidor, eliminando a necessidade de se usar comandas de papel.
--   Computador de Mesa ou Dispositivos móveis, para gerenciar os pedidos. Geralmente na posse dos cozinheiros.
--   Conexão com a internet, para que a conexão com o banco de dados seja estabelecida (opcional, o banco pode ser local)
+## Show your support
 
-## 🖥 Tecnologias
+Give a ⭐️ if this project helped you!
 
--   Client Side
-
-    -   Desktop
-
-        -   HTML
-        -   CSS + MDBootstrap
-        -   JavaScript
-        -   VueJs
-        -   Electron (Para _build_ (criação) do app)
-
-    -   Mobile
-        -   React Native
-        -   React Native Elements
-        -   React Router
-
--   Server Side
-
-    -   JavaScript
-    -   NodeJs
-    -   Express
-    -   express-session
-    -   morgan
-    -   body-parser
-    -   MongoDB e Mongoose
-
-## 👥 Equipe
-
-A equipe é constituída por membros do Instituto Federal de São Paulo Campus Catanduva, sendo eles:
-
--   Gabriel Luiz de Oliveira
--   Gabriela da Silva Ornellas
--   _**Lucas Gardini Dias**_
--   Pedro Comelli Neto
--   Thiago Aio
+***
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
