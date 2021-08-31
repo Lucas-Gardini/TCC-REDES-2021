@@ -347,6 +347,11 @@
 				</MDBCol>
 			</MDBRow>
 		</MDBContainer>
+		<div class="getBackUp">
+			<MDBBtn @click="scrollTop" color="success" floating>
+				<i class="mdi mdi-arrow-up-thick"></i>
+			</MDBBtn>
+		</div>
 	</MDBContainer>
 </template>
 
@@ -607,6 +612,9 @@ export default {
 				this.isEditingProduct = false;
 				this.show_hide = "show";
 			}, 200);
+		},
+		scrollTop() {
+			window.scrollTo(0, 0);
 		},
 	},
 	watch: {
