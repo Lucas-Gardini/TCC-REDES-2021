@@ -52,16 +52,14 @@ class expressServer {
 		}
 
 		console.log(allowedOriginsTable.toString() + "\n");
-		console.log(
-			`? Para modificar as origens, modifique o arquivo 'serverConfig.json' que se encontra no caminho:\n  ${this.baianisse.yellow(
-				this.path.join(__dirname, "./serverConfig.json")
-			)}\n`
-		);
+		console.log(`? Modifique as origens no arquivo de configurações!\n`);
 
-		this.app.use((req, res, next) => {
-			console.log(req.ip);
-			next();
-		});
+		// Log requester ip address
+
+		// this.app.use((req, res, next) => {
+		// 	console.log(req.ip);
+		// 	next();
+		// });
 
 		this.app.use(
 			this.cors({
@@ -77,7 +75,10 @@ class expressServer {
 					if (allowedOrigins.indexOf(origin) !== -1) {
 						callback(null, true);
 					} else {
-						callback(console.log(`Access from a not allowed origin: ${origin}`));
+						if (origin) {
+							return callback(console.log(`Access from a not allowed origin: ${origin}`));
+						}
+						return callback(null, true);
 					}
 				},
 				methods: ["POST", "GET", "OPTIONS", "DELETE"],
@@ -88,7 +89,7 @@ class expressServer {
 	}
 
 	setRoutes() {
-		this.app.use("/public", this.express.static("../../../response_pages"));
+		this.app.use("/public", this.express.static("./response_pages/"));
 
 		// Routes
 		const loginRoute = require("../../routes/userRoute.js");
@@ -107,21 +108,21 @@ class expressServer {
 		}
 
 		// Using Routes
+		this.app.get("/", (req, res) => {
+			res.redirect("/public");
+		});
+
 		this.app.use("/user", authMiddleware, loginRoute);
 		this.app.use("/products", authMiddleware, productsRoute);
 		this.app.use("/requests", authMiddleware, requestsRoute);
 		this.app.use("/tables", authMiddleware, tablesRoute);
-
-		this.app.get("/", (req, res) => {
-			res.sendFile(this.path.join(__dirname, "../../../response_pages/orderify.html"));
-		});
 
 		this.app.get("/ping", (req, res) => {
 			res.send("Pong!");
 		});
 
 		this.app.get("**", (req, res) => {
-			res.sendFile(this.path.join(__dirname, "../../../response_pages/404.html"));
+			res.redirect("/public");
 		});
 	}
 }
