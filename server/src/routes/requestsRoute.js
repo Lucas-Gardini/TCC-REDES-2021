@@ -9,4 +9,6 @@ router.get("/getall", requestsController.getAllRequests);
 router.get("/gettoday", requestsController.getTodayRequests);
 router.get("/getquantity", requestsController.getQuantity);
 
+router.delete("/delete/:id", requestsController.deleteRequest);
+
 module.exports = router;

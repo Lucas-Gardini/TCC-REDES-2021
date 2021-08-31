@@ -44,7 +44,7 @@ async function getNetworkInterface() {
 	if (serverConfig.serverConfiguration.ip && serverConfig.serverConfiguration.port) {
 		if (serverConfig.serverConfiguration.ip.length > 0 && serverConfig.serverConfiguration.port > 0) {
 			console.log(
-				`? Para modificar as configurações do servidor (remova os campos ip e port para selecioná-los novamente) no arquivo 'serverConfig.json' que se encontra no caminho:\n  ${baianisse.yellow(
+				`? Para modificar as configurações do servidor:\n  Remova os campos ip e port para selecioná-los novamente no arquivo 'serverConfig.json'\n  ${baianisse.yellow(
 					path.join(__dirname, "./serverConfig.json")
 				)}\n`
 			);

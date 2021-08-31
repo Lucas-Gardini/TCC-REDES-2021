@@ -18,7 +18,7 @@
 <script>
 const { ipcRenderer } = require("electron");
 import { useToast } from "vue-toastification";
-import notificationAudio from "../assets/notification-development.mp3";
+import notificationAudio from "../assets/notification.mp3";
 
 export default {
 	setup() {

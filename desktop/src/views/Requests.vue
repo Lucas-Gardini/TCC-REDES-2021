@@ -1,6 +1,6 @@
 <template>
 	<MDBContainer :class="show_hide">
-		<h1 style="margin-top: 20px">
+		<h1 style="margin-top: 20px" id="top">
 			Pedidos - Hoje
 		</h1>
 		<div v-for="(request, i) in requests" :key="i">
@@ -10,18 +10,24 @@
 						<div style="display: flex;">
 							<pulsating-dots :color="!request.completed ? 'red' : 'green'" />
 							<span style="margin-left: 10px"
-								><i class="mdi mdi-table-furniture"></i> Mesa: {{ request.table }}</span
+								><i class="mdi mdi-table-furniture"></i> Mesa:
+								{{ request.tableDoc.table }}</span
 							>
-							<div style="margin-left: auto">
+							<div v-if="!request.completed" style="margin-left: auto">
 								<div class="w3tooltip">
-									<MDBBtn @click="endRequest(request)" color="success" floating size="sm">
+									<MDBBtn
+										@click="finishRequest(request)"
+										color="success"
+										floating
+										size="sm"
+									>
 										<MDBIcon icon="check" iconStyle="fas" />
 									</MDBBtn>
 									<span class="w3tooltiptext">Finalizar Pedido</span>
 								</div>
 
 								<div class="w3tooltip">
-									<MDBBtn color="danger" floating size="sm">
+									<MDBBtn @click="endRequest(request)" color="danger" floating size="sm">
 										<MDBIcon icon="times" iconStyle="fas" />
 									</MDBBtn>
 									<span class="w3tooltiptext">Cancelar Pedido</span>
@@ -92,6 +98,11 @@
 					<hr />
 				</MDBCol>
 			</MDBRow>
+		</div>
+		<div class="getBackUp">
+			<MDBBtn @click="scrollTop" color="success" floating>
+				<i class="mdi mdi-arrow-up-thick"></i>
+			</MDBBtn>
 		</div>
 	</MDBContainer>
 </template>
@@ -172,6 +183,17 @@ export default {
 				fixedRequests.push(request);
 			}
 			this.requests = fixedRequests.reverse();
+			let completeds = [];
+			let notCompleteds = [];
+
+			this.requests.map((request) => {
+				if (request.completed) {
+					completeds.push(request);
+				} else {
+					notCompleteds.push(request);
+				}
+			});
+			this.requests = [...notCompleteds, ...completeds];
 		},
 		async getProductIngredients(prod_id, prod_index, request_index) {
 			if (this.requests[request_index].products[prod_index].alreadyGettedIngredients) {
@@ -182,13 +204,24 @@ export default {
 			this.requests[request_index].products[prod_index].ingredients = product[0].ingredients;
 			this.requests[request_index].products[prod_index].alreadyGettedIngredients = true;
 		},
-		async endRequest(request) {
-			if (confirm(`Tem certeza que deseja finalizar o pedido da mesa: ${request.table}?`)) {
+		async finishRequest(request) {
+			if (confirm(`Tem certeza que deseja finalizar o pedido da mesa: ${request.tableDoc.table}?`)) {
 				const result = (
 					await axios.post(`${localStorage.serverAddress}/requests/finish`, { ...request })
 				).data;
 				console.log(result);
 			}
+		},
+		async endRequest(request) {
+			if (confirm(`Tem certeza que deseja desfazer o pedido da mesa: ${request.tableDoc.table}?`)) {
+				const result = (
+					await axios.delete(`${localStorage.serverAddress}/requests/delete/${request._id}`)
+				).data;
+				console.log(result);
+			}
+		},
+		scrollTop() {
+			window.scrollTo(0, 0);
 		},
 	},
 	watch: {},

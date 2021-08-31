@@ -101,19 +101,19 @@
 			<div v-else>
 				<MDBCard text="center" style="color: #121212">
 					<MDBCardHeader color="danger" style="background-color: #F93154; color: aliceblue"
-						><MDBIcon icon="exclamation-triangle" iconStyle="fas"/> Erro
-						<MDBIcon icon="exclamation-triangle" iconStyle="fas"
-					/></MDBCardHeader>
+						><i class="mdi mdi-exclamation-thick"></i> Erro
+						<i class="mdi mdi-exclamation-thick"></i
+					></MDBCardHeader>
 					<MDBCardBody>
 						<MDBCardTitle>Sem conexão com o servidor</MDBCardTitle>
 						<MDBCardText>
 							Verifique se o servidor está de pé e que a conexão está estabelecida!
 						</MDBCardText>
 						<MDBBtn @click="checkServerConnection" color="success"
-							><MDBIcon icon="check" iconStyle="fas" /> Entendi!</MDBBtn
+							><i class="mdi mdi-check-bold"></i> Entendi!</MDBBtn
 						>
 						<MDBBtn @click="$router.push('/dashboard/settings')" color="secondary">
-							<MDBIcon icon="wrench" iconStyle="fas" /> Configurações
+							<i class="mdi mdi-cog"></i> Configurações
 						</MDBBtn>
 					</MDBCardBody>
 					<MDBCardFooter class="text-muted">Caso o erro persista, contate o suporte!</MDBCardFooter>
@@ -198,7 +198,6 @@ import {
 	MDBCardText,
 	MDBCardTitle,
 	MDBCardFooter,
-	MDBIcon,
 	MDBContainer,
 	MDBRow,
 	MDBCol,
@@ -222,7 +221,6 @@ export default {
 		MDBCardBody,
 		MDBCardTitle,
 		MDBCardFooter,
-		MDBIcon,
 		MDBContainer,
 		MDBRow,
 		MDBCol,

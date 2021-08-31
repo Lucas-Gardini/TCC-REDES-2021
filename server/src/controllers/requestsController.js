@@ -14,10 +14,20 @@ const requestsController = {
 			}
 		);
 	},
+	async deleteRequest(req, res) {
+		const request = req.body;
+		await requests.deleteOne({ _id: req.params.id }, (err) => {
+			if (err) res.sendStatus(500).end();
+			else {
+				res.sendStatus(200);
+			}
+		});
+	},
 	async finishRequest(req, res) {
 		const request = req.body;
+		console.log(request);
 		await requests.updateOne(
-			{ _id: requests._id },
+			{ _id: request._id },
 			{
 				completed: true,
 			},
@@ -32,7 +42,9 @@ const requestsController = {
 		let requestsWithTables = [];
 		for (let request of result) {
 			let table = await tables.findOne({ _id: request.table_id }).exec();
-			let request2 = { ...request._doc, ...table._doc };
+			let tableDoc = { ...table._doc };
+			delete tableDoc._id;
+			let request2 = { ...request._doc, tableDoc };
 			requestsWithTables.push(request2);
 		}
 		res.json(requestsWithTables);
@@ -47,7 +59,9 @@ const requestsController = {
 		let requestsWithTables = [];
 		for (let request of result) {
 			let table = await tables.findOne({ _id: request.table_id }).exec();
-			let request2 = { ...request._doc, ...table._doc };
+			let tableDoc = { ...table._doc };
+			delete tableDoc._id;
+			let request2 = { ...request._doc, tableDoc };
 			requestsWithTables.push(request2);
 		}
 		res.json(requestsWithTables);

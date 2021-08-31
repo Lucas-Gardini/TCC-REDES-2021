@@ -89,4 +89,12 @@ export default {
 	align-items: center;
 	justify-content: center;
 }
+
+.getBackUp {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
 </style>
