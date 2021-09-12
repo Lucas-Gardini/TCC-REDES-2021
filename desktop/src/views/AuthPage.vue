@@ -4,7 +4,7 @@
 			<MDBRow class="align-items-center">
 				<MDBCol :class="smallMode ? 'left-panel-no-margin' : 'left-panel'">
 					<div style="margin-top: 15px">
-						<img width="64" height="64" src="../assets/icon.png" class="img-fluid" />
+						<!-- <img width="64" height="64" src="../assets/icon.png" class="img-fluid" /> -->
 						<h1>Login</h1>
 						<hr />
 					</div>
@@ -88,7 +88,7 @@
 				</MDBCol>
 				<transition name="fade">
 					<MDBCol class="right-panel" v-if="!smallMode">
-						<img src="../assets/auth-rightpanel-undraw.svg" />
+						<img src="../assets/icon-variant.png" />
 					</MDBCol>
 				</transition>
 			</MDBRow>

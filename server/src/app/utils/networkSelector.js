@@ -29,7 +29,7 @@ function select() {
 			}
 		}
 
-		textoComBaianisse("ORDERIFY", async (err, data) => {
+		textoComBaianisse("ORDERBYTE", async (err, data) => {
 			if (err) {
 				console.log(err);
 				return;

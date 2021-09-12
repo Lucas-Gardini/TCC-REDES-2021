@@ -3,3 +3,5 @@ node_modules
 dist
 dist-ssr
 *.local
+#Electron-builder output
+/dist_electron

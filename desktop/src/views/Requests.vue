@@ -5,14 +5,15 @@
 		</h1>
 		<div v-for="(request, i) in requests" :key="i">
 			<MDBRow class="g3 mb-4 border">
-				<MDBCard>
-					<MDBCardHeader style="margin-top: auto; margin-bottom: auto;">
+				<MDBCard style="padding: 0 !important">
+					<MDBCardHeader
+						class="bg-success"
+						style="margin-top: auto; margin-bottom: auto; border-radius: 0 !important; color: #fff"
+					>
 						<div style="display: flex;">
-							<pulsating-dots :color="!request.completed ? 'red' : 'green'" />
-							<span style="margin-left: 10px"
-								><i class="mdi mdi-table-furniture"></i> Mesa:
-								{{ request.tableDoc.table }}</span
-							>
+							<h4 style="margin-left: 5px; margin-top: auto; margin-bottom: auto">
+								<i class="mdi mdi-table-furniture"></i> Mesa: {{ request.tableDoc.table }}
+							</h4>
 							<div v-if="!request.completed" style="margin-left: auto">
 								<div class="w3tooltip">
 									<MDBBtn
@@ -33,15 +34,18 @@
 									<span class="w3tooltiptext">Cancelar Pedido</span>
 								</div>
 							</div>
+							<div v-else style="margin-left: auto">
+								<i class="mdi mdi-thumb-up"></i> Pedido Finalizado
+							</div>
 						</div>
 					</MDBCardHeader>
 					<MDBCardBody>
-						<h5><i class="mdi mdi-food"></i> Produtos</h5>
+						<h6><i class="mdi mdi-food"></i> Pedido</h6>
 						<div v-for="(product, ii) in request.products" :key="ii">
 							<MDBCardTitle style="margin-bottom: 0">
 								<MDBBtn
 									class="text-truncate"
-									style="width: 100%; text-align: left; font-size: 1em;"
+									style="width: 100%; text-align: left; font-size: 0.85em; display: flex"
 									tag="a"
 									color="link"
 									@click="
@@ -51,15 +55,24 @@
 											});
 										}
 									"
-									><i
+								>
+									<i
 										:class="
 											request.collapse[ii]
 												? 'mdi mdi-chevron-right active'
 												: 'mdi mdi-chevron-right inactive'
 										"
-									></i
-									>{{ product.quantity }} {{ product.name }}</MDBBtn
-								>
+									></i>
+									<span style="margin-right: auto"
+										>{{ product.quantity }} {{ product.name }}</span
+									>
+									<span style="margin-left: auto; color: #4F4F4F !important">{{
+										(product.quantity * product.price).toLocaleString("pt-br", {
+											style: "currency",
+											currency: "BRL",
+										})
+									}}</span>
+								</MDBBtn>
 							</MDBCardTitle>
 							<MDBCardText>
 								<MDBCollapse v-model="request.collapse[ii]">
@@ -78,13 +91,21 @@
 							</MDBCardText>
 						</div>
 					</MDBCardBody>
-					<MDBCardFooter>
-						<h5><i class="mdi mdi-eye"></i> Observações</h5>
+					<MDBCardFooter v-if="request.observations.length > 0">
+						<h6><i class="mdi mdi-eye"></i> Observações</h6>
 						<p>{{ request.observations }}</p>
 					</MDBCardFooter>
-					<MDBCardFooter class="text-muted">
-						<TimeAgo :date="request.date" />
+					<MDBCardFooter style="display: flex">
+						<span style="margin-right: auto; margin-top: auto; margin-bottom: auto"
+							><i class="mdi mdi-cash"></i> Total:
+						</span>
+						<span style="margin-left: auto; font-size: 1.2em">{{
+							getFullPrice(request.products)
+						}}</span>
 					</MDBCardFooter>
+					<span style="width: 100%; text-align: center">
+						<TimeAgo :date="request.date" />
+					</span>
 				</MDBCard>
 			</MDBRow>
 			<MDBRow>
@@ -165,6 +186,7 @@ export default {
 		};
 	},
 	async mounted() {
+		this.getTables();
 		this.getRequests();
 	},
 	beforeUnmount() {
@@ -195,6 +217,9 @@ export default {
 			});
 			this.requests = [...notCompleteds, ...completeds];
 		},
+		async getTables() {
+			this.tables = (await axios.get(`${localStorage.serverAddress}/tables/getall`)).data;
+		},
 		async getProductIngredients(prod_id, prod_index, request_index) {
 			if (this.requests[request_index].products[prod_index].alreadyGettedIngredients) {
 				return;
@@ -203,6 +228,17 @@ export default {
 				.data;
 			this.requests[request_index].products[prod_index].ingredients = product[0].ingredients;
 			this.requests[request_index].products[prod_index].alreadyGettedIngredients = true;
+		},
+		getFullPrice(products) {
+			let price = 0;
+			products.forEach((product) => {
+				price += product.price * product.quantity;
+			});
+
+			return price.toLocaleString("pt-br", {
+				style: "currency",
+				currency: "BRL",
+			});
 		},
 		async finishRequest(request) {
 			if (confirm(`Tem certeza que deseja finalizar o pedido da mesa: ${request.tableDoc.table}?`)) {

@@ -47,13 +47,6 @@
 		<MDBRow style="margin-bottom: 50px !important;" v-for="(table, i) in tables" :key="i">
 			<MDBCol>
 				<MDBCard class="border" style="margin-left: 10vw !important; margin-right: 10vw !important;">
-					<button
-						@click="deleteFromDatabase(i)"
-						:class="!isDeletingTable ? 'deleteTable' : 'deleteTable spin'"
-						aria-label="Excluir"
-					>
-						<i :class="!isDeletingTable ? 'mdi mdi-close-thick' : 'mdi mdi-loading spin'"></i>
-					</button>
 					<MDBCardHeader style="display: flex; flex-direction: row; align-content: space-between;">
 						<div class="card-title" style="display: flex; min-width: 100%">
 							<div style="margin-right: auto">
@@ -64,6 +57,15 @@
 									@click="toggleAvailability(i)"
 									>Toggle</label
 								>
+							</div>
+							<div
+								@click="deleteFromDatabase(i)"
+								:class="!isDeletingTable ? 'deleteTable' : 'deleteTable spin'"
+								aria-label="Excluir"
+							>
+								<i
+									:class="!isDeletingTable ? 'mdi mdi-close-thick' : 'mdi mdi-loading spin'"
+								></i>
 							</div>
 						</div>
 					</MDBCardHeader>
@@ -260,21 +262,17 @@ input:checked + label:after {
 
 .deleteTable {
 	transition: all 0.4s;
-	position: absolute;
-	top: -13px;
-	right: -13px;
 	background-color: #fff;
 	transform: scale(0.8);
-	border: 0.5px solid #121212;
-	border-radius: 50%;
 	font-size: 1.01em;
+	margin-left: 10px;
 }
 
 .deleteTable:hover {
 	transition: all 0.4s;
 	transform: scale(1);
 	color: #f93154;
-	border: 0.5px solid #f93154;
+	cursor: pointer;
 }
 
 .spin {

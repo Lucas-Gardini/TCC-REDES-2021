@@ -5,7 +5,7 @@ module.exports = {
 			builderOptions: {
 				appId: "com.desktop.orderify",
 				win: {
-					icon: "src/assets/icon.png",
+					icon: "src/assets/icon-no-name.png",
 				},
 			},
 		},

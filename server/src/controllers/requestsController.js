@@ -3,16 +3,32 @@ const { requests, tables } = require("../models/index.js");
 const requestsController = {
 	async addRequest(req, res) {
 		const { products, table_id, observations } = req.body;
-		console.log(products);
-		const create = await requests.create(
-			{ table_id, products, observations, completed: false, date: Date.now() },
-			(err) => {
-				if (err) res.send(`Error code: ${err.code}`);
-				else {
-					res.send("OK");
+		requests.findOne({ table_id, completed: false }, (err, doc) => {
+			if (err) res.sendStatus(500).end();
+			if (!doc) {
+				requests.create(
+					{ table_id, products, observations, completed: false, date: Date.now() },
+					(err) => {
+						if (err) return res.sendStatus(500).end();
+						res.send("OK");
+					}
+				);
+			} else {
+				const updatedProducts = doc.products.concat(products);
+				let updatedObservations = doc.observations || "";
+				if (observations.length > 0) {
+					updatedObservations = updatedObservations + "\n" + observations;
 				}
+				requests.updateOne(
+					{ _id: doc._id },
+					{ products: updatedProducts, observations: updatedObservations },
+					(err) => {
+						if (err) return res.sendStatus(500).end();
+						res.send("OK");
+					}
+				);
 			}
-		);
+		});
 	},
 	async deleteRequest(req, res) {
 		const request = req.body;

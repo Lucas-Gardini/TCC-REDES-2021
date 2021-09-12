@@ -1,6 +1,6 @@
 {
-	"name": "orderify.platform.api",
-	"productName": "Orderify Server",
+	"name": "orderbyte.platform.api",
+	"productName": "Orderbyte Server",
 	"version": "1.0.0",
 	"description": "API para a plataforma de pedidos, destinada a restaurantes para melhorar o antendimento ao cliente",
 	"main": "src/app/server.js",

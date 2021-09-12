@@ -1,7 +1,7 @@
 <template>
 	<div class="ToolBar">
 		<div class="appName">
-			orderify
+			orderbYte
 		</div>
 		<button @click="manageWindow('MINIMIZE')" class="tb-minimize">
 			<i class="mdi mdi-minus"></i>
