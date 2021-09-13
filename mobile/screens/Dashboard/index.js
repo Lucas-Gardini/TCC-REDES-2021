@@ -7,6 +7,7 @@ import {
 	Dimensions,
 	ActivityIndicator,
 	Alert,
+	useWindowDimensions,
 } from 'react-native';
 import {
 	Button,
@@ -18,12 +19,15 @@ import {
 	Overlay,
 	PricingCard,
 	Input,
+	Card,
 } from 'react-native-elements';
 import KeyStorage from 'react-native-sensitive-info';
 import axios from 'axios';
 import {useHistory} from 'react-router-native';
 
 export default ({onLoad}) => {
+	const {width} = useWindowDimensions();
+
 	const router = useHistory();
 	const [isLoading, setIsLoading] = useState(true);
 	const [isReviewing, setIsReviewing] = useState(false);
@@ -54,6 +58,12 @@ export default ({onLoad}) => {
 						.get(`http://${serverAddress}/tables/getall`)
 						.then(apiTables => {
 							setTables(apiTables.data);
+							setNewRequest({
+								table_id: '',
+								table_number: apiTables.data[0].table,
+								observations: '',
+								products: [],
+							});
 							setTimeout(() => {
 								setIsLoading(false);
 							}, 800);
@@ -126,6 +136,15 @@ export default ({onLoad}) => {
 			.then(response => {
 				if (response.data === 'OK') {
 					Alert.alert('Pedido Enviado!');
+					setIsReviewing(false);
+					setIsMakingNewRequest(false);
+					setIsMakingNewRequest(false);
+					setNewRequest({
+						table_id: '',
+						table_number: 0,
+						products: [],
+						observations: '',
+					});
 				} else {
 					Alert.alert(response.data);
 				}
@@ -148,7 +167,7 @@ export default ({onLoad}) => {
 					<Text>Mesa: {newRequest.table_number}</Text>
 				</View>
 				<PricingCard
-					containerStyle={{width: 100}}
+					containerStyle={{width: width * 0.8}}
 					color="#00B74A"
 					title="Total"
 					titleStyle={{color: '#00B74A'}}
@@ -277,55 +296,43 @@ export default ({onLoad}) => {
 						</BottomSheet>
 					</ListItem>
 					{products.map((product, i) => (
-						<ListItem key={i} bottomDivider>
-							<ListItem.Content>
-								<ListItem.Title>
-									<View>
-										<Text style={{fontSize: 25}}>
-											{product.name} -{' '}
-											{product.available
-												? 'Disponível'
-												: 'Indisponível'}
-										</Text>
-									</View>
-								</ListItem.Title>
-								<ListItem.Subtitle>
+						<Card
+							containerStyle={{
+								marginLeft: 5,
+								marginRight: 5,
+								padding: 0,
+								borderColor: 'rgba(52, 52, 52, 0.3)',
+								borderWidth: 1,
+							}}
+							key={i}>
+							<Card.Title
+								style={{
+									backgroundColor: '#00B74A',
+									color: '#fff',
+									padding: 5,
+								}}>
+								<View
+									style={{
+										display: 'flex',
+										flexDirection: 'row',
+										justifyContent: 'space-between',
+										width: width * 0.95,
+									}}>
+									<Text
+										style={{
+											color: '#fff',
+											paddingLeft: 10,
+											marginTop: 'auto',
+											marginBottom: 'auto',
+										}}>
+										{product.name}
+									</Text>
 									<View
 										style={{
 											display: 'flex',
-											flex: 1,
-											flexDirection: 'column',
+											flexDirection: 'row',
+											justifyContent: 'space-between',
 										}}>
-										{product.ingredients.map(
-											(ingredient, ii) => {
-												return (
-													<View key={ii}>
-														{/* <Button
-															buttonStyle={{
-																justifyContent:
-																	'flex-start',
-																width:
-																	deviceDimensions.width -
-																	35,
-															}}
-															title={}
-															type="clear"
-														/> */}
-														<Text>
-															• {ingredient}
-														</Text>
-													</View>
-												);
-											},
-										)}
-									</View>
-								</ListItem.Subtitle>
-								<View
-									style={{
-										flexDirection: 'row',
-										marginTop: 15,
-									}}>
-									<View style={{marginRight: 15}}>
 										<Button
 											buttonStyle={{
 												backgroundColor: '#fff',
@@ -342,8 +349,7 @@ export default ({onLoad}) => {
 												manageNewProducts(product, 1);
 											}}
 										/>
-									</View>
-									<View style={{marginRight: 15}}>
+										<Text> </Text>
 										<Button
 											buttonStyle={{
 												backgroundColor: '#fff',
@@ -361,50 +367,190 @@ export default ({onLoad}) => {
 											}}
 										/>
 									</View>
-									<View>
-										<Button
-											buttonStyle={{
-												backgroundColor: '#fff',
-											}}
-											titleStyle={{
-												color: '#121212',
-											}}
-											disabled={true}
-											disabledStyle={{
-												backgroundColor: '#fff',
-											}}
-											disabledTitleStyle={{
-												color: '#121212',
-											}}
-											title={
-												newRequest.products.findIndex(
-													prod => {
-														return (
-															prod.productId ===
-															product._id
-														);
-													},
-												) === -1
-													? 'Quantidade: 0'
-													: `Quantidade: ${
-															newRequest.products[
-																newRequest.products.findIndex(
-																	prod => {
-																		return (
-																			prod.productId ===
-																			product._id
-																		);
-																	},
-																)
-															].quantity
-															// eslint-disable-next-line no-mixed-spaces-and-tabs
-													  }`
-											}
-										/>
-									</View>
 								</View>
-							</ListItem.Content>
-						</ListItem>
+							</Card.Title>
+							<Card.Divider />
+							<View
+								style={{
+									display: 'flex',
+									flex: 1,
+									flexDirection: 'column',
+									marginLeft: 10,
+									marginRight: 10,
+								}}>
+								{product.ingredients.map((ingredient, ii) => {
+									return (
+										<View key={ii}>
+											{/* <Button
+															buttonStyle={{
+																justifyContent:
+																	'flex-start',
+																width:
+																	deviceDimensions.width -
+																	35,
+															}}
+															title={}
+															type="clear"
+														/> */}
+											<Text>• {ingredient}</Text>
+										</View>
+									);
+								})}
+							</View>
+							<Card.Divider />
+							<Card.Title
+								style={{
+									padding: 5,
+								}}>
+								<Text>
+									{newRequest.products.findIndex(prod => {
+										return prod.productId === product._id;
+									}) === -1
+										? 'Quantidade: 0'
+										: `Quantidade: ${
+												newRequest.products[
+													newRequest.products.findIndex(
+														prod => {
+															return (
+																prod.productId ===
+																product._id
+															);
+														},
+													)
+												].quantity
+												// eslint-disable-next-line no-mixed-spaces-and-tabs
+										  }`}
+								</Text>
+							</Card.Title>
+						</Card>
+						// <ListItem key={i} bottomDivider>
+						// 	<ListItem.Content>
+						// 		<ListItem.Title>
+						// 			<View>
+						// 				<Text style={{fontSize: 25}}>
+						// 					{product.name} -{' '}
+						// 					{product.available
+						// 						? 'Disponível'
+						// 						: 'Indisponível'}
+						// 				</Text>
+						// 			</View>
+						// 		</ListItem.Title>
+						// 		<ListItem.Subtitle>
+						// 			<View
+						// 				style={{
+						// 					display: 'flex',
+						// 					flex: 1,
+						// 					flexDirection: 'column',
+						// 				}}>
+						// 				{product.ingredients.map(
+						// 					(ingredient, ii) => {
+						// 						return (
+						// 							<View key={ii}>
+						// 								{/* <Button
+						// 									buttonStyle={{
+						// 										justifyContent:
+						// 											'flex-start',
+						// 										width:
+						// 											deviceDimensions.width -
+						// 											35,
+						// 									}}
+						// 									title={}
+						// 									type="clear"
+						// 								/> */}
+						// 								<Text>
+						// 									• {ingredient}
+						// 								</Text>
+						// 							</View>
+						// 						);
+						// 					},
+						// 				)}
+						// 			</View>
+						// 		</ListItem.Subtitle>
+						// 		<View
+						// 			style={{
+						// 				flexDirection: 'row',
+						// 				marginTop: 15,
+						// 			}}>
+						// 			<View style={{marginRight: 15}}>
+						// 				<Button
+						// 					buttonStyle={{
+						// 						backgroundColor: '#fff',
+						// 					}}
+						// 					icon={
+						// 						<Icon
+						// 							type="font-awesome-5"
+						// 							name="plus"
+						// 							color="#00B74A"
+						// 							size={15}
+						// 						/>
+						// 					}
+						// 					onPress={() => {
+						// 						manageNewProducts(product, 1);
+						// 					}}
+						// 				/>
+						// 			</View>
+						// 			<View style={{marginRight: 15}}>
+						// 				<Button
+						// 					buttonStyle={{
+						// 						backgroundColor: '#fff',
+						// 					}}
+						// 					icon={
+						// 						<Icon
+						// 							type="font-awesome-5"
+						// 							name="minus"
+						// 							color="#F93154"
+						// 							size={15}
+						// 						/>
+						// 					}
+						// 					onPress={() => {
+						// 						manageNewProducts(product, -1);
+						// 					}}
+						// 				/>
+						// 			</View>
+						// 			<View>
+						// 				<Button
+						// 					buttonStyle={{
+						// 						backgroundColor: '#fff',
+						// 					}}
+						// 					titleStyle={{
+						// 						color: '#121212',
+						// 					}}
+						// 					disabled={true}
+						// 					disabledStyle={{
+						// 						backgroundColor: '#fff',
+						// 					}}
+						// 					disabledTitleStyle={{
+						// 						color: '#121212',
+						// 					}}
+						// 					title={
+						// 						newRequest.products.findIndex(
+						// 							prod => {
+						// 								return (
+						// 									prod.productId ===
+						// 									product._id
+						// 								);
+						// 							},
+						// 						) === -1
+						// 							? 'Quantidade: 0'
+						// 							: `Quantidade: ${
+						// 									newRequest.products[
+						// 										newRequest.products.findIndex(
+						// 											prod => {
+						// 												return (
+						// 													prod.productId ===
+						// 													product._id
+						// 												);
+						// 											},
+						// 										)
+						// 									].quantity
+						// 									// eslint-disable-next-line no-mixed-spaces-and-tabs
+						// 							  }`
+						// 					}
+						// 				/>
+						// 			</View>
+						// 		</View>
+						// 	</ListItem.Content>
+						// </ListItem>
 					))}
 				</ScrollView>
 			) : (

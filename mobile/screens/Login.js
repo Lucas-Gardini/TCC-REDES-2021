@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Alert, ActivityIndicator} from 'react-native';
+import {View, StyleSheet, Alert, ActivityIndicator, Image} from 'react-native';
 import {Input, Button, Icon, Text} from 'react-native-elements';
 import {useHistory} from 'react-router-native';
 import KeyStorage from 'react-native-sensitive-info';
@@ -91,7 +91,20 @@ export default ({onLoad}) => {
 
 	return (
 		<View style={styles.mainContainer}>
-			<Text style={styles.title}>ORDERIFY - Login</Text>
+			<Image
+				source={require('./logo.png')}
+				// eslint-disable-next-line react-native/no-inline-styles
+				style={{
+					width: 525,
+					height: 349,
+					transform: [{scale: 0.5}],
+					margin: 'auto',
+					marginBottom: 0,
+					marginTop: '60%',
+				}}
+			/>
+			<Text style={styles.title}>Login</Text>
+
 			<View style={styles.container}>
 				{isLoading ? (
 					<ActivityIndicator
@@ -235,29 +248,28 @@ export default ({onLoad}) => {
 const styles = StyleSheet.create({
 	mainContainer: {
 		backgroundColor: '#00B74A',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	title: {
+		fontSize: 30,
+		color: '#fff',
+		fontWeight: 'bold',
 	},
 	container: {
-		marginTop: '30%',
+		// marginTop: '30%',
 		// padding: 10,
+		marginTop: 0,
 		display: 'flex',
 		paddingTop: '20%',
 		height: '100%',
+		width: '100%',
 		borderWidth: 1,
 		borderTopLeftRadius: 60,
 		borderTopRightRadius: 60,
 		borderColor: '#fff',
 		backgroundColor: '#fff',
-	},
-	title: {
-		fontSize: 30,
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center',
-		alignContent: 'center',
-		alignSelf: 'center',
-		textAlign: 'center',
-		paddingTop: '10%',
-		color: '#fff',
 	},
 	checkbox: {
 		color: '#121212',
@@ -281,7 +293,7 @@ const styles = StyleSheet.create({
 		alignContent: 'flex-end',
 		alignItems: 'flex-end',
 		alignSelf: 'flex-end',
-		marginTop: '45%',
+		marginTop: '5%',
 	},
 	configButton: {
 		color: '#00B74A',

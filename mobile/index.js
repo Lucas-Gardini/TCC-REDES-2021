@@ -25,7 +25,7 @@ const App = () => {
 						backgroundColor="#00B74A"
 						placement="left"
 						leftComponent={{
-							text: `ORDERIFY - ${currentPage}`,
+							text: `ORDERBYTE - ${currentPage}`,
 							style: {color: '#fff', fontSize: 15},
 						}}
 						rightComponent={{
