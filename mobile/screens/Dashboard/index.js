@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect} from "react";
 import {
 	StyleSheet,
 	View,
@@ -8,7 +8,7 @@ import {
 	ActivityIndicator,
 	Alert,
 	useWindowDimensions,
-} from 'react-native';
+} from "react-native";
 import {
 	Button,
 	Icon,
@@ -20,12 +20,12 @@ import {
 	PricingCard,
 	Input,
 	Card,
-} from 'react-native-elements';
-import KeyStorage from 'react-native-sensitive-info';
-import axios from 'axios';
-import {useHistory} from 'react-router-native';
+} from "react-native-elements";
+import KeyStorage from "react-native-sensitive-info";
+import axios from "axios";
+import {useHistory} from "react-router-native";
 
-export default ({onLoad}) => {
+export default () => {
 	const {width} = useWindowDimensions();
 
 	const router = useHistory();
@@ -37,18 +37,17 @@ export default ({onLoad}) => {
 	const [products, setProducts] = useState([]);
 	const [tables, setTables] = useState([]);
 	const [newRequest, setNewRequest] = useState({
-		table_id: '',
+		table_id: "",
 		table_number: 0,
 		products: [],
-		observations: '',
+		observations: "",
 	});
-	const deviceDimensions = Dimensions.get('window');
+	const deviceDimensions = Dimensions.get("window");
 
 	useEffect(() => {
-		onLoad();
-		KeyStorage.getItem('serverAddress', {
-			sharedPreferencesName: 'appConfig',
-			keychainService: 'appConfig',
+		KeyStorage.getItem("serverAddress", {
+			sharedPreferencesName: "appConfig",
+			keychainService: "appConfig",
 		}).then(serverAddress => {
 			axios
 				.get(`http://${serverAddress}/products/getall`)
@@ -59,9 +58,9 @@ export default ({onLoad}) => {
 						.then(apiTables => {
 							setTables(apiTables.data);
 							setNewRequest({
-								table_id: '',
+								table_id: "",
 								table_number: apiTables.data[0].table,
-								observations: '',
+								observations: "",
 								products: [],
 							});
 							setTimeout(() => {
@@ -75,11 +74,11 @@ export default ({onLoad}) => {
 				console.log(message);
 			};
 		});
-	}, [onLoad]);
+	}, []);
 
 	function manageNewProducts(newProduct, quantity) {
 		if (!newProduct.available) {
-			Alert.alert('Produto Indisponível');
+			Alert.alert("Produto Indisponível");
 			return;
 		}
 		let newProducts = [...newRequest.products];
@@ -117,33 +116,33 @@ export default ({onLoad}) => {
 			totalPrice += product.quantity * product.price;
 		});
 		return `R$ ${String(
-			totalPrice.toFixed(2).toLocaleString('pt-br', {
-				style: 'currency',
-				currency: 'BRL',
+			totalPrice.toFixed(2).toLocaleString("pt-br", {
+				style: "currency",
+				currency: "BRL",
 			}),
-		).replace('.', ',')}`;
+		).replace(".", ",")}`;
 	}
 
 	async function sendRequest() {
 		axios
 			.post(
-				`http://${await KeyStorage.getItem('serverAddress', {
-					sharedPreferencesName: 'appConfig',
-					keychainService: 'appConfig',
+				`http://${await KeyStorage.getItem("serverAddress", {
+					sharedPreferencesName: "appConfig",
+					keychainService: "appConfig",
 				})}/requests/add`,
 				newRequest,
 			)
 			.then(response => {
-				if (response.data === 'OK') {
-					Alert.alert('Pedido Enviado!');
+				if (response.data === "OK") {
+					Alert.alert("Pedido Enviado!");
 					setIsReviewing(false);
 					setIsMakingNewRequest(false);
 					setIsMakingNewRequest(false);
 					setNewRequest({
-						table_id: '',
+						table_id: "",
 						table_number: 0,
 						products: [],
-						observations: '',
+						observations: "",
 					});
 				} else {
 					Alert.alert(response.data);
@@ -160,9 +159,9 @@ export default ({onLoad}) => {
 				}}>
 				<View
 					style={{
-						display: 'flex',
-						justifyContent: 'center',
-						alignItems: 'center',
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
 					}}>
 					<Text>Mesa: {newRequest.table_number}</Text>
 				</View>
@@ -170,14 +169,14 @@ export default ({onLoad}) => {
 					containerStyle={{width: width * 0.8}}
 					color="#00B74A"
 					title="Total"
-					titleStyle={{color: '#00B74A'}}
+					titleStyle={{color: "#00B74A"}}
 					price={getPrice()}
 					button={{
-						title: ' Finalizar Pedido',
+						title: " Finalizar Pedido",
 						icon: {
-							name: 'clipboard-check',
-							type: 'font-awesome-5',
-							color: '#fff',
+							name: "clipboard-check",
+							type: "font-awesome-5",
+							color: "#fff",
 						},
 						// color: '#00B74A',
 						onPress: sendRequest,
@@ -187,9 +186,9 @@ export default ({onLoad}) => {
 					<Input
 						placeholder="Observações"
 						leftIcon={{
-							type: 'font-awesome-5',
+							type: "font-awesome-5",
 							solid: true,
-							name: 'eye',
+							name: "eye",
 						}}
 						value={newRequest.observations}
 						onChangeText={obs => {
@@ -204,9 +203,9 @@ export default ({onLoad}) => {
 				</View>
 				<View
 					style={{
-						display: 'flex',
-						justifyContent: 'center',
-						alignItems: 'center',
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
 					}}>
 					<Text>Produtos: </Text>
 				</View>
@@ -214,8 +213,8 @@ export default ({onLoad}) => {
 					{newRequest.products.map((product, i) => (
 						<View
 							style={{
-								alignItems: 'flex-start',
-								justifyContent: 'flex-start',
+								alignItems: "flex-start",
+								justifyContent: "flex-start",
 							}}
 							key={i}>
 							<Text>
@@ -226,7 +225,7 @@ export default ({onLoad}) => {
 				</ScrollView>
 				<Button
 					type="clear"
-					titleStyle={{color: '#F93154'}}
+					titleStyle={{color: "#F93154"}}
 					title="Cancelar"
 					onPress={() => {
 						setIsReviewing(false);
@@ -247,11 +246,11 @@ export default ({onLoad}) => {
 					<ListItem>
 						<Button
 							buttonStyle={{
-								justifyContent: 'flex-start',
+								justifyContent: "flex-start",
 								width: deviceDimensions.width - 35,
 							}}
 							titleStyle={{
-								color: '#00B74A',
+								color: "#00B74A",
 							}}
 							title={` Escolher Mesa: ${newRequest.table_number} `}
 							type="clear"
@@ -260,12 +259,12 @@ export default ({onLoad}) => {
 						<BottomSheet
 							isVisible={changingTable}
 							containerStyle={{
-								backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)',
+								backgroundColor: "rgba(0.5, 0.25, 0, 0.2)",
 							}}>
 							{tables.map((table, i) => (
 								<ListItem
 									disabled={!table.available}
-									disabledStyle={{backgroundColor: 'gray'}}
+									disabledStyle={{backgroundColor: "gray"}}
 									onPress={() => {
 										const newTableOnRequest = newRequest;
 										newTableOnRequest.table_number =
@@ -286,9 +285,9 @@ export default ({onLoad}) => {
 								onPress={() => {
 									setChangingTable(false);
 								}}
-								containerStyle={{backgroundColor: '#F93154'}}>
+								containerStyle={{backgroundColor: "#F93154"}}>
 								<ListItem.Content>
-									<ListItem.Title style={{color: '#fff'}}>
+									<ListItem.Title style={{color: "#fff"}}>
 										Cancelar
 									</ListItem.Title>
 								</ListItem.Content>
@@ -301,41 +300,41 @@ export default ({onLoad}) => {
 								marginLeft: 5,
 								marginRight: 5,
 								padding: 0,
-								borderColor: 'rgba(52, 52, 52, 0.3)',
+								borderColor: "rgba(52, 52, 52, 0.3)",
 								borderWidth: 1,
 							}}
 							key={i}>
 							<Card.Title
 								style={{
-									backgroundColor: '#00B74A',
-									color: '#fff',
+									backgroundColor: "#00B74A",
+									color: "#fff",
 									padding: 5,
 								}}>
 								<View
 									style={{
-										display: 'flex',
-										flexDirection: 'row',
-										justifyContent: 'space-between',
+										display: "flex",
+										flexDirection: "row",
+										justifyContent: "space-between",
 										width: width * 0.95,
 									}}>
 									<Text
 										style={{
-											color: '#fff',
+											color: "#fff",
 											paddingLeft: 10,
-											marginTop: 'auto',
-											marginBottom: 'auto',
+											marginTop: "auto",
+											marginBottom: "auto",
 										}}>
 										{product.name}
 									</Text>
 									<View
 										style={{
-											display: 'flex',
-											flexDirection: 'row',
-											justifyContent: 'space-between',
+											display: "flex",
+											flexDirection: "row",
+											justifyContent: "space-between",
 										}}>
 										<Button
 											buttonStyle={{
-												backgroundColor: '#fff',
+												backgroundColor: "#fff",
 											}}
 											icon={
 												<Icon
@@ -352,7 +351,7 @@ export default ({onLoad}) => {
 										<Text> </Text>
 										<Button
 											buttonStyle={{
-												backgroundColor: '#fff',
+												backgroundColor: "#fff",
 											}}
 											icon={
 												<Icon
@@ -372,9 +371,9 @@ export default ({onLoad}) => {
 							<Card.Divider />
 							<View
 								style={{
-									display: 'flex',
+									display: "flex",
 									flex: 1,
-									flexDirection: 'column',
+									flexDirection: "column",
 									marginLeft: 10,
 									marginRight: 10,
 								}}>
@@ -406,7 +405,7 @@ export default ({onLoad}) => {
 									{newRequest.products.findIndex(prod => {
 										return prod.productId === product._id;
 									}) === -1
-										? 'Quantidade: 0'
+										? "Quantidade: 0"
 										: `Quantidade: ${
 												newRequest.products[
 													newRequest.products.findIndex(
@@ -554,18 +553,18 @@ export default ({onLoad}) => {
 					))}
 				</ScrollView>
 			) : (
-				<View style={{width: '100%'}} />
+				<View style={{width: "100%"}} />
 			)}
 			{isLoading ? (
 				<ActivityIndicator
 					style={{
-						position: 'absolute',
+						position: "absolute",
 						left: 0,
 						right: 0,
 						top: 0,
 						bottom: 0,
-						alignItems: 'center',
-						justifyContent: 'center',
+						alignItems: "center",
+						justifyContent: "center",
 					}}
 					size="large"
 					color="#00B74A"
@@ -624,8 +623,8 @@ export default ({onLoad}) => {
 						color="#1266F1"
 						title={
 							isMakingNewRequest
-								? 'Cancelar Pedido'
-								: 'Novo Pedido'
+								? "Cancelar Pedido"
+								: "Novo Pedido"
 						}
 						onPress={() => {
 							setIsMakingNewRequest(!isMakingNewRequest);
@@ -645,10 +644,10 @@ export default ({onLoad}) => {
 						title="Sair"
 						onPress={async () => {
 							const serverAddress = await KeyStorage.getItem(
-								'serverAddress',
+								"serverAddress",
 								{
-									sharedPreferencesName: 'appConfig',
-									keychainService: 'appConfig',
+									sharedPreferencesName: "appConfig",
+									keychainService: "appConfig",
 								},
 							);
 							const logOut = (
@@ -657,7 +656,7 @@ export default ({onLoad}) => {
 								)
 							).data;
 							if (logOut.success) {
-								router.push('/');
+								router.push("/");
 							}
 						}}
 					/>
@@ -669,18 +668,18 @@ export default ({onLoad}) => {
 
 const styles = StyleSheet.create({
 	mainContainer: {
-		position: 'relative',
+		position: "relative",
 		margin: 0,
-		height: '95%',
+		height: "95%",
 	},
 	fabNewOrder: {
-		position: 'absolute',
+		position: "absolute",
 		bottom: 0,
 		right: 0,
 		marginBottom: 5,
 	},
 	speedDialMenu: {
-		position: 'absolute',
+		position: "absolute",
 		bottom: 0,
 		right: 0,
 		// backgroundColor: '#00B74A',

@@ -1,23 +1,22 @@
-import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Alert, ActivityIndicator, Image} from 'react-native';
-import {Input, Button, Icon, Text} from 'react-native-elements';
-import {useHistory} from 'react-router-native';
-import KeyStorage from 'react-native-sensitive-info';
-import axios from 'axios';
+import React, {useState, useEffect} from "react";
+import {View, StyleSheet, Alert, ActivityIndicator, Image} from "react-native";
+import {Input, Button, Icon, Text} from "react-native-elements";
+import {useHistory} from "react-router-native";
+import KeyStorage from "react-native-sensitive-info";
+import axios from "axios";
 
-export default ({onLoad}) => {
+export default () => {
 	const router = useHistory();
 
-	const [serverAddress, setServerAddress] = useState('');
+	const [serverAddress, setServerAddress] = useState("");
 	const [login, setLogin] = useState({user: null, password: null});
 
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		onLoad();
-		KeyStorage.getItem('user', {
-			sharedPreferencesName: 'userLogin',
-			keychainService: 'userLogin',
+		KeyStorage.getItem("user", {
+			sharedPreferencesName: "userLogin",
+			keychainService: "userLogin",
 		})
 			.then(user => {
 				if (user) {
@@ -33,20 +32,20 @@ export default ({onLoad}) => {
 
 		async function getLogin() {
 			const StorageServerAddress = await KeyStorage.getItem(
-				'serverAddress',
+				"serverAddress",
 				{
-					sharedPreferencesName: 'appConfig',
-					keychainService: 'appConfig',
+					sharedPreferencesName: "appConfig",
+					keychainService: "appConfig",
 				},
 			);
 			if (StorageServerAddress) {
 				try {
 					const serverTimeout = setTimeout(() => {
 						Alert.alert(
-							'Tempo Esgotado',
-							'O servidor demorou mais de 10 segundos para responder! Verifique se ele está funcionando e que sua conexão está estável!',
+							"Tempo Esgotado",
+							"O servidor demorou mais de 10 segundos para responder! Verifique se ele está funcionando e que sua conexão está estável!",
 						);
-						router.push('/serverconfig');
+						router.push("/serverconfig");
 					}, 12000);
 					axios
 						.post(`http://${StorageServerAddress}/user/get`, {
@@ -58,9 +57,9 @@ export default ({onLoad}) => {
 							clearTimeout(serverTimeout);
 							setIsLoading(false);
 							if (
-								USER_LOGIN_RESULT.data === 'ALREADY_LOGGED_IN'
+								USER_LOGIN_RESULT.data === "ALREADY_LOGGED_IN"
 							) {
-								router.push('/dashboard');
+								router.push("/dashboard");
 							} else {
 								setServerAddress(StorageServerAddress);
 							}
@@ -69,17 +68,17 @@ export default ({onLoad}) => {
 							clearTimeout(serverTimeout);
 							Alert.alert(
 								`${err}`,
-								'Ocorreu um erro! Talvez o servidor não esteja configurado corretamente.',
+								"Ocorreu um erro! Talvez o servidor não esteja configurado corretamente.",
 							);
-							router.push('/serverconfig');
+							router.push("/serverconfig");
 						});
 				} catch (err) {
 					if (err) {
 						Alert.alert(
 							`${err}`,
-							'Ocorreu um erro! Talvez o servidor não esteja configurado corretamente.',
+							"Ocorreu um erro! Talvez o servidor não esteja configurado corretamente.",
 						);
-						router.push('/serverconfig');
+						router.push("/serverconfig");
 					}
 				}
 			} else {
@@ -87,36 +86,36 @@ export default ({onLoad}) => {
 			}
 		}
 		getLogin();
-	}, [router, serverAddress, onLoad]);
+	}, [router, serverAddress]);
 
 	return (
 		<View style={styles.mainContainer}>
 			<Image
-				source={require('./logo.png')}
+				source={require("./logo.png")}
 				// eslint-disable-next-line react-native/no-inline-styles
 				style={{
-					width: 525,
-					height: 349,
-					transform: [{scale: 0.5}],
-					margin: 'auto',
+					width: 262.5,
+					height: 174.5,
+					transform: [{scale: 1}],
+					margin: "auto",
 					marginBottom: 0,
-					marginTop: '60%',
+					marginTop: "60%",
 				}}
 			/>
-			<Text style={styles.title}>Login</Text>
 
 			<View style={styles.container}>
+				<Text style={styles.title}>Login</Text>
 				{isLoading ? (
 					<ActivityIndicator
 						// eslint-disable-next-line react-native/no-inline-styles
 						style={{
-							position: 'absolute',
+							position: "absolute",
 							left: 0,
 							right: 0,
 							top: 0,
 							bottom: 0,
-							alignItems: 'center',
-							justifyContent: 'center',
+							alignItems: "center",
+							justifyContent: "center",
 						}}
 						size="large"
 						color="#00B74A"
@@ -127,9 +126,9 @@ export default ({onLoad}) => {
 							<Input
 								placeholder="Usuário"
 								leftIcon={{
-									type: 'font-awesome-5',
+									type: "font-awesome-5",
 									solid: true,
-									name: 'user',
+									name: "user",
 								}}
 								value={login.user}
 								onChangeText={user => {
@@ -142,7 +141,7 @@ export default ({onLoad}) => {
 							<Input
 								secureTextEntry={true}
 								placeholder="Senha"
-								leftIcon={{type: 'font-awesome-5', name: 'key'}}
+								leftIcon={{type: "font-awesome-5", name: "key"}}
 								value={login.password}
 								onChangeText={password => {
 									setLogin({
@@ -180,28 +179,28 @@ export default ({onLoad}) => {
 										.then(USER_LOGIN_RESULT => {
 											if (
 												USER_LOGIN_RESULT.data ===
-												'ALREADY_LOGGED_IN'
+												"ALREADY_LOGGED_IN"
 											) {
-												router.push('/dashboard');
+												router.push("/dashboard");
 											} else if (
-												USER_LOGIN_RESULT.data === 'OK'
+												USER_LOGIN_RESULT.data === "OK"
 											) {
 												KeyStorage.setItem(
-													'user',
+													"user",
 													JSON.stringify({
 														user: login.user,
-														password: '',
+														password: "",
 													}),
 													{
 														sharedPreferencesName:
-															'userLogin',
+															"userLogin",
 														keychainService:
-															'userLogin',
+															"userLogin",
 													},
 												)
 													.then(() => {
 														router.push(
-															'/dashboard',
+															"/dashboard",
 														);
 													})
 													.catch(err => {
@@ -209,8 +208,8 @@ export default ({onLoad}) => {
 													});
 											} else {
 												Alert.alert(
-													'Erro na Autenticação!',
-													'Cheque suas credenciais e verifique se o servidor se encontra ativo!',
+													"Erro na Autenticação!",
+													"Cheque suas credenciais e verifique se o servidor se encontra ativo!",
 												);
 											}
 										})
@@ -222,8 +221,8 @@ export default ({onLoad}) => {
 										});
 								} catch (error) {
 									Alert.alert(
-										'Erro',
-										'Ocorreu um erro! Talvez o servidor não esteja configurado ou não esteja rodando!',
+										"Erro",
+										"Ocorreu um erro! Talvez o servidor não esteja configurado ou não esteja rodando!",
 									);
 								}
 							}}
@@ -234,7 +233,7 @@ export default ({onLoad}) => {
 								buttonStyle={styles.configButton}
 								type="clear"
 								onPress={() => {
-									router.push('/serverconfig');
+									router.push("/serverconfig");
 								}}
 							/>
 						</View>
@@ -247,55 +246,56 @@ export default ({onLoad}) => {
 
 const styles = StyleSheet.create({
 	mainContainer: {
-		backgroundColor: '#00B74A',
-		display: 'flex',
-		justifyContent: 'center',
-		alignItems: 'center',
+		backgroundColor: "#00B74A",
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
 	},
 	title: {
 		fontSize: 30,
-		color: '#fff',
-		fontWeight: 'bold',
+		color: "#121212",
+		fontWeight: "bold",
+		textAlign: "center",
 	},
 	container: {
 		// marginTop: '30%',
 		// padding: 10,
 		marginTop: 0,
-		display: 'flex',
-		paddingTop: '20%',
-		height: '100%',
-		width: '100%',
+		display: "flex",
+		paddingTop: "10%",
+		height: "100%",
+		width: "100%",
 		borderWidth: 1,
 		borderTopLeftRadius: 60,
 		borderTopRightRadius: 60,
-		borderColor: '#fff',
-		backgroundColor: '#fff',
+		borderColor: "#fff",
+		backgroundColor: "#fff",
 	},
 	checkbox: {
-		color: '#121212',
+		color: "#121212",
 	},
 	loginButton: {
-		backgroundColor: '#262626',
-		width: '80%',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center',
-		alignContent: 'center',
-		alignSelf: 'center',
-		textAlign: 'center',
+		backgroundColor: "#262626",
+		width: "80%",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+		alignContent: "center",
+		alignSelf: "center",
+		textAlign: "center",
 	},
 	loginButtonText: {
-		color: '#00B74A',
+		color: "#00B74A",
 	},
 	serverConfig: {
-		display: 'flex',
-		textAlign: 'right',
-		alignContent: 'flex-end',
-		alignItems: 'flex-end',
-		alignSelf: 'flex-end',
-		marginTop: '5%',
+		display: "flex",
+		textAlign: "right",
+		alignContent: "flex-end",
+		alignItems: "flex-end",
+		alignSelf: "flex-end",
+		marginTop: "5%",
 	},
 	configButton: {
-		color: '#00B74A',
+		color: "#00B74A",
 	},
 });

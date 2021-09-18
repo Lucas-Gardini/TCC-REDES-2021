@@ -1,42 +1,38 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, AppRegistry} from 'react-native';
-import {Appearance} from 'react-native-appearance';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {Header} from 'react-native-elements';
-import {name as appName} from './app.json';
-import {NativeRouter, Route} from 'react-router-native';
-import axios from 'axios';
+import React, {useState} from "react";
+import {StyleSheet, View, AppRegistry} from "react-native";
+import {Appearance} from "react-native-appearance";
+import {SafeAreaProvider} from "react-native-safe-area-context";
+import {Header} from "react-native-elements";
+import {name as appName} from "./app.json";
+import {NativeRouter, Route} from "react-router-native";
+import axios from "axios";
 
-import Login from './screens/Login';
-import AppConfig from './screens/AppConfig';
-import Dashboard from './screens/Dashboard/index';
+import Login from "./screens/Login";
+import AppConfig from "./screens/AppConfig";
+import Dashboard from "./screens/Dashboard/index";
 
-Appearance.set({colorScheme: 'light'});
+Appearance.set({colorScheme: "light"});
 axios.defaults.withCredentials = true;
 
 const App = () => {
 	const [isAtLogin, setIsAtLogin] = useState(false);
-	const [currentPage, setCurrentPage] = useState('');
+	const [currentPage, setCurrentPage] = useState("");
 	return (
 		<SafeAreaProvider>
 			<NativeRouter>
-				{!isAtLogin ? (
-					<Header
-						backgroundColor="#00B74A"
-						placement="left"
-						leftComponent={{
-							text: `ORDERBYTE - ${currentPage}`,
-							style: {color: '#fff', fontSize: 15},
-						}}
-						rightComponent={{
-							icon: 'utensils',
-							type: 'font-awesome-5',
-							color: '#fff',
-						}}
-					/>
-				) : (
-					<View />
-				)}
+				<Header
+					backgroundColor="#00B74A"
+					placement="left"
+					leftComponent={{
+						text: `ORDERBYTE - ${currentPage}`,
+						style: {color: "#fff", fontSize: 15},
+					}}
+					rightComponent={{
+						icon: "utensils",
+						type: "font-awesome-5",
+						color: "#fff",
+					}}
+				/>
 				<View style={styles.container}>
 					<Route
 						exact
@@ -56,7 +52,7 @@ const App = () => {
 							<AppConfig
 								onLoad={() => {
 									setIsAtLogin(false);
-									setCurrentPage('Configurações');
+									setCurrentPage("Configurações");
 								}}
 							/>
 						}
@@ -68,7 +64,7 @@ const App = () => {
 							<Dashboard
 								onLoad={() => {
 									setIsAtLogin(false);
-									setCurrentPage('Início');
+									setCurrentPage("Início");
 								}}
 							/>
 						}
@@ -84,7 +80,7 @@ const styles = StyleSheet.create({
 		padding: 0,
 		paddingTop: 0,
 		paddingBottom: 0,
-		backgroundColor: '#fff',
+		backgroundColor: "#fff",
 	},
 });
 
