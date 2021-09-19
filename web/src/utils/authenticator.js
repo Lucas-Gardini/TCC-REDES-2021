@@ -1,4 +1,4 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signOut, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 export default class Authenticator {
 	googleAuth() {
@@ -24,6 +24,18 @@ export default class Authenticator {
 						email: error.email,
 						credential: GoogleAuthProvider.credentialFromError(error),
 					});
+				});
+		});
+	}
+	googleLogout() {
+		return new Promise((resolve, reject) => {
+			const auth = getAuth();
+			signOut(auth)
+				.then(() => {
+					resolve({});
+				})
+				.catch((error) => {
+					reject(error);
 				});
 		});
 	}

@@ -2,8 +2,9 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
-// eslint-disable-next-line no-unused-vars
-import firebaseApp from "./firebase.js";
+
+import "./firebase.js";
+import "animate.css";
 
 Vue.config.productionTip = false;
 
