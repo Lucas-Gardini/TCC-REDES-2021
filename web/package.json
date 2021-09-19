@@ -1,23 +1,34 @@
 {
-  "name": "Orderbyte",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "generate": "nuxt generate"
-  },
-  "dependencies": {
-    "@nuxtjs/axios": "^5.13.6",
-    "@nuxtjs/pwa": "^3.3.5",
-    "core-js": "^3.15.1",
-    "nuxt": "^2.15.7",
-    "vuetify": "^2.5.5"
-  },
-  "devDependencies": {
-    "@nuxtjs/vuetify": "^1.12.1",
-    "eslint-config-prettier": "^8.3.0",
-    "prettier": "^2.3.2"
-  }
+	"name": "orderbyte",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"serve": "vue-cli-service serve",
+		"build": "vue-cli-service build",
+		"lint": "vue-cli-service lint"
+	},
+	"dependencies": {
+		"core-js": "^3.6.5",
+		"firebase": "^9.0.2",
+		"vue": "^2.6.11",
+		"vue-router": "^3.2.0",
+		"vuetify": "^2.4.0"
+	},
+	"devDependencies": {
+		"@vue/cli-plugin-babel": "~4.5.0",
+		"@vue/cli-plugin-eslint": "~4.5.0",
+		"@vue/cli-plugin-router": "~4.5.0",
+		"@vue/cli-service": "~4.5.0",
+		"@vue/eslint-config-prettier": "^6.0.0",
+		"babel-eslint": "^10.1.0",
+		"eslint": "^6.7.2",
+		"eslint-plugin-prettier": "^3.3.1",
+		"eslint-plugin-vue": "^6.2.2",
+		"prettier": "^2.2.1",
+		"sass": "~1.32.0",
+		"sass-loader": "^10.0.0",
+		"vue-cli-plugin-vuetify": "~2.4.2",
+		"vue-template-compiler": "^2.6.11",
+		"vuetify-loader": "^1.7.0"
+	}
 }
