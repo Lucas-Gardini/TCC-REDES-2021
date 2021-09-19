@@ -10,7 +10,7 @@
 					transition="scale-transition"
 					width="50"
 				/>
-				<h1 class="app-name">orderbYte</h1>
+				<h1 class="app-name">orderbYte {{ route.length > 0 ? "-" : "" }} {{ route }}</h1>
 			</div>
 			<div v-else class="d-flex align-center">
 				<v-img
@@ -92,6 +92,21 @@ export default {
 		user() {
 			this.loading = false;
 		},
+		$route() {
+			switch (this.$route.path) {
+				case "/":
+					this.route = "";
+					break;
+				case "/cardapios":
+					this.route = "cardápios";
+					break;
+				case "/sobre":
+					this.route = "sobre";
+					break;
+				default:
+					this.route = "";
+			}
+		},
 	},
 	data() {
 		return {
@@ -102,9 +117,23 @@ export default {
 				{ name: "Cardápios", href: "/cardapios", icon: "mdi-content-paste" },
 				{ name: "Sobre", href: "/sobre", icon: "mdi-information" },
 			],
+			route: "",
 		};
 	},
 	mounted() {
+		switch (this.$route.path) {
+			case "/":
+				this.route = "";
+				break;
+			case "/cardapios":
+				this.route = "cardápios";
+				break;
+			case "/sobre":
+				this.route = "Sobre";
+				break;
+			default:
+				this.route = "";
+		}
 		let tab = this.routes.findIndex((route) => route.href === this.$route.path);
 		this.tabs = tab;
 	},

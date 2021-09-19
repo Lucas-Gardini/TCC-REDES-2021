@@ -11,7 +11,7 @@
 				enter-active-class="animate__animated animate__slideInLeft"
 				leave-active-class="animate__animated animate__slideOutRight"
 			>
-				<router-view />
+				<router-view :isMobile="isMobile" />
 			</transition>
 		</v-main>
 	</v-app>
