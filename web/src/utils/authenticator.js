@@ -15,6 +15,7 @@ export default class Authenticator {
 						token: credential.accessToken,
 						info: result.user,
 					};
+					console.log(user);
 					resolve(user);
 				})
 				.catch((error) => {

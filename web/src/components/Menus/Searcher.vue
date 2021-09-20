@@ -3,11 +3,21 @@
 		<v-container>
 			<v-row>
 				<v-col cols="4" md="4">
-					<v-autocomplete :items="states" v-model="selectedState" clearable></v-autocomplete>
+					<v-autocomplete
+						label="Estado"
+						:items="states"
+						v-model="selectedState"
+						clearable
+					></v-autocomplete>
 				</v-col>
 
 				<v-col cols="4" md="4">
-					<v-autocomplete :items="cities" v-model="selectedCity" clearable></v-autocomplete>
+					<v-autocomplete
+						label="Cidade"
+						:items="cities"
+						v-model="selectedCity"
+						clearable
+					></v-autocomplete>
 				</v-col>
 
 				<v-col v-if="!isMobile" style="display: flex" cols="4" md="4">

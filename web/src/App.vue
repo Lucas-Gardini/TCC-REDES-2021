@@ -6,12 +6,17 @@
 			@authenticateUser="googleAuth"
 			@logoutUser="googleAuth(true)"
 		/>
-		<v-main style="overflow-x: hidden">
+		<v-main
+			:style="
+				isMobile ? 'overflow-x: hidden; margin-left: 56px' : 'overflow-x: hidden; margin-left: 256px'
+			"
+		>
 			<transition
-				enter-active-class="animate__animated animate__slideInLeft"
-				leave-active-class="animate__animated animate__slideOutRight"
+				:duration="{ enter: 500, leave: 100 }"
+				enter-active-class="animate__animated animate__fadeIn"
+				leave-active-class="animate__animated animate__fadeOut"
 			>
-				<router-view :isMobile="isMobile" />
+				<router-view :user="user" :isMobile="isMobile" />
 			</transition>
 		</v-main>
 	</v-app>

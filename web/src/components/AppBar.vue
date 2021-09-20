@@ -1,6 +1,84 @@
 <template>
-	<div>
-		<v-app-bar app color="#00B74A" dark>
+	<div class="app-navigation">
+		<v-navigation-drawer :v-model="true" :mini-variant="isMobile" fixed permanent>
+			<v-list-item class="px-2" style="padding-left: 4px !important">
+				<v-btn
+					v-if="!user.token"
+					:loading="loading"
+					:disabled="loading"
+					color="#fff"
+					class="ma-2 black--text"
+					@click="authenticateUser"
+					:fab="isMobile"
+					:x-small="isMobile"
+				>
+					<v-img
+						alt="Google Logo"
+						:class="isMobile ? 'shrink' : 'shrink mr-2'"
+						contain
+						src="../assets/google.png"
+						transition="scale-transition"
+						width="20"
+					/>
+					{{ isMobile ? "" : "Entrar" }}
+				</v-btn>
+				<v-btn
+					v-else
+					:loading="loading"
+					:disabled="loading"
+					color="#fff"
+					class="ma-2 black--text"
+					@click="logoutUser"
+					:fab="isMobile"
+					:x-small="isMobile"
+				>
+					<v-icon>mdi-logout</v-icon>
+					{{ isMobile ? "" : "Sair" }}
+				</v-btn>
+			</v-list-item>
+
+			<v-divider></v-divider>
+			<v-list v-if="user.info" dense :style="isMobile ? 'display: flex' : ''">
+				<div
+					class="v-avatar v-list-item__avatar"
+					:style="
+						isMobile
+							? 'height: 40px; min-width: 40px; width: 40px; margin: auto !important'
+							: 'height: 40px; min-width: 40px; width: 40px;'
+					"
+				>
+					<div class="v-image v-responsive theme--light">
+						<div class="v-responsive__sizer" style="padding-bottom: 100%"></div>
+						<div
+							class="v-image__image v-image__image--cover"
+							:style="`background-image: url('${user.info.photoURL}');
+								background-position: center center;`"
+						></div>
+						<div class="v-responsive__content" style="width: 128px"></div>
+					</div>
+				</div>
+				{{ isMobile ? "" : user.info.displayName }}
+			</v-list>
+			<v-divider></v-divider>
+
+			<v-list dense>
+				<v-list-item
+					v-for="(route, index) in routes"
+					@click="redirect(route.href)"
+					class="white--text"
+					:key="index"
+					link
+				>
+					<v-list-item-icon>
+						<v-icon>{{ route.icon }}</v-icon>
+					</v-list-item-icon>
+					<v-list-item-content>
+						<v-list-item-title style="color: #121212">{{ route.name }}</v-list-item-title>
+					</v-list-item-content>
+				</v-list-item>
+			</v-list>
+		</v-navigation-drawer>
+		<v-app-bar app color="#00B74A" dark :style="isMobile ? 'margin-left: 56px' : 'margin-left: 256px'">
 			<div v-if="!isMobile" class="d-flex align-center">
 				<v-img
 					alt="Orderbyte Logo"
@@ -23,55 +101,6 @@
 				/>
 				<h1 class="app-name mobile">orderbYte</h1>
 			</div>
-			<v-spacer />
-			<v-btn
-				v-if="!user.token"
-				:loading="loading"
-				:disabled="loading"
-				color="#fff"
-				class="ma-2 black--text"
-				@click="authenticateUser"
-			>
-				<v-img
-					alt="Google Logo"
-					class="shrink mr-2"
-					contain
-					src="../assets/google.png"
-					transition="scale-transition"
-					width="20"
-				/>
-				Entrar
-			</v-btn>
-			<v-btn
-				v-else
-				:loading="loading"
-				:disabled="loading"
-				color="#fff"
-				class="ma-2 black--text"
-				@click="logoutUser"
-			>
-				<v-icon>mdi-logout</v-icon>
-				Sair
-			</v-btn>
-			<template v-slot:extension>
-				<v-tabs
-					v-model="tabs"
-					background-color="#00B74A accent-4"
-					style="border-top: 0.1px solid #fff"
-					fixed-tabs
-				>
-					<v-tabs-slider></v-tabs-slider>
-					<v-tab
-						v-for="(route, index) in routes"
-						@click="redirect(route.href)"
-						class="white--text"
-						:key="index"
-					>
-						<v-icon v-html="route.icon" color="#fff"></v-icon>
-						<span v-if="!isMobile" style="padding-left: 5%; color: #fff">{{ route.name }}</span>
-					</v-tab>
-				</v-tabs>
-			</template>
 		</v-app-bar>
 	</div>
 </template>
@@ -156,9 +185,13 @@ export default {
 <style scoped>
 .app-name {
 	font-family: "Major Mono Display", monospace;
-	font-size: 1.5em;
+	font-size: 1em;
 }
 .app-name.mobile {
 	font-size: 1em;
+}
+.app-navigation {
+	display: flex;
+	flex-direction: row;
 }
 </style>
