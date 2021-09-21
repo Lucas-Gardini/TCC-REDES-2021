@@ -44,7 +44,7 @@
 					:style="
 						isMobile
 							? 'height: 40px; min-width: 40px; width: 40px; margin: auto !important'
-							: 'height: 40px; min-width: 40px; width: 40px;'
+							: 'height: 40px; min-width: 40px; width: 40px; margin-left: 10px'
 					"
 				>
 					<div class="v-image v-responsive theme--light">
@@ -132,8 +132,14 @@ export default {
 				case "/sobre":
 					this.route = "sobre";
 					break;
+				case "/cardapio":
+					this.route = `cardápio de ${this.$route.params.id.toLowerCase()}`;
+					break;
 				default:
 					this.route = "";
+			}
+			if (this.$route.path.includes("cardapio") && !this.$route.path.includes("cardapios")) {
+				this.route = `cardápio de ${this.$route.params.id.toLowerCase()}`;
 			}
 		},
 	},
@@ -158,13 +164,14 @@ export default {
 				this.route = "cardápios";
 				break;
 			case "/sobre":
-				this.route = "Sobre";
+				this.route = "sobre";
 				break;
 			default:
 				this.route = "";
 		}
-		let tab = this.routes.findIndex((route) => route.href === this.$route.path);
-		this.tabs = tab;
+		if (this.$route.path.includes("cardapio") && !this.$route.path.includes("cardapios")) {
+			this.route = `cardápio de ${this.$route.params.id.toLowerCase()}`;
+		}
 	},
 	methods: {
 		redirect(route) {

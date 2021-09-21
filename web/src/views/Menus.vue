@@ -12,9 +12,54 @@
 				leave-active-class="animate__animated animate__fadeOut"
 			>
 				<div v-if="page === 1">
-					<searcher :isMobile="isMobile" />
+					<searcher :isMobile="isMobile" @setFilter="filter" />
+					<v-list>
+						<v-list-item v-for="(menu, index) in allMenus" :key="index">
+							<v-card width="100%">
+								<v-card-title>
+									<v-row>
+										<v-col cols="1">
+											<v-avatar>
+												<img
+													:src="
+														menu.image
+															? menu.image
+															: `https://ui-avatars.com/api/?name=${menu.data.restaurant}`
+													"
+													alt="John"
+													size="128"
+												/>
+											</v-avatar>
+										</v-col>
+										<v-col cols="11">
+											{{ menu.data.restaurant }}
+											<v-card-subtitle
+												style="margin-left: 0 !important; padding-left: 0 !important"
+											>
+												{{
+													menu.data.location.state +
+													" - " +
+													menu.data.location.city +
+													" - " +
+													menu.data.location.district +
+													" - " +
+													menu.data.location.street
+												}}
+											</v-card-subtitle>
+										</v-col>
+									</v-row>
+								</v-card-title>
+								<v-card-actions>
+									<v-spacer></v-spacer>
+									<v-btn color="#00B74A" dark @click="redirect(menu.data.restaurant)"
+										><v-icon left>mdi-content-paste</v-icon> Cardápio</v-btn
+									>
+								</v-card-actions>
+							</v-card>
+						</v-list-item>
+					</v-list>
 				</div>
-				<div v-else-if="page === 2">
+				<div v-else-if="page === 2" style="margin-bottom: 5%">
 					<transition
 						enter-active-class="animate__animated animate__fadeIn"
 						leave-active-class="animate__animated animate__fadeOut"
@@ -38,7 +83,7 @@
 						<v-icon>mdi-plus</v-icon>
 						Novo Cardápio
 					</v-btn>
-					<div v-for="(menu, index) in menus" :key="index">
+					<div v-for="(menu, index) in menus" :key="index" style="margin-top: 5%">
 						<new-menu
 							v-if="menu.editing"
 							:menu="menu"
@@ -53,23 +98,33 @@
 							<v-card-title>{{ menu.data.restaurant }}</v-card-title>
 							<v-divider />
 							<v-card-subtitle>Produtos</v-card-subtitle>
-							<v-list>
-								<v-list-item v-for="(product, index) in menu.data.products" :key="index">
-									<v-card-actions>
-										<v-card-text>{{ product.productName }}</v-card-text>
-										<v-divider />
-										<v-card-text>{{ product.price }}</v-card-text>
-									</v-card-actions>
-									<v-list>
-										<v-list-item
-											v-for="(ingredient, index) in product.ingredients"
-											:key="index"
-										>
-											{{ ingredient.ingredientName }}
-										</v-list-item>
-									</v-list>
-								</v-list-item>
-							</v-list>
+							<v-card-text>
+								<v-expansion-panels>
+									<v-expansion-panel
+										v-for="(product, index) in menu.data.products"
+										:key="index"
+									>
+										<v-expansion-panel-header style="width: 100%; display: flex">
+											<v-card-text style="margin-right: auto"
+												><h4>{{ product.productName }}</h4></v-card-text
+											>
+											<v-card-text style="margin-left: auto"
+												><h4>{{ product.price }}</h4></v-card-text
+											>
+										</v-expansion-panel-header>
+										<v-expansion-panel-content>
+											<v-list>
+												<v-list-item
+													v-for="(ingredient, index) in product.productIngredients"
+													:key="index"
+												>
+													{{ ingredient }}
+												</v-list-item>
+											</v-list>
+										</v-expansion-panel-content>
+									</v-expansion-panel>
+								</v-expansion-panels>
+							</v-card-text>
 							<v-footer>
 								<v-spacer />
 								<v-btn color="#00B74A" dark @click="menu.editing = !menu.editing">
@@ -88,7 +143,17 @@
 import Searcher from "../components/Menus/Searcher.vue";
 import NewMenu from "../components/Menus/NewMenu.vue";
 import firebase from "../firebase.js";
-import { collection, addDoc, getDocs, doc, query, where, updateDoc, onSnapshot } from "firebase/firestore";
+import {
+	collection,
+	addDoc,
+	getDocs,
+	doc,
+	query,
+	where,
+	updateDoc,
+	onSnapshot,
+	limit,
+} from "firebase/firestore";
 import Swal from "sweetalert2";
 export default {
 	components: { Searcher, NewMenu },
@@ -113,6 +178,7 @@ export default {
 			this.getUserMenus();
 		});
 		this.getUserMenus();
+		this.getAllMenus();
 	},
 	beforeDestroy() {
 		this.unsub();
@@ -122,6 +188,7 @@ export default {
 			page: 1,
 			isAddingNewMenu: false,
 			menus: [],
+			allMenus: [],
 			unsub: null,
 		};
 	},
@@ -144,6 +211,7 @@ export default {
 			} catch (error) {
 				console.error("Error adding document: ", error);
 			}
+			this.getUserMenus();
 		},
 		async updateMenu(menu) {
 			this.isAddingNewMenu = false;
@@ -163,6 +231,7 @@ export default {
 			} catch (error) {
 				console.log("Error updating document: ", error);
 			}
+			this.getUserMenus();
 		},
 		async getUserMenus() {
 			if (this.user.info) {
@@ -176,6 +245,44 @@ export default {
 					console.error("Error getting document: ", error);
 				}
 			}
+		},
+		async getAllMenus() {
+			try {
+				const q = query(collection(firebase.db, "menus"), limit(10));
+				const querySnapshot = await getDocs(q);
+				this.allMenus = querySnapshot.docs.map((doc) => {
+					return { data: doc.data() };
+				});
+			} catch (error) {
+				console.error("Error getting document: ", error);
+			}
+		},
+		async filter(state, city) {
+			where("location.state", "==", state);
+			where("location.city", "==", city);
+			try {
+				let q;
+				if (state && city) {
+					q = query(
+						collection(firebase.db, "menus"),
+						where("location.state", "==", state),
+						where("location.city", "==", city)
+					);
+				} else if (state && !city) {
+					q = query(collection(firebase.db, "menus"), where("location.state", "==", state));
+				} else {
+					q = query(collection(firebase.db, "menus"));
+				}
+				const querySnapshot = await getDocs(q);
+				this.allMenus = querySnapshot.docs.map((doc) => {
+					return { data: doc.data() };
+				});
+			} catch (error) {
+				console.error("Error getting document: ", error);
+			}
+		},
+		redirect(restaurantID) {
+			this.$router.push(`/cardapio/${restaurantID}`);
 		},
 	},
 };
