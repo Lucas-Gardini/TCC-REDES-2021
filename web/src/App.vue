@@ -34,13 +34,14 @@ export default {
 		user: {},
 		isMobile: false,
 	}),
-	mounted() {
+	async mounted() {
 		this.checkMobile();
 		window.addEventListener("resize", this.checkMobile);
+		this.user = await this.Authenticator.checkAuth();
 	},
-	beforeDestroy() {
-		this.Authenticator.googleLogout();
-	},
+	// beforeDestroy() {
+	// 	this.Authenticator.googleLogout();
+	// },
 	methods: {
 		async googleAuth(logout) {
 			if (logout) {
@@ -48,6 +49,7 @@ export default {
 				return;
 			}
 			this.user = await this.Authenticator.googleAuth();
+			console.log(this.user);
 		},
 
 		checkMobile() {

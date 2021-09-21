@@ -3,7 +3,7 @@
 		<v-navigation-drawer :v-model="true" :mini-variant="isMobile" fixed permanent>
 			<v-list-item class="px-2" style="padding-left: 4px !important">
 				<v-btn
-					v-if="!user.token"
+					v-if="!user.info"
 					:loading="loading"
 					:disabled="loading"
 					color="#fff"
