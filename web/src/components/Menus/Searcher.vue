@@ -4,6 +4,7 @@
 			<v-row>
 				<v-col cols="4" md="4">
 					<v-autocomplete
+						type="search"
 						label="Estado"
 						:items="states"
 						v-model="selectedState"
@@ -13,6 +14,7 @@
 
 				<v-col cols="4" md="4">
 					<v-autocomplete
+						type="search"
 						label="Cidade"
 						:items="cities"
 						v-model="selectedCity"

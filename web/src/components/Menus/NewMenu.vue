@@ -1,13 +1,15 @@
 <template>
 	<v-stepper v-model="step">
 		<v-stepper-header>
-			<v-stepper-step color="#00B74A" :complete="step > 1" step="1">
-				Nome do Restaurante
-			</v-stepper-step>
+			<v-stepper-step color="error" :complete="step > 1" step="1"> Nome do Restaurante </v-stepper-step>
 
 			<v-divider></v-divider>
 
-			<v-stepper-step color="#00B74A" :complete="step > 2" step="2"> Produtos </v-stepper-step>
+			<v-stepper-step color="error" :complete="step > 2" step="2"> Produtos </v-stepper-step>
+
+			<v-divider></v-divider>
+
+			<v-stepper-step color="error" :complete="step > 3" step="3"> Localização </v-stepper-step>
 		</v-stepper-header>
 
 		<v-stepper-items>
@@ -20,7 +22,7 @@
 
 				<v-btn color="#00B74A" @click="step = 2" dark> Continuar </v-btn>
 
-				<v-btn text @click="$emit('cancel')"> Cancelar </v-btn>
+				<v-btn text @click="clearForm(), $emit('cancel')"> Cancelar </v-btn>
 			</v-stepper-content>
 
 			<v-stepper-content step="2">
@@ -78,20 +80,89 @@
 				<div style="margin-bottom: 30px">
 					<v-btn @click="newProduct">Novo Produto</v-btn>
 				</div>
-				<v-btn color="#00B74A" @click="$emit('newMenu', newMenu)" dark> Enviar </v-btn>
+				<v-btn color="#00B74A" @click="step = 3" dark> Enviar </v-btn>
 
-				<v-btn text @click="step = 1"> Cancelar </v-btn>
+				<v-btn text @click="step = 1"> Voltar </v-btn>
+			</v-stepper-content>
+			<v-stepper-content step="3">
+				<v-col cols="4" md="4">
+					<v-autocomplete
+						label="Estado"
+						:items="states"
+						v-model="selectedState"
+						clearable
+					></v-autocomplete>
+				</v-col>
+
+				<v-col cols="4" md="4">
+					<v-autocomplete
+						label="Cidade"
+						:items="cities"
+						v-model="selectedCity"
+						clearable
+					></v-autocomplete>
+				</v-col>
+
+				<v-btn
+					color="#00B74A"
+					@click="
+						clearForm(), newMenu.id ? $emit('updateMenu', newMenu) : $emit('newMenu', newMenu)
+					"
+					dark
+				>
+					Enviar
+				</v-btn>
+
+				<v-btn text @click="step = 2"> Voltar </v-btn>
 			</v-stepper-content>
 		</v-stepper-items>
 	</v-stepper>
 </template>
 
 <script>
-// Local Directive
 import { mask } from "vue-the-mask";
+import { states } from "../../utils/estados-cidades.json";
 
 export default {
 	directives: { mask },
+	props: {
+		menu: {
+			type: Object,
+			required: false,
+		},
+	},
+	watch: {
+		menu() {
+			this.newMenu = {
+				restaurant: this.menu.data.restaurant,
+				products: this.menu.data.products,
+				id: this.menu.id,
+				location: { state: this.menu.location.state, city: this.menu.location.city },
+			};
+		},
+		selectedState() {
+			states.forEach((state) => {
+				if (state.initials === this.selectedState) {
+					return (this.cities = state.cities);
+				}
+			});
+		},
+		selectedCity() {
+			this.newMenu.location = { state: this.selectedState, city: this.selectedCity };
+		},
+	},
+	mounted() {
+		if (this.menu) {
+			this.newMenu = {
+				restaurant: this.menu.data.restaurant,
+				products: this.menu.data.products,
+				id: this.menu.id,
+			};
+		}
+		states.forEach((state) => {
+			this.states.push(state.initials);
+		});
+	},
 	data() {
 		return {
 			step: 1,
@@ -99,13 +170,17 @@ export default {
 				restaurant: "",
 				products: [],
 			},
+			states: [],
+			selectedState: null,
+			cities: [],
+			selectedCity: null,
 		};
 	},
 	methods: {
 		newProduct() {
 			this.newMenu.products.push({
 				productName: "",
-				productPrice: 0,
+				price: "R$ 0",
 				productIngredients: [],
 			});
 		},
@@ -114,6 +189,17 @@ export default {
 				this.newMenu.products[prodIndex].productIngredients = [];
 			}
 			this.newMenu.products[prodIndex].productIngredients.push("");
+		},
+		clearForm() {
+			this.newMenu = {
+				restaurant: "",
+				products: [],
+				id: "",
+				location: {},
+			};
+			this.selectedState = null;
+			this.selectedCity = null;
+			this.step = 1;
 		},
 	},
 };

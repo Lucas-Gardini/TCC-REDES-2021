@@ -43,7 +43,7 @@ export default {
 				{
 					name: "Lucas Gardini Dias",
 					function: "Desenvolvedor Full-Stack",
-					photo: "https://scontent.fsjp8-1.fna.fbcdn.net/v/t1.6435-1/p200x200/101030643_1333441810177787_439376687684124672_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=7206a8&_nc_ohc=8odtb1Y26goAX_MOzlf&_nc_ht=scontent.fsjp8-1.fna&oh=2370033eddcab159fd60a8942fc8f86f&oe=616B0AB1",
+					photo: "https://i.imgur.com/EFJTt5S.jpg",
 					social: {
 						color: "black",
 						icon: "mdi-github",
@@ -53,7 +53,7 @@ export default {
 				{
 					name: "Gabriel Luiz Oliveira",
 					function: "Podre",
-					photo: "../assets/team/luiz.png",
+					photo: "https://i.imgur.com/6vxTjxy.jpg",
 					social: {
 						color: "blue",
 						icon: "mdi-map-marker-question",
@@ -63,7 +63,7 @@ export default {
 				{
 					name: "Gabriela Da Silva Ornellas",
 					function: "Podre",
-					photo: "https://scontent.fsjp8-1.fna.fbcdn.net/v/t1.6435-1/p200x200/106574922_1711632502328639_8855364679354210058_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=7206a8&_nc_ohc=ZNu5QgVVJHYAX92Ksk9&_nc_ht=scontent.fsjp8-1.fna&oh=34efc84532877ebae6d0a0a2a18f3297&oe=616BECDE",
+					photo: "https://i.imgur.com/9NA4lLd.jpg",
 					social: {
 						color: "pink",
 						icon: "mdi-instagram",
@@ -73,7 +73,7 @@ export default {
 				{
 					name: "Thiago Aio",
 					function: "Podre",
-					photo: "https://scontent.fsjp8-1.fna.fbcdn.net/v/t31.18172-1/p200x200/24302343_1737924019848157_6938408309947979548_o.jpg?_nc_cat=104&ccb=1-5&_nc_sid=7206a8&_nc_ohc=R4kAg1UyuSsAX-xgwWV&tn=xPw77SkLpKKbWjqO&_nc_ht=scontent.fsjp8-1.fna&oh=047e83d20671447de5aed54e9efcd0b8&oe=616D5E52",
+					photo: "https://i.imgur.com/HXVL7J4.jpg",
 					social: {
 						color: "blue",
 						icon: "mdi-map-marker-question",
@@ -83,11 +83,11 @@ export default {
 				{
 					name: "Pedro Comelli Neto",
 					function: "Podre",
-					photo: "https://scontent.fsjp8-1.fna.fbcdn.net/v/t1.18169-1/c0.7.200.200a/p200x200/13439012_472461412949735_7719418409905100868_n.jpg?_nc_cat=106&ccb=1-5&_nc_sid=7206a8&_nc_ohc=uUVE_0QnhYoAX9GePnG&_nc_ht=scontent.fsjp8-1.fna&oh=2ea8acc73b7d5f4dfac67d03e58ae4a3&oe=616B594D",
+					photo: "https://i.imgur.com/LKPmHNZ.jpg",
 					social: {
-						color: "blue",
-						icon: "mdi-map-marker-question",
-						href: "",
+						color: "pink",
+						icon: "mdi-instagram",
+						href: "https://www.instagram.com/pedrocomelli/",
 					},
 				},
 			],
