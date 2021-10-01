@@ -11,10 +11,12 @@
 	},
 	"dependencies": {
 		"axios": "^0.21.1",
+		"intl": "^1.2.5",
 		"react": "17.0.1",
 		"react-native": "0.64.2",
 		"react-native-appearance": "^0.3.4",
 		"react-native-elements": "^3.4.2",
+		"react-native-paper": "^4.9.2",
 		"react-native-ratings": "^8.1.0",
 		"react-native-safe-area-context": "^3.2.0",
 		"react-native-sensitive-info": "^6.0.0-alpha.9",
