@@ -24,6 +24,7 @@ import {
 import KeyStorage from "react-native-sensitive-info";
 import axios from "axios";
 import {useHistory} from "react-router-native";
+import Orders from "../../components/Orders";
 
 export default () => {
 	const {width} = useWindowDimensions();
@@ -306,7 +307,9 @@ export default () => {
 							key={i}>
 							<Card.Title
 								style={{
-									backgroundColor: "#00B74A",
+									backgroundColor: product.available
+										? "#00B74A"
+										: "#F93154",
 									color: "#fff",
 									padding: 5,
 								}}>
@@ -553,7 +556,24 @@ export default () => {
 					))}
 				</ScrollView>
 			) : (
-				<View style={{width: "100%"}} />
+				<View style={{height: "100%"}}>
+					{!isLoading ? (
+						<Orders
+							serverAddress={function () {
+								return new Promise((resolve, reject) => {
+									KeyStorage.getItem("serverAddress", {
+										sharedPreferencesName: "appConfig",
+										keychainService: "appConfig",
+									}).then(serverAddress => {
+										resolve(serverAddress);
+									});
+								});
+							}}
+						/>
+					) : (
+						<View />
+					)}
+				</View>
 			)}
 			{isLoading ? (
 				<ActivityIndicator
