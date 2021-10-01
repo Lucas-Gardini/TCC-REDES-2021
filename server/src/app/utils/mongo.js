@@ -16,9 +16,7 @@ class mongoDB {
 			this.connections.push(conn);
 			conn.on("close", () => {
 				console.log(
-					baianisse.red(
-						`O WebSocket '${this.connections.indexOf(conn)}' se desconectou!'`
-					)
+					baianisse.red(`O WebSocket '${this.connections.indexOf(conn)}' se desconectou!'`)
 				);
 				const index = this.connections.indexOf(conn);
 				if (index > -1) {
