@@ -61,7 +61,7 @@ export default () => {
 						.then(apiTables => {
 							setTables(apiTables.data);
 							setNewRequest({
-								table_id: "",
+								table_id: apiTables.data[0]._id,
 								table_number: apiTables.data[0].table,
 								observations: "",
 								products: [],
@@ -290,7 +290,7 @@ export default () => {
 							{tables.map((table, i) => (
 								<ListItem
 									disabled={!table.available}
-									disabledStyle={{backgroundColor: "gray"}}
+									disabledStyle={{display: "none"}}
 									onPress={() => {
 										const newTableOnRequest = newRequest;
 										newTableOnRequest.table_number =
@@ -450,140 +450,24 @@ export default () => {
 								</Text>
 							</Card.Title>
 						</Card>
-						// <ListItem key={i} bottomDivider>
-						// 	<ListItem.Content>
-						// 		<ListItem.Title>
-						// 			<View>
-						// 				<Text style={{fontSize: 25}}>
-						// 					{product.name} -{' '}
-						// 					{product.available
-						// 						? 'Disponível'
-						// 						: 'Indisponível'}
-						// 				</Text>
-						// 			</View>
-						// 		</ListItem.Title>
-						// 		<ListItem.Subtitle>
-						// 			<View
-						// 				style={{
-						// 					display: 'flex',
-						// 					flex: 1,
-						// 					flexDirection: 'column',
-						// 				}}>
-						// 				{product.ingredients.map(
-						// 					(ingredient, ii) => {
-						// 						return (
-						// 							<View key={ii}>
-						// 								{/* <Button
-						// 									buttonStyle={{
-						// 										justifyContent:
-						// 											'flex-start',
-						// 										width:
-						// 											deviceDimensions.width -
-						// 											35,
-						// 									}}
-						// 									title={}
-						// 									type="clear"
-						// 								/> */}
-						// 								<Text>
-						// 									• {ingredient}
-						// 								</Text>
-						// 							</View>
-						// 						);
-						// 					},
-						// 				)}
-						// 			</View>
-						// 		</ListItem.Subtitle>
-						// 		<View
-						// 			style={{
-						// 				flexDirection: 'row',
-						// 				marginTop: 15,
-						// 			}}>
-						// 			<View style={{marginRight: 15}}>
-						// 				<Button
-						// 					buttonStyle={{
-						// 						backgroundColor: '#fff',
-						// 					}}
-						// 					icon={
-						// 						<Icon
-						// 							type="font-awesome-5"
-						// 							name="plus"
-						// 							color="#00B74A"
-						// 							size={15}
-						// 						/>
-						// 					}
-						// 					onPress={() => {
-						// 						manageNewProducts(product, 1);
-						// 					}}
-						// 				/>
-						// 			</View>
-						// 			<View style={{marginRight: 15}}>
-						// 				<Button
-						// 					buttonStyle={{
-						// 						backgroundColor: '#fff',
-						// 					}}
-						// 					icon={
-						// 						<Icon
-						// 							type="font-awesome-5"
-						// 							name="minus"
-						// 							color="#F93154"
-						// 							size={15}
-						// 						/>
-						// 					}
-						// 					onPress={() => {
-						// 						manageNewProducts(product, -1);
-						// 					}}
-						// 				/>
-						// 			</View>
-						// 			<View>
-						// 				<Button
-						// 					buttonStyle={{
-						// 						backgroundColor: '#fff',
-						// 					}}
-						// 					titleStyle={{
-						// 						color: '#121212',
-						// 					}}
-						// 					disabled={true}
-						// 					disabledStyle={{
-						// 						backgroundColor: '#fff',
-						// 					}}
-						// 					disabledTitleStyle={{
-						// 						color: '#121212',
-						// 					}}
-						// 					title={
-						// 						newRequest.products.findIndex(
-						// 							prod => {
-						// 								return (
-						// 									prod.productId ===
-						// 									product._id
-						// 								);
-						// 							},
-						// 						) === -1
-						// 							? 'Quantidade: 0'
-						// 							: `Quantidade: ${
-						// 									newRequest.products[
-						// 										newRequest.products.findIndex(
-						// 											prod => {
-						// 												return (
-						// 													prod.productId ===
-						// 													product._id
-						// 												);
-						// 											},
-						// 										)
-						// 									].quantity
-						// 									// eslint-disable-next-line no-mixed-spaces-and-tabs
-						// 							  }`
-						// 					}
-						// 				/>
-						// 			</View>
-						// 		</View>
-						// 	</ListItem.Content>
-						// </ListItem>
 					))}
 				</ScrollView>
 			) : (
 				<View style={{height: "100%"}}>
 					{!isLoading ? (
 						<Orders
+							continueOrder={table => {
+								setNewRequest({
+									table_id: tables.find(table2 => {
+										return table2.table === table;
+									})._id,
+									table_number: table,
+									products: [],
+									observations: "",
+								});
+								setIsMakingNewRequest(true);
+								setOpen(false);
+							}}
 							serverAddress={function () {
 								return new Promise((resolve, reject) => {
 									KeyStorage.getItem("serverAddress", {
@@ -725,7 +609,7 @@ const styles = StyleSheet.create({
 	},
 	speedDialMenu: {
 		position: "absolute",
-		bottom: "-5%",
+		bottom: "0%",
 		right: 0,
 		// backgroundColor: '#00B74A',
 	},

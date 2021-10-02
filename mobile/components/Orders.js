@@ -8,17 +8,15 @@ import axios from "axios";
 require("intl");
 require("intl/locale-data/jsonp/pt-BR");
 
-export default function ({serverAddress}) {
+export default function ({serverAddress, continueOrder}) {
 	const {width} = useWindowDimensions();
 	const [orders, setOrders] = useState([]);
 
 	useEffect(() => {
 		function getRequests(address) {
-			console.log(`http://${address}/requests/gettoday`);
 			axios
 				.get(`http://${address}/requests/gettoday`)
 				.then(apiRequests => {
-					console.log(apiRequests.data[0].products);
 					setOrders(apiRequests.data);
 				})
 				.catch(() => {
@@ -55,11 +53,19 @@ export default function ({serverAddress}) {
 		}).format(price);
 	}
 
+	function onPressContinueOrder(table) {
+		continueOrder(table);
+	}
+
 	return (
 		<ScrollView style={styles.scrollview}>
 			{orders.map((order, i) => (
 				<Card containerStyle={styles.cardContainer} key={i}>
-					<Card.Title style={styles.cardTitle}>
+					<Card.Title
+						style={styles.cardTitle}
+						onPress={() => {
+							onPressContinueOrder(order.tableDoc.table);
+						}}>
 						<View
 							style={{
 								display: "flex",
