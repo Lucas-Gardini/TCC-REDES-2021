@@ -19,6 +19,8 @@ async function createWindow() {
 		frame: false,
 		resizable: false,
 		fullscreenable: false,
+		thickFrame: false,
+		titleBarStyle: "hidden",
 	});
 
 	// Create the browser window.
@@ -33,7 +35,7 @@ async function createWindow() {
 			enableRemoteModule: true,
 		},
 		frame: false,
-		show: false,
+		show: true,
 	});
 
 	if (process.env.WEBPACK_DEV_SERVER_URL) {
