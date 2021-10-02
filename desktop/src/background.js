@@ -9,9 +9,18 @@ require("@electron/remote/main").initialize();
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: true, standard: true } }]);
 
-var win;
+var win, splash;
 
 async function createWindow() {
+	splash = new BrowserWindow({
+		width: 300,
+		height: 125,
+		show: true,
+		frame: false,
+		resizable: false,
+		fullscreenable: false,
+	});
+
 	// Create the browser window.
 	win = new BrowserWindow({
 		width: 800,
@@ -24,14 +33,17 @@ async function createWindow() {
 			enableRemoteModule: true,
 		},
 		frame: false,
+		show: false,
 	});
 
 	if (process.env.WEBPACK_DEV_SERVER_URL) {
 		// Load the url of the dev server if in development mode
+		await splash.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}/splash.html`);
 		await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
 	} else {
 		createProtocol("app");
 		// Load the index.html when not in development
+		splash.loadURL("app://./splash.html");
 		win.loadURL("app://./index.html");
 	}
 }
@@ -56,6 +68,11 @@ app.on("activate", () => {
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
 	createWindow();
+});
+
+ipcMain.once("loaded", () => {
+	win.show();
+	splash.close();
 });
 
 ipcMain.handle("manageWindow", async (event, ...args) => {

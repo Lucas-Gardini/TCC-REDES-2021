@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from "react";
 import {
@@ -21,6 +22,7 @@ import {
 	Input,
 	Card,
 } from "react-native-elements";
+import {DataTable} from "react-native-paper";
 import KeyStorage from "react-native-sensitive-info";
 import axios from "axios";
 import {useHistory} from "react-router-native";
@@ -151,6 +153,20 @@ export default () => {
 			});
 	}
 
+	function toCurrency(_products, single = false) {
+		let price = 0;
+		single
+			? (price = _products)
+			: _products.forEach(product => {
+					price += product.price * product.quantity;
+			  });
+
+		return new Intl.NumberFormat("pt-BR", {
+			style: "currency",
+			currency: "BRL",
+		}).format(price);
+	}
+
 	return (
 		<View style={styles.mainContainer}>
 			<Overlay
@@ -186,6 +202,7 @@ export default () => {
 				<View>
 					<Input
 						placeholder="Observações"
+						multiline={true}
 						leftIcon={{
 							type: "font-awesome-5",
 							solid: true,
@@ -211,18 +228,26 @@ export default () => {
 					<Text>Produtos: </Text>
 				</View>
 				<ScrollView style={{maxHeight: 200}}>
-					{newRequest.products.map((product, i) => (
-						<View
-							style={{
-								alignItems: "flex-start",
-								justifyContent: "flex-start",
-							}}
-							key={i}>
-							<Text>
-								{product.name} | x{product.quantity}
-							</Text>
-						</View>
-					))}
+					<DataTable>
+						<DataTable.Header>
+							<DataTable.Title>Produto</DataTable.Title>
+							<DataTable.Title numeric>
+								Quantidade
+							</DataTable.Title>
+							<DataTable.Title numeric>Preço Un.</DataTable.Title>
+						</DataTable.Header>
+						{newRequest.products.map((product, i) => (
+							<DataTable.Row key={i}>
+								<DataTable.Cell>{product.name}</DataTable.Cell>
+								<DataTable.Cell numeric>
+									{product.quantity}
+								</DataTable.Cell>
+								<DataTable.Cell numeric>
+									{toCurrency(product.price, true)}
+								</DataTable.Cell>
+							</DataTable.Row>
+						))}
+					</DataTable>
 				</ScrollView>
 				<Button
 					type="clear"
@@ -235,7 +260,7 @@ export default () => {
 			</Overlay>
 			{isMakingNewRequest && !isLoading ? (
 				<ScrollView>
-					<Text h1={true} style={{marginLeft: 10}}>
+					{/* <Text h1={true} style={{marginLeft: 10}}>
 						<Icon
 							name="plus"
 							type="font-awesome-5"
@@ -243,7 +268,7 @@ export default () => {
 							style={{marginRight: 10}}
 						/>
 						Novo Pedido
-					</Text>
+					</Text> */}
 					<ListItem>
 						<Button
 							buttonStyle={{
@@ -700,7 +725,7 @@ const styles = StyleSheet.create({
 	},
 	speedDialMenu: {
 		position: "absolute",
-		bottom: 0,
+		bottom: "-5%",
 		right: 0,
 		// backgroundColor: '#00B74A',
 	},

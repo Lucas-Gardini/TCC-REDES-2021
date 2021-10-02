@@ -222,7 +222,7 @@ export default function ({serverAddress}) {
 const styles = StyleSheet.create({
 	scrollview: {
 		minHeight: "90%",
-		maxHeight: "90%",
+		maxHeight: "95%",
 	},
 	cardContainer: {
 		marginLeft: 5,

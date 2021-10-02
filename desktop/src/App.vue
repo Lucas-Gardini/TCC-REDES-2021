@@ -12,6 +12,7 @@
 </template>
 
 <script>
+const { ipcRenderer } = require("electron");
 import ToolBar from "./components/ToolBar.vue";
 import SideNav from "./components/SideNav.vue";
 import axios from "axios";
@@ -33,6 +34,9 @@ export default {
 		},
 	},
 	components: { ToolBar, SideNav },
+	mounted() {
+		ipcRenderer.send("loaded");
+	},
 };
 </script>
 <style>
