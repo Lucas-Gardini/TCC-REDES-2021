@@ -153,10 +153,10 @@ android {
             keyPassword 'android'
         }
 		release {
-			storeFile file('orderify.keystore')
-			storePassword 'orderify'
-			keyAlias 'odrfy'
-			keyPassword 'orderify'
+			storeFile file('orderbyte.keystore')
+			storePassword 'orderbyte'
+			keyAlias 'orderbyte'
+			keyPassword 'orderbyte'
     	}
     }
     buildTypes {
