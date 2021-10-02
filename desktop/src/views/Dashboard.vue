@@ -15,14 +15,19 @@
 						<MDBCardBody>
 							<MDBCardTitle>Vendas Realizadas no Mês</MDBCardTitle>
 							<MDBRow class="d-flex">
-								<MDBCol md="6">
-									<MDBCardText style="font-size: 0.9em">Quantidade</MDBCardText>
-									0
-								</MDBCol>
-								<MDBCol md="6">
-									<MDBCardText style="font-size: 0.9em">Total Arrecadado</MDBCardText>
-									R$00,00
-								</MDBCol>
+								<chart
+									chartType="line"
+									:chartData="{
+										labels: ['Hoje', 'Total'],
+										datasets: [
+											{
+												label: '',
+												data: [0, 1000],
+												backgroundColor: ['#00B74A', '#1266F1'],
+											},
+										],
+									}"
+								/>
 							</MDBRow>
 						</MDBCardBody>
 					</MDBCard>
@@ -106,6 +111,7 @@ import {
 	MDBCardTitle,
 	MDBIcon,
 } from "mdb-vue-ui-kit";
+import Chart from "../components/Chart.vue";
 
 export default {
 	components: {
@@ -118,6 +124,7 @@ export default {
 		MDBCardText,
 		MDBCardTitle,
 		MDBIcon,
+		Chart,
 	},
 	data: () => {
 		return {
