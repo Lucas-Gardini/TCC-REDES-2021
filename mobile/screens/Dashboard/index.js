@@ -362,7 +362,13 @@ export default () => {
 										}}>
 										<Button
 											buttonStyle={{
-												backgroundColor: "#fff",
+												backgroundColor:
+													product.available
+														? "#fff"
+														: "#F93154",
+												opacity: product.available
+													? 1
+													: 0,
 											}}
 											icon={
 												<Icon
@@ -379,7 +385,13 @@ export default () => {
 										<Text> </Text>
 										<Button
 											buttonStyle={{
-												backgroundColor: "#fff",
+												backgroundColor:
+													product.available
+														? "#fff"
+														: "#F93154",
+												opacity: product.available
+													? 1
+													: 0,
 											}}
 											icon={
 												<Icon
@@ -445,7 +457,6 @@ export default () => {
 														},
 													)
 												].quantity
-												// eslint-disable-next-line no-mixed-spaces-and-tabs
 										  }`}
 								</Text>
 							</Card.Title>
@@ -500,7 +511,7 @@ export default () => {
 				/>
 			) : (
 				<SpeedDial
-					style={styles.speedDialMenu}
+					// style={styles.speedDialMenu}
 					color="#00B74A"
 					isOpen={open}
 					icon={
@@ -609,7 +620,7 @@ const styles = StyleSheet.create({
 	},
 	speedDialMenu: {
 		position: "absolute",
-		bottom: "0%",
+		bottom: "-1%",
 		right: 0,
 		// backgroundColor: '#00B74A',
 	},
