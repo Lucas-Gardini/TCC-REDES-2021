@@ -95,6 +95,24 @@ const requestsController = {
 		const todayQuantity = today.length;
 		res.json({ today: todayQuantity, all: allQuantity });
 	},
+	async getSells(req, res) {
+		const currentYear = new Date().getFullYear();
+		var firstDay = new Date(currentYear, 0, 1);
+		var lastDay = new Date(currentYear, 11, 31);
+
+		const thisYearRequests = await requests.find({ date: { $gte: firstDay, $lt: lastDay } }).exec();
+		let months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+		let monthsMoney = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+		thisYearRequests.forEach((request) => {
+			const monthIndex = new Date(request.date).getMonth();
+			months[monthIndex] = months[monthIndex] + 1;
+
+			request.products.forEach((product) => {
+				monthsMoney[monthIndex] = monthsMoney[monthIndex] + product.quantity * product.price;
+			});
+		});
+		res.json({ monthSellsQuantity: months, monthSellsMoney: monthsMoney });
+	},
 };
 
 module.exports = requestsController;

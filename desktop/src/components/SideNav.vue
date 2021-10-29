@@ -98,7 +98,6 @@
 </template>
 
 <script>
-import detectGender from "detect-gender";
 import { MDBModal, MDBModalHeader, MDBModalTitle, MDBModalFooter, MDBBtn, MDBTooltip } from "mdb-vue-ui-kit";
 import { ref } from "vue";
 import axios from "axios";
@@ -153,12 +152,7 @@ export default {
 		if (localStorage.currentUser !== null || typeof localStorage.currentUser !== "undefined") {
 			this.user = localStorage.currentUser;
 			if (localStorage.currentUser !== "admin") {
-				const GENDER = await detectGender(this.user);
-				if (GENDER === "male") {
-					this.isMan = true;
-				} else {
-					this.isMan = false;
-				}
+				this.isMan = true;
 			} else {
 				this.isAdm = true;
 			}

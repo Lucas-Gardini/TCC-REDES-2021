@@ -13,20 +13,31 @@
 								iconStyle="fas"
 						/></MDBCardHeader>
 						<MDBCardBody>
-							<MDBCardTitle>Vendas Realizadas no Mês</MDBCardTitle>
+							<MDBCardTitle>Vendas Realizadas no Ano</MDBCardTitle>
 							<MDBRow class="d-flex">
 								<chart
-									chartType="line"
-									:chartData="{
-										labels: ['Hoje', 'Total'],
-										datasets: [
-											{
-												label: '',
-												data: [0, 1000],
-												backgroundColor: ['#00B74A', '#1266F1'],
-											},
-										],
-									}"
+									:labels="[
+										'Janeiro',
+										'Fevereiro',
+										'Março',
+										'Abril',
+										'Maio',
+										'Junho',
+										'Julho',
+										'Agosto',
+										'Setembro',
+										'Outubro',
+										'Novembro',
+										'Dezembro',
+									]"
+									:datasets="[
+										{
+											label: 'Quantidade de Pedidos',
+											data: sellsQuantity,
+											backgroundColor: '#00B74A',
+										},
+									]"
+									:moneys="sellsMoney"
 								/>
 							</MDBRow>
 						</MDBCardBody>
@@ -133,6 +144,8 @@ export default {
 			products_quantity: 0,
 			tables: { indexed: 0, available: 0 },
 			requests: { today: 0, all: 0 },
+			sellsQuantity: [],
+			sellsMoney: [],
 			isLoaded: false,
 		};
 	},
@@ -195,7 +208,10 @@ export default {
 				const REQUESTS_REQUEST = await axios.get(
 					`${localStorage.serverAddress}/requests/getquantity`
 				);
+				const SELLS_REQUEST = await axios.get(`${localStorage.serverAddress}/requests/getsells`);
 				this.requests = REQUESTS_REQUEST.data;
+				this.sellsQuantity = SELLS_REQUEST.data.monthSellsQuantity;
+				this.sellsMoney = SELLS_REQUEST.data.monthSellsMoney;
 			} catch (error) {
 				console.log(error);
 			}

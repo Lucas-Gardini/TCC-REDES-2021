@@ -35,7 +35,7 @@ async function createWindow() {
 			enableRemoteModule: true,
 		},
 		frame: false,
-		show: true,
+		show: false,
 	});
 
 	if (process.env.WEBPACK_DEV_SERVER_URL) {

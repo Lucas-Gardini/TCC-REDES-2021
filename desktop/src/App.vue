@@ -21,7 +21,12 @@ export default {
 	watch: {
 		async $route() {
 			try {
-				(await axios.get(`${localStorage.serverAddress}/ping`)).data;
+				const loggedIn = (await axios.get(`${localStorage.serverAddress}/user/getlogin`)).status;
+				if (loggedIn === 401 || loggedIn === "401") {
+					localStorage.currentUser = null;
+					localStorage.user = null;
+					this.$router.push("/");
+				}
 			} catch (e) {
 				if (!localStorage.serverAddress || this.$route.path === "/dashboard/settings") {
 					this.$router.push("/dashboard/settings");
