@@ -13,9 +13,25 @@
 								iconStyle="fas"
 						/></MDBCardHeader>
 						<MDBCardBody>
-							<MDBCardTitle>Vendas Realizadas no Ano</MDBCardTitle>
+							<MDBCardTitle>
+								<div style="display: flex; flex-direction: row">
+									<p>Vendas Realizadas no Ano</p>
+									<MDBBtn
+										@click="updateChart"
+										style="margin-left: auto"
+										outline="success"
+										floating
+										size="sm"
+									>
+										<MDBIcon
+											:icon="chartShowQuantity ? 'dollar-sign' : 'sort-numeric-up-alt'"
+										></MDBIcon>
+									</MDBBtn>
+								</div>
+							</MDBCardTitle>
 							<MDBRow class="d-flex">
 								<chart
+									:key="forceChartReRender"
 									:labels="[
 										'Janeiro',
 										'Fevereiro',
@@ -32,12 +48,17 @@
 									]"
 									:datasets="[
 										{
-											label: 'Quantidade de Pedidos',
-											data: sellsQuantity,
+											label: chartShowQuantity
+												? 'Quantidade de Pedidos'
+												: 'Renda Total',
+											data: chartShowQuantity ? sellsQuantity : sellsMoney,
 											backgroundColor: '#00B74A',
+											borderColor: '#008F39 ',
+											borderWidth: 1,
 										},
 									]"
-									:moneys="sellsMoney"
+									:moneys="!chartShowQuantity ? sellsQuantity : sellsMoney"
+									:showQuantity="chartShowQuantity"
 								/>
 							</MDBRow>
 						</MDBCardBody>
@@ -121,6 +142,7 @@ import {
 	MDBCardText,
 	MDBCardTitle,
 	MDBIcon,
+	MDBBtn,
 } from "mdb-vue-ui-kit";
 import Chart from "../components/Chart.vue";
 
@@ -136,6 +158,7 @@ export default {
 		MDBCardTitle,
 		MDBIcon,
 		Chart,
+		MDBBtn,
 	},
 	data: () => {
 		return {
@@ -146,7 +169,9 @@ export default {
 			requests: { today: 0, all: 0 },
 			sellsQuantity: [],
 			sellsMoney: [],
+			chartShowQuantity: true,
 			isLoaded: false,
+			forceChartReRender: 0,
 		};
 	},
 	created() {
@@ -215,6 +240,10 @@ export default {
 			} catch (error) {
 				console.log(error);
 			}
+		},
+		updateChart() {
+			this.chartShowQuantity = !this.chartShowQuantity;
+			this.forceChartReRender = this.forceChartReRender + 1;
 		},
 	},
 };
