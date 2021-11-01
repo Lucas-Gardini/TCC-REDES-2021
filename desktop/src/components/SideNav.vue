@@ -1,10 +1,10 @@
 <template>
 	<div v-if="isLoggedIn" id="sidenav" class="sidenav">
-		<div id="userPicture" style="text-align: center; font-size: xx-large; color: white;display: grid">
-			<i v-if="isMan" class="mdi mdi-face"></i>
-			<i v-else-if="isAdm" class="mdi mdi-account-cowboy-hat"></i>
-			<i v-else class="mdi mdi-face-woman"></i>
-			<!-- {{ user }} -->
+		<div
+			id="userPicture"
+			style="text-align: center; color: white;display: grid; place-items: center; margin-top: 20px"
+		>
+			<img src="../assets/icon-variant-no-name.png" style="width: 80%" />
 		</div>
 		<hr />
 		<MDBTooltip arrow v-model="homeTooltip" direction="right">

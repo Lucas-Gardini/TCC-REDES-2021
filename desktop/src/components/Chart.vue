@@ -1,11 +1,10 @@
 <template>
-	<div style="width: 400px">
+	<div style="width: 100%">
 		<BarChart v-bind="barChartProps" />
 	</div>
 </template>
 
 <script>
-import { ref } from "vue";
 import { BarChart, useBarChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
 
@@ -27,29 +26,32 @@ export default {
 			type: Array,
 			required: true,
 		},
+		showQuantity: {
+			type: Boolean,
+			default: true,
+			required: true,
+		},
 	},
 	setup(props) {
-		const toggleLegend = ref(true);
 		const chartData = {
 			labels: [...props.labels],
 			datasets: [...props.datasets],
 		};
 
 		const footer = (hoveredItem) => {
-			return (
-				"Renda: " +
-				props.moneys[hoveredItem[0].dataIndex].toLocaleString("pt-br", {
-					style: "currency",
-					currency: "BRL",
-				})
-			);
+			return props.showQuantity
+				? "Renda: " +
+						props.moneys[hoveredItem[0].dataIndex].toLocaleString("pt-br", {
+							style: "currency",
+							currency: "BRL",
+						})
+				: "Quantidade: " + props.moneys[hoveredItem[0].dataIndex];
 		};
 
 		const options = {
 			scales: {
-				myScale: {
-					type: "logarithmic",
-					position: toggleLegend.value ? "left" : "right",
+				y: {
+					beginAtZero: true,
 				},
 			},
 			plugins: {
@@ -57,6 +59,9 @@ export default {
 					callbacks: {
 						footer: footer,
 					},
+				},
+				decimation: {
+					enabled: false,
 				},
 			},
 		};
