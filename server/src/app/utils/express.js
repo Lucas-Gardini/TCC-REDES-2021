@@ -54,13 +54,6 @@ class expressServer {
 		console.log(allowedOriginsTable.toString() + "\n");
 		console.log(`? Modifique as origens no arquivo de configurações!\n`);
 
-		// Log requester ip address
-
-		// this.app.use((req, res, next) => {
-		// 	console.log(req.ip);
-		// 	next();
-		// });
-
 		this.app.use(
 			this.cors({
 				allowedHeaders: [
