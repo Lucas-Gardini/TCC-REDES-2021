@@ -1,7 +1,16 @@
 <template>
 	<MDBContainer :class="show_hide">
-		<h1 style="margin-top: 20px" id="top">
-			Pedidos - Hoje
+		<h1 style="margin-top: 20px; width: 100%; display: flex" id="top">
+			{{ pageMode === "today" ? "Pedidos - Hoje" : "Todos os Pedidos" }}
+			<MDBBtn
+				style="margin-left: auto"
+				color="success"
+				@click="pageMode = pageMode === 'today' ? 'all' : 'today'"
+			>
+				<MDBIcon v-if="pageMode === 'today'" icon="calendar-day" iconStyle="fas" />
+				<MDBIcon v-else icon="calendar-week" iconStyle="fas" />
+				{{ pageMode === "today" ? "Ver Todos" : "Ver Hoje" }}
+			</MDBBtn>
 		</h1>
 		<div v-for="(request, i) in requests" :key="i">
 			<MDBRow class="g3 mb-4 border">
@@ -104,7 +113,11 @@
 						}}</span>
 					</MDBCardFooter>
 					<span style="width: 100%; text-align: center">
-						<TimeAgo :date="request.date" />
+						Criado por <strong>{{ request.created_by }}</strong> a
+						<TimeAgo :date="request.date" /><br />
+						<p v-if="request.updated_by">
+							Última vez atualizado por <strong>{{ request.updated_by }}</strong>
+						</p>
 					</span>
 				</MDBCard>
 			</MDBRow>
@@ -171,6 +184,7 @@ export default {
 	data: () => {
 		return {
 			ws: new WebSocket(`ws://${String(localStorage.serverAddress).split("://")[1]}`),
+			pageMode: "today",
 			show_hide: "show",
 			requests: [],
 			tables: [],
@@ -193,8 +207,13 @@ export default {
 		this.ws.close();
 	},
 	methods: {
-		async getRequests() {
-			const requests = (await axios.get(`${localStorage.serverAddress}/requests/gettoday`)).data;
+		async getRequests(args) {
+			console.log(args && args.all ? "getall" : "gettoday");
+			const requests = (
+				await axios.get(
+					`${localStorage.serverAddress}/requests/${args && args.all ? "getall" : "gettoday"}`
+				)
+			).data;
 			let fixedRequests = [];
 			for (let request of requests) {
 				request.collapse = [];
@@ -260,7 +279,11 @@ export default {
 			window.scrollTo(0, 0);
 		},
 	},
-	watch: {},
+	watch: {
+		pageMode: function() {
+			this.getRequests({ all: this.pageMode === "all" });
+		},
+	},
 };
 </script>
 

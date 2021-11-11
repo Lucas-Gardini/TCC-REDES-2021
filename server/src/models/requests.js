@@ -6,6 +6,8 @@ const requestsSchema = new mongoose.Schema({
 	observations: String,
 	completed: Boolean,
 	date: { type: Date, default: Date.now() },
+	created_by: String,
+	updated_by: { type: String, default: null },
 });
 
 module.exports = mongoose.model("requests", requestsSchema);

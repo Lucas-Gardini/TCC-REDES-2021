@@ -7,9 +7,20 @@ const requestsController = {
 			if (err) res.sendStatus(500).end();
 			if (!doc) {
 				requests.create(
-					{ table_id, products, observations, completed: false, date: Date.now() },
+					{
+						table_id,
+						products,
+						observations,
+						completed: false,
+						date: Date.now(),
+						created_by: req.session.auth.user_name,
+						updated_by: "",
+					},
 					(err) => {
-						if (err) return res.sendStatus(500).end();
+						if (err) {
+							console.log(err);
+							return res.sendStatus(500).end();
+						}
 						res.send("OK");
 					}
 				);
@@ -21,7 +32,11 @@ const requestsController = {
 				}
 				requests.updateOne(
 					{ _id: doc._id },
-					{ products: updatedProducts, observations: updatedObservations },
+					{
+						products: updatedProducts,
+						observations: updatedObservations,
+						updated_by: req.session.auth.user_name,
+					},
 					(err) => {
 						if (err) return res.sendStatus(500).end();
 						res.send("OK");
