@@ -52,7 +52,7 @@ export default {
 				},
 				{
 					name: "Gabriel Luiz Oliveira",
-					function: "Podre",
+					function: "Desenvolvedor Front-End",
 					photo: "https://i.imgur.com/6vxTjxy.jpg",
 					social: {
 						color: "blue",
@@ -62,7 +62,7 @@ export default {
 				},
 				{
 					name: "Gabriela Da Silva Ornellas",
-					function: "Podre",
+					function: "QA, Criatividade e Ideias",
 					photo: "https://i.imgur.com/9NA4lLd.jpg",
 					social: {
 						color: "pink",
@@ -72,7 +72,7 @@ export default {
 				},
 				{
 					name: "Thiago Aio",
-					function: "Podre",
+					function: "Desenvolvedor Front-End",
 					photo: "https://i.imgur.com/HXVL7J4.jpg",
 					social: {
 						color: "blue",
@@ -82,7 +82,7 @@ export default {
 				},
 				{
 					name: "Pedro Comelli Neto",
-					function: "Podre",
+					function: "QA",
 					photo: "https://i.imgur.com/LKPmHNZ.jpg",
 					social: {
 						color: "pink",
